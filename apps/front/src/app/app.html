@@ -19,7 +19,21 @@
     </nav>
   </header>
 
-  <main class="flex-grow p-4">
+  <main class="flex-grow p-8 flex flex-col items-center gap-4">
+    <button class="btn btn-primary text-red-500">Click Me! DaisyUI works</button>
+    <div class="card bg-base-100 w-96 shadow-xl border">
+      <div class="card-body">
+        <h2 class="card-title text-black">Shoes!</h2>
+        <p class="text-black">If a dog chews shoes whose shoes does he choose?</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-secondary">Buy Now</button>
+        </div>
+      </div>
+    </div>
+    <label class="label cursor-pointer">
+      <span class="label-text text-black">Remember me</span>
+      <input type="checkbox" class="checkbox" />
+    </label>
     <router-outlet></router-outlet>
   </main>
 
