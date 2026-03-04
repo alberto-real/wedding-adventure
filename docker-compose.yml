@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for live reloading during development
+      # Note: This is for changes to be reflected in the container.
+      # For NestJS, you'd typically run in watch mode inside the container
+      # or use nodemon. For now, this volume ensures the source is available.
+      - ./apps/api:/app/apps/api
+      - /app/node_modules # Exclude node_modules from host mount
+    environment:
+      NODE_ENV: development
+
+  client:
+    build:
+      context: ./apps/client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    # Mount source code for rebuilds if you run `docker-compose build client` often
+    # For interactive Angular development with live reloading, it's generally
+    # easier to run `npx nx serve client` directly on your host machine.
+    # This Docker setup is more geared towards building and serving the
+    # production-ready static assets.
+    volumes:
+      - ./apps/client:/app/apps/client
+      - /app/node_modules # Exclude node_modules from host mount
+    depends_on:
+      - api
