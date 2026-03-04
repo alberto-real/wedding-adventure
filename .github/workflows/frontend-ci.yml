@@ -1,4 +1,4 @@
-name: Client CI/CD
+name: Front CI/CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
       - master
     paths:
-      - 'apps/client/**' # Trigger only on changes in the frontend directory
+      - 'apps/front/**' # Trigger only on changes in the frontend directory
       - '.github/workflows/frontend-ci.yml' # Also trigger if the workflow itself changes
 
 jobs:
@@ -24,18 +24,18 @@ jobs:
       - name: Install dependencies
         run: npm install --prefix ./
 
-      - name: Build Client
-        run: npx nx build client --prod
+      - name: Build Front
+        run: npx nx build front --prod
 
-      - name: Run Client tests
-        run: npx nx test client
+      - name: Run Front tests
+        run: npx nx test front
 
       # - name: Build and push Docker image (example - requires Docker Hub/GHCR credentials)
       #   uses: docker/build-push-action@v5
       #   with:
-      #     context: ./apps/client
+      #     context: ./apps/front
       #     push: true
-      #     tags: your_docker_username/wedding-adventure-client:latest
+      #     tags: your_docker_username/wedding-adventure-front:latest
       #     username: ${{ secrets.DOCKER_USERNAME }}
       #     password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -46,9 +46,9 @@ jobs:
       #     username: ${{ secrets.VPS_USERNAME }}
       #     key: ${{ secrets.VPS_SSH_KEY }}
       #     script: |
-      #       # For client, usually involves syncing static files or restarting Nginx/web server
+      #       # For front, usually involves syncing static files or restarting Nginx/web server
       #       # This example pulls and runs a Docker image for Nginx serving the Angular app.
-      #       docker pull your_docker_username/wedding-adventure-client:latest
-      #       docker stop wedding-adventure-client || true
-      #       docker rm wedding-adventure-client || true
-      #       docker run -d --name wedding-adventure-client -p 80:80 your_docker_username/wedding-adventure-client:latest
+      #       docker pull your_docker_username/wedding-adventure-front:latest
+      #       docker stop wedding-adventure-front || true
+      #       docker rm wedding-adventure-front || true
+      #       docker run -d --name wedding-adventure-front -p 80:80 your_docker_username/wedding-adventure-front:latest

@@ -1,4 +1,4 @@
-name: API CI/CD
+name: Back CI/CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
       - master
     paths:
-      - 'apps/api/**' # Trigger only on changes in the backend directory
+      - 'apps/back/**' # Trigger only on changes in the backend directory
       - '.github/workflows/backend-ci.yml' # Also trigger if the workflow itself changes
 
 jobs:
@@ -24,18 +24,18 @@ jobs:
       - name: Install dependencies
         run: npm install --prefix ./
 
-      - name: Build API
-        run: npx nx build api --prod
+      - name: Build Back
+        run: npx nx build back --prod
 
-      - name: Run API tests
-        run: npx nx test api
+      - name: Run Back tests
+        run: npx nx test back
 
       # - name: Build and push Docker image (example - requires Docker Hub/GHCR credentials)
       #   uses: docker/build-push-action@v5
       #   with:
-      #     context: ./apps/api
+      #     context: ./apps/back
       #     push: true
-      #     tags: your_docker_username/wedding-adventure-api:latest
+      #     tags: your_docker_username/wedding-adventure-back:latest
       #     username: ${{ secrets.DOCKER_USERNAME }}
       #     password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -46,7 +46,7 @@ jobs:
       #     username: ${{ secrets.VPS_USERNAME }}
       #     key: ${{ secrets.VPS_SSH_KEY }}
       #     script: |
-      #       docker pull your_docker_username/wedding-adventure-api:latest
-      #       docker stop wedding-adventure-api || true
-      #       docker rm wedding-adventure-api || true
-      #       docker run -d --name wedding-adventure-api -p 3000:3000 your_docker_username/wedding-adventure-api:latest
+      #       docker pull your_docker_username/wedding-adventure-back:latest
+      #       docker stop wedding-adventure-back || true
+      #       docker rm wedding-adventure-back || true
+      #       docker run -d --name wedding-adventure-back -p 3000:3000 your_docker_username/wedding-adventure-back:latest

@@ -1,0 +1,29 @@
+<div class="min-h-screen bg-gray-100 flex flex-col">
+  <header class="bg-white shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">{{ 'WELCOME' | translate }}</h1>
+    <nav>
+      <select
+        (change)="changeLang($event)"
+        class="p-2 border rounded-md bg-white text-gray-700"
+      >
+        <option value="ca" [selected]="translate.currentLang === 'ca'">
+          Català
+        </option>
+        <option value="es" [selected]="translate.currentLang === 'es'">
+          Español
+        </option>
+        <option value="en" [selected]="translate.currentLang === 'en'">
+          English
+        </option>
+      </select>
+    </nav>
+  </header>
+
+  <main class="flex-grow p-4">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-gray-800 text-white p-4 text-center">
+    <p>&copy; 2026 wedding-adventure. All rights reserved.</p>
+  </footer>
+</div>
