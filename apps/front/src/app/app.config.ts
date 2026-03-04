@@ -8,18 +8,25 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { DEFAULT_LANGUAGE_CODE, SUPPORTED_LANGUAGES } from './core/constants/languages';
+
+const getInitialLanguage = (): string => {
+  const browserLang = window.navigator.language.split('-')[0];
+  const isSupported = SUPPORTED_LANGUAGES.some((lang) => lang.code === browserLang);
+  return isSupported ? browserLang : DEFAULT_LANGUAGE_CODE;
+};
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(appRoutes),
-    provideHttpClient(withFetch()), // Provides HttpClient for the application
+    provideHttpClient(withFetch()),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: './assets/i18n/',
         suffix: '.json',
       }),
-      fallbackLang: 'en',
-      lang: 'en',
+      lang: getInitialLanguage(),
     }),
   ],
 };

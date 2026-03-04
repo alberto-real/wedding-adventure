@@ -1,43 +1,27 @@
-<div class="min-h-screen bg-gray-100 flex flex-col">
-  <header class="bg-white shadow-md p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-800">{{ 'WELCOME' | translate }}</h1>
-    <nav>
-      <select
-        (change)="changeLang($event)"
-        class="p-2 border rounded-md bg-white text-gray-700"
-      >
-        <option value="ca" [selected]="translate.currentLang === 'ca'">
-          Català
-        </option>
-        <option value="es" [selected]="translate.currentLang === 'es'">
-          Español
-        </option>
-        <option value="en" [selected]="translate.currentLang === 'en'">
-          English
-        </option>
-      </select>
-    </nav>
-  </header>
+<div class="min-h-screen bg-base-200 flex flex-col">
+  <app-navbar></app-navbar>
 
-  <main class="flex-grow p-8 flex flex-col items-center gap-4">
-    <button class="btn btn-primary text-red-500">Click Me! DaisyUI works</button>
-    <div class="card bg-base-100 w-96 shadow-xl border">
+  <main class="flex-grow p-8 flex flex-col items-center gap-8">
+    <div class="text-center">
+      <h1 class="text-4xl font-extrabold text-primary">{{ 'WELCOME' | translate }}</h1>
+    </div>
+
+    <div class="card bg-base-100 w-96 shadow-xl border border-base-300">
       <div class="card-body">
-        <h2 class="card-title text-black">Shoes!</h2>
-        <p class="text-black">If a dog chews shoes whose shoes does he choose?</p>
+        <h2 class="card-title text-secondary">Wedding Adventure</h2>
+        <p>¡Comienza tu aventura con nosotros!</p>
         <div class="card-actions justify-end">
-          <button class="btn btn-secondary">Buy Now</button>
+          <button class="btn btn-primary">Empieza aquí</button>
         </div>
       </div>
     </div>
-    <label class="label cursor-pointer">
-      <span class="label-text text-black">Remember me</span>
-      <input type="checkbox" class="checkbox" />
-    </label>
+
     <router-outlet></router-outlet>
   </main>
 
-  <footer class="bg-gray-800 text-white p-4 text-center">
-    <p>&copy; 2026 wedding-adventure. All rights reserved.</p>
+  <footer class="footer footer-center p-6 bg-base-100 text-base-content border-t border-base-300 mt-auto">
+    <aside>
+      <p class="font-semibold">&copy; 2026 Wedding Adventure. All rights reserved.</p>
+    </aside>
   </footer>
 </div>

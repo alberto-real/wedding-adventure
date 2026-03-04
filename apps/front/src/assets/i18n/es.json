@@ -1,3 +1,8 @@
 {
-  "WELCOME": "¡Bienvenido a wedding-adventure!"
+  "WELCOME": "¡Bienvenido a wedding-adventure!",
+  "LANGUAGES": {
+    "CA": "Catalán",
+    "ES": "Español",
+    "EN": "Inglés"
+  }
 }

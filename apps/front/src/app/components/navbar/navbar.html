@@ -1,0 +1,17 @@
+<div class="navbar bg-white shadow-md px-4">
+  <div class="flex-1">
+    <a class="text-xl font-bold text-gray-800">Wedding Adventure</a>
+  </div>
+  <div class="flex-none">
+    <select
+      class="select select-bordered select-sm w-full max-w-xs bg-white text-gray-700"
+      (change)="changeLang($event)"
+    >
+      @for (lang of languages; track lang.code) {
+        <option [value]="lang.code" [selected]="currentLang === lang.code">
+          {{ lang.labelTranslationKey | translate }}
+        </option>
+      }
+    </select>
+  </div>
+</div>
