@@ -1,31 +1,39 @@
-# Stage 1: Build Angular application
+# ─── Stage 1: Build Angular application ───
 FROM node:20-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy root package files for monorepo install
 COPY package.json package-lock.json ./
-RUN npm install
 
-# Copy the Angular application and other project files
+# Copy workspace package.json files
+COPY apps/front/package.json ./apps/front/
+COPY apps/back/package.json ./apps/back/
+
+# Install all dependencies
+RUN npm ci
+
+# Copy all source code (needed for NX build)
 COPY . .
 
-# Build the Angular application (assuming Nx build command)
-# The output path is usually dist/apps/front
-RUN npx nx build front --prod
+# Build the Angular application
+RUN npx nx build front --configuration=production
 
-# Stage 2: Serve Angular application with Nginx
+# ─── Stage 2: Serve with Nginx + Reverse Proxy ───
 FROM nginx:alpine AS production
 
-# Copy Nginx configuration (create a default one)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Remove default Nginx config
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy the built Angular application from the build stage
-COPY --from=build /app/dist/apps/front /usr/share/nginx/html
+# Copy custom Nginx config (includes reverse proxy for API + WebSocket)
+COPY apps/front/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 for web traffic
+# Copy the built Angular application
+COPY --from=build /app/dist/apps/front/browser /usr/share/nginx/html
+
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 EXPOSE 80
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

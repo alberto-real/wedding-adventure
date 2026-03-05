@@ -1,0 +1,77 @@
+name: CI/CD Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+# Prevent concurrent deploys to the same environment
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  # ─── Step 1: Build & Test ───
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Backend
+        run: npx nx build back --prod
+
+      - name: Build Frontend
+        run: npx nx build front --prod
+
+      - name: Run Backend tests
+        run: npx nx test back --passWithNoTests
+
+      - name: Run Frontend tests
+        run: npx nx test front --passWithNoTests
+
+  # ─── Step 2: Deploy to Production (main branch) ───
+  deploy-prod:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+      - name: Deploy to Production VM
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script_stop: true
+          script: |
+            /opt/wedding-adventure/deploy/deploy.sh main
+
+  # ─── Step 3: Deploy to Dev (dev branch) ───
+  deploy-dev:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    environment: dev
+
+    steps:
+      - name: Deploy to Dev VM
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEV_SSH_HOST }}
+          username: ${{ secrets.DEV_SSH_USER }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          script_stop: true
+          script: |
+            /opt/wedding-adventure/deploy/deploy.sh dev

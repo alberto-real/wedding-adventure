@@ -1,0 +1,49 @@
+version: '3.8'
+
+# ─── Production Docker Compose ───
+# Backend is INTERNAL only (not exposed to the internet).
+# Nginx serves Angular + reverse proxies API/WebSocket traffic.
+# Only port 80 is exposed to the outside world.
+
+services:
+  front:
+    build:
+      context: .
+      dockerfile: apps/front/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - back
+    networks:
+      - internal
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  back:
+    build:
+      context: .
+      dockerfile: apps/back/Dockerfile
+    # ⚠️ NO 'ports:' here — only accessible via internal Docker network
+    expose:
+      - "3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    networks:
+      - internal
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/back', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  internal:
+    driver: bridge

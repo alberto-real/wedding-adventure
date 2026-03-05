@@ -1,35 +1,36 @@
-# Stage 1: Build NestJS application
+# ─── Stage 1: Build NestJS application ───
 FROM node:20-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy root package files for monorepo install
 COPY package.json package-lock.json ./
-RUN npm install
 
-# Copy the rest of the NestJS application
+# Copy workspace package.json files
+COPY apps/front/package.json ./apps/front/
+COPY apps/back/package.json ./apps/back/
+
+# Install all dependencies
+RUN npm ci
+
+# Copy all source code (needed for NX build)
 COPY . .
 
-# Build the NestJS application (assuming Nx build command)
-RUN npx nx build back --prod
+# Build the NestJS application
+RUN npx nx build back --configuration=production
 
-# Stage 2: Run NestJS application
+# ─── Stage 2: Run NestJS application (minimal image) ───
 FROM node:20-alpine AS production
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install production dependencies
-COPY package.json package-lock.json ./
-RUN npm ci --only=production
-
 # Copy the built application from the build stage
-COPY --from=build /app/dist/apps/back ./apps/back
-COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/dist/apps/back ./
 
-# Expose the port your NestJS app listens on (default is 3000)
+# Install only production dependencies from the built output
+RUN if [ -f package.json ]; then npm ci --only=production 2>/dev/null || true; fi
+
+# Expose the port NestJS listens on (internal only in production)
 EXPOSE 3000
 
-# Command to run the NestJS application
-CMD ["node", "apps/back/main.js"]
+CMD ["node", "main.js"]

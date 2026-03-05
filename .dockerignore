@@ -1,0 +1,38 @@
+# ─── Docker Ignore ───
+# Keep the build context small and fast
+
+node_modules
+dist
+.angular
+.nx
+.git
+.github
+.vscode
+
+# Test files
+*.spec.ts
+*.test.ts
+coverage
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docker files (don't send docker files into the build context)
+docker-compose*.yml
+
+# Deploy scripts
+deploy/
+
+# Documentation
+*.md
+!README.md

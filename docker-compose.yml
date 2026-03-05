@@ -1,35 +1,28 @@
 version: '3.8'
 
+# ─── Local Development Docker Compose ───
+# For local dev, you'd typically run `npx nx serve front` and `npx nx serve back`
+# directly. This compose file is for testing the Docker build locally.
+#
+# Usage:
+#   docker compose up -d --build        (test with current docker-compose.yml)
+#   docker compose -f docker-compose.prod.yml up -d --build  (test prod config)
+
 services:
   back:
     build:
-      context: ./apps/back
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/back/Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      # Mount source code for live reloading during development
-      # Note: This is for changes to be reflected in the container.
-      # For NestJS, you'd typically run in watch mode inside the container
-      # or use nodemon. For now, this volume ensures the source is available.
-      - ./apps/back:/app/apps/back
-      - /app/node_modules # Exclude node_modules from host mount
     environment:
       NODE_ENV: development
 
   front:
     build:
-      context: ./apps/front
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/front/Dockerfile
     ports:
       - "80:80"
-    # Mount source code for rebuilds if you run `docker-compose build front` often
-    # For interactive Angular development with live reloading, it's generally
-    # easier to run `npx nx serve front` directly on your host machine.
-    # This Docker setup is more geared towards building and serving the
-    # production-ready static assets.
-    volumes:
-      - ./apps/front:/app/apps/front
-      - /app/node_modules # Exclude node_modules from host mount
     depends_on:
       - back
