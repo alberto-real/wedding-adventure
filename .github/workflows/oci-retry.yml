@@ -18,56 +18,70 @@ jobs:
           mkdir -p ~/.oci
           echo "${{ secrets.OCI_KEY }}" > ~/.oci/oci_api_key.pem
           chmod 600 ~/.oci/oci_api_key.pem
-          cat > ~/.oci/config << EOF
+          cat > ~/.oci/config << 'OCIEOF'
           [DEFAULT]
           user=${{ secrets.OCI_USER_OCID }}
           fingerprint=${{ secrets.OCI_FINGERPRINT }}
           tenancy=${{ secrets.OCI_TENANCY_OCID }}
           region=eu-madrid-1
           key_file=~/.oci/oci_api_key.pem
-          EOF
+          OCIEOF
 
       - name: Check if VM already exists
         id: check
         run: |
-          INSTANCES=$(oci compute instance list \
-            --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
+          set +e
+          RESULT=$(oci compute instance list \
+            --compartment-id "${{ secrets.OCI_TENANCY_OCID }}" \
             --display-name "vm-alberto" \
             --lifecycle-state RUNNING \
             --query "data | length(@)" \
-            --raw-output 2>/dev/null || echo "0")
-          echo "exists=$INSTANCES" >> $GITHUB_OUTPUT
+            --raw-output 2>&1)
+          EXIT_CODE=$?
+          echo "OCI CLI exit code: $EXIT_CODE"
+          echo "OCI CLI output: $RESULT"
+
+          if [ $EXIT_CODE -ne 0 ] || [ -z "$RESULT" ] || [ "$RESULT" == "None" ] || [ "$RESULT" == "null" ] || [ "$RESULT" == "0" ]; then
+            echo "vm_running=false" >> $GITHUB_OUTPUT
+            echo "VM not found or query failed"
+          else
+            echo "vm_running=true" >> $GITHUB_OUTPUT
+            echo "VM exists with $RESULT instance(s)"
+          fi
 
       - name: Try to apply stack
-        if: steps.check.outputs.exists == '0'
+        if: steps.check.outputs.vm_running == 'false'
         run: |
-          echo "VM not found, trying to create..."
-          JOB_ID=$(oci resource-manager job create-apply-job \
-            --stack-id ${{ secrets.OCI_STACK_ID }} \
+          echo "Attempting to create VM..."
+          set +e
+          RESPONSE=$(oci resource-manager job create-apply-job \
+            --stack-id "${{ secrets.OCI_STACK_ID }}" \
             --execution-plan-strategy AUTO_APPROVED \
             --query "data.id" --raw-output 2>&1)
+          echo "Response: $RESPONSE"
 
-          if [[ "$JOB_ID" == ocid1* ]]; then
+          if [[ "$RESPONSE" == ocid1* ]]; then
+            JOB_ID="$RESPONSE"
             echo "Job created: $JOB_ID"
-            echo "Waiting for result..."
+            echo "Waiting 2 minutes for result..."
             sleep 120
 
             STATE=$(oci resource-manager job get \
-              --job-id $JOB_ID \
+              --job-id "$JOB_ID" \
               --query "data.\"lifecycle-state\"" \
-              --raw-output 2>/dev/null || echo "UNKNOWN")
+              --raw-output 2>&1 || echo "UNKNOWN")
 
             echo "Job state: $STATE"
             if [ "$STATE" == "SUCCEEDED" ]; then
               echo "VM created successfully!"
             else
-              echo "Still no capacity, will retry..."
+              echo "Failed or still no capacity. Will retry in 10 minutes."
             fi
           else
-            echo "Failed to create job: $JOB_ID"
+            echo "Could not create job. Will retry in 10 minutes."
           fi
 
       - name: VM already running
-        if: steps.check.outputs.exists != '0'
+        if: steps.check.outputs.vm_running == 'true'
         run: |
           echo "VM already exists and is running. Nothing to do."
