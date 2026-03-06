@@ -1,0 +1,73 @@
+name: OCI VM Retry
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Every 10 minutes
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  retry-create-vm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install OCI CLI
+        run: |
+          pip install oci-cli --quiet
+
+      - name: Configure OCI CLI
+        run: |
+          mkdir -p ~/.oci
+          echo "${{ secrets.OCI_KEY }}" > ~/.oci/oci_api_key.pem
+          chmod 600 ~/.oci/oci_api_key.pem
+          cat > ~/.oci/config << EOF
+          [DEFAULT]
+          user=${{ secrets.OCI_USER_OCID }}
+          fingerprint=${{ secrets.OCI_FINGERPRINT }}
+          tenancy=${{ secrets.OCI_TENANCY_OCID }}
+          region=eu-madrid-1
+          key_file=~/.oci/oci_api_key.pem
+          EOF
+
+      - name: Check if VM already exists
+        id: check
+        run: |
+          INSTANCES=$(oci compute instance list \
+            --compartment-id ${{ secrets.OCI_TENANCY_OCID }} \
+            --display-name "vm-alberto" \
+            --lifecycle-state RUNNING \
+            --query "data | length(@)" \
+            --raw-output 2>/dev/null || echo "0")
+          echo "exists=$INSTANCES" >> $GITHUB_OUTPUT
+
+      - name: Try to apply stack
+        if: steps.check.outputs.exists == '0'
+        run: |
+          echo "VM not found, trying to create..."
+          JOB_ID=$(oci resource-manager job create-apply-job \
+            --stack-id ${{ secrets.OCI_STACK_ID }} \
+            --execution-plan-strategy AUTO_APPROVED \
+            --query "data.id" --raw-output 2>&1)
+
+          if [[ "$JOB_ID" == ocid1* ]]; then
+            echo "Job created: $JOB_ID"
+            echo "Waiting for result..."
+            sleep 120
+
+            STATE=$(oci resource-manager job get \
+              --job-id $JOB_ID \
+              --query "data.\"lifecycle-state\"" \
+              --raw-output 2>/dev/null || echo "UNKNOWN")
+
+            echo "Job state: $STATE"
+            if [ "$STATE" == "SUCCEEDED" ]; then
+              echo "VM created successfully!"
+            else
+              echo "Still no capacity, will retry..."
+            fi
+          else
+            echo "Failed to create job: $JOB_ID"
+          fi
+
+      - name: VM already running
+        if: steps.check.outputs.exists != '0'
+        run: |
+          echo "VM already exists and is running. Nothing to do."
