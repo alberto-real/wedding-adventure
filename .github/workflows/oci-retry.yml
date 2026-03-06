@@ -2,90 +2,75 @@ name: OCI VM Retry
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Every 10 minutes
-  workflow_dispatch: # Manual trigger
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+env:
+  OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING: "True"
+  SUPPRESS_LABEL_WARNING: "True"
 
 jobs:
   retry-create-vm:
     runs-on: ubuntu-latest
     steps:
       - name: Install OCI CLI
-        run: |
-          pip install oci-cli --quiet
+        run: pip install oci-cli --quiet
 
       - name: Configure OCI CLI
         run: |
           mkdir -p ~/.oci
-          echo "${{ secrets.OCI_KEY }}" > ~/.oci/oci_api_key.pem
+          printf '%s\n' "${{ secrets.OCI_KEY }}" > ~/.oci/oci_api_key.pem
           chmod 600 ~/.oci/oci_api_key.pem
-          cat > ~/.oci/config << 'OCIEOF'
-          [DEFAULT]
-          user=${{ secrets.OCI_USER_OCID }}
-          fingerprint=${{ secrets.OCI_FINGERPRINT }}
-          tenancy=${{ secrets.OCI_TENANCY_OCID }}
-          region=eu-madrid-1
-          key_file=~/.oci/oci_api_key.pem
-          OCIEOF
+          printf '[DEFAULT]\nuser=%s\nfingerprint=%s\ntenancy=%s\nregion=eu-madrid-1\nkey_file=~/.oci/oci_api_key.pem\n' \
+            "${{ secrets.OCI_USER_OCID }}" \
+            "${{ secrets.OCI_FINGERPRINT }}" \
+            "${{ secrets.OCI_TENANCY_OCID }}" > ~/.oci/config
           chmod 600 ~/.oci/config
+
+      - name: Verify OCI CLI works
+        run: |
+          oci iam region list --query "data[?name=='eu-madrid-1'].name" --raw-output
+          echo "OCI CLI is working"
 
       - name: Check if VM already exists
         id: check
-        env:
-          OCI_CLI_SUPPRESS_FILE_PERMISSIONS_WARNING: "True"
-          SUPPRESS_LABEL_WARNING: "True"
         run: |
-          set +e
-          RESULT=$(oci compute instance list \
+          COUNT=$(oci compute instance list \
             --compartment-id "${{ secrets.OCI_TENANCY_OCID }}" \
-            --display-name "vm-alberto" \
             --lifecycle-state RUNNING \
-            --query "data | length(@)" \
-            --raw-output 2>/dev/null)
-          EXIT_CODE=$?
-          echo "OCI CLI exit code: $EXIT_CODE"
-          echo "OCI CLI result: [$RESULT]"
-
-          if [ $EXIT_CODE -ne 0 ] || [ -z "$RESULT" ] || [ "$RESULT" == "None" ] || [ "$RESULT" == "null" ] || [ "$RESULT" == "0" ]; then
-            echo "vm_running=false" >> $GITHUB_OUTPUT
-            echo "VM not found"
-          else
+            --query "length(data)" \
+            --raw-output 2>/dev/null || echo "0")
+          echo "Running instances: $COUNT"
+          if [ "$COUNT" != "0" ] && [ -n "$COUNT" ] && [ "$COUNT" != "None" ]; then
             echo "vm_running=true" >> $GITHUB_OUTPUT
-            echo "VM exists with $RESULT instance(s)"
+          else
+            echo "vm_running=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Try to apply stack
         if: steps.check.outputs.vm_running == 'false'
         run: |
-          echo "Attempting to create VM..."
-          set +e
-          RESPONSE=$(oci resource-manager job create-apply-job \
+          echo "No running VMs found. Attempting to create..."
+          RAW=$(oci resource-manager job create-apply-job \
             --stack-id "${{ secrets.OCI_STACK_ID }}" \
             --execution-plan-strategy AUTO_APPROVED \
-            --query "data.id" --raw-output 2>&1)
-          echo "Response: $RESPONSE"
+            --query "data.id" --raw-output 2>&1) || true
+          JOB_ID=$(echo "$RAW" | grep "^ocid1" | head -1)
+          echo "Raw output: $RAW"
+          echo "Extracted JOB_ID: $JOB_ID"
 
-          if [[ "$RESPONSE" == ocid1* ]]; then
-            JOB_ID="$RESPONSE"
+          if [[ -n "$JOB_ID" ]]; then
             echo "Job created: $JOB_ID"
-            echo "Waiting 2 minutes for result..."
             sleep 120
-
             STATE=$(oci resource-manager job get \
               --job-id "$JOB_ID" \
               --query "data.\"lifecycle-state\"" \
-              --raw-output 2>&1 || echo "UNKNOWN")
-
+              --raw-output 2>&1 | grep -v "^Warning" | tail -1)
             echo "Job state: $STATE"
-            if [ "$STATE" == "SUCCEEDED" ]; then
-              echo "VM created successfully!"
-            else
-              echo "Failed or still no capacity. Will retry in 10 minutes."
-            fi
           else
             echo "Could not create job. Will retry in 10 minutes."
           fi
 
       - name: VM already running
         if: steps.check.outputs.vm_running == 'true'
-        run: |
-          echo "VM already exists and is running. Nothing to do."
+        run: echo "VM already exists. Disabling this workflow would be a good idea."
