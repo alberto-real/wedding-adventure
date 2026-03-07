@@ -1,0 +1,12 @@
+<div class="flex flex-col gap-6 w-full items-stretch">
+  @for (phase of config(); track phase.id) {
+    <app-phase-card
+      [config]="phase"
+      [isDefaultOpen]="phase.id === 1"
+      [hintsUnlocked]="getHintsCount(phase.id)"
+      [resolutionStage]="getResStage(phase.id)"
+      (unlockHint)="unlockHint.emit(phase.id)"
+      (advanceResolution)="advanceResolution.emit(phase.id)"
+    />
+  }
+</div>

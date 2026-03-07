@@ -1,0 +1,12 @@
+@if (rules() && rules()!.length > 0) {
+  <div class="bg-secondary/5 p-4 rounded-xl text-left border border-secondary/10">
+    <h3 class="font-bold text-secondary mb-2 uppercase tracking-widest text-[10px]">
+      {{ rulesTitleKey() | translate }}
+    </h3>
+    <ul class="text-xs space-y-1 text-secondary-focus list-none">
+      @for (rule of rules(); track rule) {
+        <li>{{ rule | translate }}</li>
+      }
+    </ul>
+  </div>
+}

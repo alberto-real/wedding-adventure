@@ -1,0 +1,31 @@
+<div class="collapse collapse-arrow bg-base-100 border border-base-300 shadow-md">
+  <input type="checkbox" [checked]="isDefaultOpen()" />
+  <div
+    class="collapse-title text-xl font-bold text-secondary flex justify-between items-center pr-12"
+  >
+    <span
+      >{{ 'PHASE' | translate }} {{ config().id }}:
+      {{ config().titleKey | translate }}</span
+    >
+    <div class="badge badge-outline text-xs">{{ config().badgeLabel }}</div>
+  </div>
+  <div class="collapse-content flex flex-col gap-6">
+    <app-phase-history [historyKey]="config().historyKey" />
+
+    <app-phase-rules [rules]="config().rules" />
+
+    <app-phase-hints
+      [hints]="config().hints"
+      [unlockedCount]="hintsUnlocked()"
+      (unlock)="unlockHint.emit()"
+    />
+
+    @if (hintsUnlocked() === config().hints.length) {
+      <app-phase-resolution
+        [steps]="config().resolutionSteps"
+        [stage]="resolutionStage()"
+        (advance)="advanceResolution.emit()"
+      />
+    }
+  </div>
+</div>

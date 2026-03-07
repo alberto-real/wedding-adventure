@@ -1,0 +1,33 @@
+<div class="mt-4 pt-4 border-t border-base-300 space-y-2 animate-in fade-in zoom-in">
+  <h4 class="text-xs uppercase tracking-widest font-bold opacity-50 text-center">
+    {{ 'SPORTS.GIVE_UP' | translate }}
+  </h4>
+
+  @for (step of steps(); track $index) {
+    @if (stage() > $index) {
+      <div
+        class="alert alert-warning py-2 text-sm shadow"
+        [class.font-mono]="step.isMono"
+        [class.font-bold]="step.isBold"
+      >
+        <span>🏁 {{ step.labelKey | translate }}</span>
+      </div>
+    }
+  }
+
+  <div class="flex flex-col items-center gap-1 mt-2">
+    <button
+      class="btn btn-xs btn-warning"
+      [disabled]="stage() >= steps().length"
+      (click)="advance.emit()"
+    >
+      @if (stage() < steps().length) {
+        🚀 {{ 'SPORTS.RESOLVE_LABEL' | translate }} ({{ stage() }}/{{
+          steps().length
+        }})
+      } @else {
+        ✅ {{ 'PHASE' | translate }} OK
+      }
+    </button>
+  </div>
+</div>

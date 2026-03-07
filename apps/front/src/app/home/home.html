@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center gap-12 max-w-6xl mx-auto py-8">
+  <header class="text-center space-y-4">
+    <h1 class="text-5xl font-black text-primary tracking-tight">
+      {{ 'WELCOME' | translate }}
+    </h1>
+    <p class="text-xl text-base-content/70 italic">
+      {{ 'HOME.SUBTITLE' | translate }}
+    </p>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full px-4">
+    @for (section of sections; track section.id) {
+      <div 
+        class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 border border-base-300 group cursor-pointer"
+        [routerLink]="section.route"
+      >
+        <div class="card-body flex-row items-center gap-6">
+          <div class="text-5xl bg-primary/10 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+            {{ section.icon }}
+          </div>
+          <div class="space-y-1">
+            <h2 class="card-title text-2xl font-bold group-hover:text-primary transition-colors">
+              {{ section.title | translate }}
+            </h2>
+            <p class="text-base-content/60 leading-tight">
+              {{ section.description | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

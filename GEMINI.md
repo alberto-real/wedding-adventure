@@ -21,13 +21,22 @@ Monorepo managed with **Nx 22** using npm workspaces.
 - **Nx 22** - build system and task runner.
 - **TypeScript 5.9**
 - **ESLint 9** with angular-eslint and typescript-eslint.
-- **Jest 30** for unit tests.
+- **Vitest** for unit tests.
 - **Playwright** for e2e tests.
 - **Prettier** for formatting.
+
+## Core Rules
+- **i18n** (ngx-translate) for ALL user-facing text.
+- **API First** approach for all backend interactions.
+- **Lazy Loading** for all feature routes.
+- **Strict Quality:** 100% test coverage mandatory for all new components/services (SonarQube ready).
+- **Zero Code Smells:** Adherence to ESLint and Prettier.
+- **Atomic Architecture:** Maximize component atomization and reusability.
 
 ## Angular Best Practices (v21)
 - Components are standalone by default - no need for `standalone: true`.
 - Use **signals** and the new **control flow syntax** (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`.
+- Use **self-closing tags** for components without content (e.g., `<app-header />`).
 - Use `inject()` function instead of constructor injection.
 - Use `input()`, `output()`, `model()` signal-based APIs instead of `@Input()`, `@Output()`.
 - Use `linkedSignal()` and `resource()` where appropriate.
