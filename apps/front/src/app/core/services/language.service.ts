@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE_CODE } from '../constants/languages';
 
@@ -8,17 +8,20 @@ import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE_CODE } from '../constants/languag
 export class LanguageService {
   private translate = inject(TranslateService);
 
+  /**
+   * Reactive signal for current language code.
+   */
+  readonly currentLang = signal(this.translate.currentLang || DEFAULT_LANGUAGE_CODE);
+
   get languages() {
     return SUPPORTED_LANGUAGES;
   }
 
-  get currentLang() {
-    return this.translate.currentLang;
-  }
-
   setLanguage(code: string) {
     if (this.languages.some((l) => l.code === code)) {
-      this.translate.use(code);
+      this.translate.use(code).subscribe(() => {
+        this.currentLang.set(code);
+      });
     }
   }
 

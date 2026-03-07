@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 
@@ -7,6 +7,20 @@ import { Observable } from 'rxjs';
 })
 export class SocketService {
   private socket = inject(Socket);
+
+  /**
+   * Reactive signal for connection status.
+   */
+  readonly connected = signal(false);
+
+  constructor() {
+    // Escucha eventos de conexión para actualizar el signal
+    this.socket.on('connect', () => this.connected.set(true));
+    this.socket.on('disconnect', () => this.connected.set(false));
+    
+    // Sincronización inicial
+    this.connected.set(this.socket.ioSocket.connected);
+  }
 
   /**
    * Sends a message to the backend.
@@ -24,12 +38,5 @@ export class SocketService {
    */
   listen<T>(event: string): Observable<T> {
     return this.socket.fromEvent<T>(event);
-  }
-
-  /**
-   * Returns the connection status.
-   */
-  isConnected(): boolean {
-    return this.socket.ioSocket.connected;
   }
 }

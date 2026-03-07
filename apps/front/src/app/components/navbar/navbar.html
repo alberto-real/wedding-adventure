@@ -8,7 +8,7 @@
       (change)="changeLang($event)"
     >
       @for (lang of languages; track lang.code) {
-        <option [value]="lang.code" [selected]="currentLang === lang.code">
+        <option [value]="lang.code" [selected]="langService.currentLang() === lang.code">
           {{ lang.labelTranslationKey | translate }}
         </option>
       }
