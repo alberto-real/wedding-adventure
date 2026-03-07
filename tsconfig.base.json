@@ -15,6 +15,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["@wedding-adventure/source"]
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "customConditions": ["@wedding-adventure/source"],
+    "paths": {
+      "@version": ["package.json"]
+    }
   }
 }
