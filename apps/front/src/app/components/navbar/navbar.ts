@@ -18,8 +18,8 @@ export class NavbarComponent {
     return this.langService.languages;
   }
 
-  changeLang(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.langService.setLanguage(selectElement.value);
+  selectLanguage(code: string): void {
+    this.langService.setLanguage(code);
+    (document.activeElement as HTMLElement)?.blur();
   }
 }

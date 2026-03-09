@@ -18,9 +18,11 @@
       <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 border border-base-300 mt-2">
         @for (lang of languages; track lang.code) {
           <li>
-            <a 
+            <a
+              tabindex="0"
               [class.active]="langService.currentLang() === lang.code"
-              (click)="langService.setLanguage(lang.code)"
+              (click)="selectLanguage(lang.code)"
+              (keydown.enter)="selectLanguage(lang.code)"
               class="flex justify-between"
             >
               {{ lang.labelTranslationKey | translate }}
