@@ -1,0 +1,22 @@
+@if (isVisible()) {
+  <div class="celebration-overlay fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm cursor-pointer" 
+       [class.fade-out]="isFadingOut()"
+       (click)="close()">
+    
+    <div class="text-center p-8 bg-base-100 rounded-3xl shadow-2xl border-4 border-primary transition-all duration-1000"
+         [class.scale-90]="isFadingOut()"
+         [class.opacity-0]="isFadingOut()">
+      
+      <div class="text-8xl mb-6 drop-shadow-lg animate-bounce">💍</div>
+      <h2 class="text-6xl font-black text-primary tracking-tighter drop-shadow-md">
+        {{ messageKey() | translate }}
+      </h2>
+      <p class="text-2xl mt-4 text-secondary font-bold">{{ 'WELCOME' | translate }}</p>
+      <div class="mt-8 flex gap-2 justify-center">
+        <span class="text-4xl">✨</span>
+        <span class="text-4xl">🥂</span>
+        <span class="text-4xl">✨</span>
+      </div>
+    </div>
+  </div>
+}

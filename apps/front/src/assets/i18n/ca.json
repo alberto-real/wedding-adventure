@@ -1,8 +1,11 @@
 {
-  "WELCOME": "Benvinguts, Anna i Roger!",
+  "WELCOME": "Benvinguts i Enhorabona!",
+  "COUPLE_NAMES": "Anna i Roger",
   "BACK_TO_HOME": "Tornar a l'inici",
   "ALL_RIGHTS_RESERVED": "Tots els drets reservats.",
   "PHASE": "Fase",
+  "CELEBRATION_MESSAGE": "Visca els nuvis!",
+  "APP_TITLE": "L'aventura de l'Anna i en Roger",
   "LANGUAGES": {
     "CA": "Català",
     "ES": "Castellà",
@@ -15,7 +18,7 @@
     "CHALLENGES": "Desafiaments en Equip"
   },
   "HOME": {
-    "TITLE": "La Vostra Boda - L'Aventura",
+    "TITLE": "L'aventura de l'Anna i en Roger",
     "SUBTITLE": "Resolgueu els acertis i descobriu els codis secrets.",
     "SECTIONS": {
       "SPORTS": "Repte Olímpic",
@@ -43,38 +46,13 @@
     "PHASE2_TITLE": "El retrobament",
     "PHASE3_TITLE": "Destí",
     "PHASE1_DESC": "",
-    "PHASE1_HINT1": "Podreu trobar detalls i informació a",
-    "PHASE1_HINT2": "L'Anna siempre triomfava, però amb el triple salt, va volar com mai.",
-    "PHASE1_HINT3": "El pobre Alberto no va arribar a destacar mai, però el seu millor resultat va ser al 400m tanques.",
-    "PHASE2_TITLE": "Fase 2: El retrobament",
-    "PHASE2_DESC": "",
-    "PHASE2_HINT1": "El valor de l'esforç podria equivaler al grau.",
-    "PHASE2_HINT2": "El sistema francès d'escalada us resultarà útil.",
-    "PHASE2_HINT3": "El millor grau de cada un serà tota una referència.",
-    "PHASE3_TITLE": "Fase 3: Destí",
-    "PHASE3_DESC": "",
-    "PHASE3_HINT1": "Has d'endevinar l'última connexió curiosa de les seves històries.",
-    "PHASE3_HINT2": "Has de trobar 2 xifres en aquesta fase.",
-    "PHASE3_HINT3": "La història conté 2 pistes sobre la relació.",
-    "LOCK_TITLE": "El repte final",
-    "LOCK_DESC": "Resoleu l'equació de la jerarquia:",
-    "LOCK_RULE": "Si el resultat té decimals, redondegeu al número sencer més proper. Si té més d'una xifra, sumeu-les entre si fins que només en quedi una.",
-    "HINTS_LABEL": "Dona'm una pista",
-    "GIVE_UP": "Si us rendiu...",
-    "RESOLVE_LABEL": "Resolució Manual",
-    "RESOLVE_LOCKED": "Desbloquegeu totes les pistes primer",
-    "RESOLVE_ANNA_MARK": "Marca de l'Anna: 10.56m",
-    "RESOLVE_ALBERTO_MARK": "Marca de l'Alberto: 1:03.84",
-    "RESOLVE_A": "Resultat A (Anna): 1+0+5+6 = 12 -> 3",
-    "RESOLVE_B": "Resultat B (Alberto): 1+0+3+8+4 = 16 -> 7",
-    "RESOLVE_ANNA_ROCK_GRADE": "L'Anna ha arribat a encadenar en roca un 6b (i si va ser més, disculpeu-me).",
-    "RESOLVE_ANNA_ROCK_PTS": "Conversió Anna: 6b -> 20 punts d'esforç.",
-    "RESOLVE_ALBERTO_ROCK_GRADE": "L'Alberto ha arribat a encadenar un 6a+.",
+...
     "RESOLVE_ALBERTO_ROCK_PTS": "Conversió Alberto: 6a+ -> 15 punts d'esforç.",
     "RESOLVE_R": "Factor Roca R: 20 + 15 = 35",
     "RESOLVE_DATE_HINT": "L'última coincidència té a veure amb una data.",
     "RESOLVE_DAY": "L'Anna i el Roger es van casar el DIA 21, l'Alberto va néixer el DIA 21.",
     "RESOLVE_MONTH": "L'Anna i el Roger es van casar el MES de març, l'Alberto va néixer el MES de març.",
-    "RESOLVE_DATE": "El 21 de març és la data en qüestió. L'Alberto va néixer el 1900 no sé què; I l'Anna i el Roger es van casar el 2026."
+    "RESOLVE_DATE": "El 21 de març és la data en qüestió. L'Alberto va néixer el 1900 no sé què; I l'Anna i el Roger es van casar el 2026.",
+    "ERROR": "Aquest no és el número que dicta la jerarquia..."
   }
 }

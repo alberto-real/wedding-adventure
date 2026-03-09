@@ -1,8 +1,11 @@
 {
-  "WELCOME": "¡Bienvenidos, Anna y Roger!",
+  "WELCOME": "¡Bienvenidos y Enhorabuena!",
+  "COUPLE_NAMES": "Anna y Roger",
   "BACK_TO_HOME": "Volver al inicio",
   "ALL_RIGHTS_RESERVED": "Todos los derechos reservados.",
   "PHASE": "Fase",
+  "CELEBRATION_MESSAGE": "¡Vivan los novios!",
+  "APP_TITLE": "La aventura de Anna y Roger",
   "LANGUAGES": {
     "CA": "Catalán",
     "ES": "Español",
@@ -15,7 +18,7 @@
     "CHALLENGES": "Desafíos en Equipo"
   },
   "HOME": {
-    "TITLE": "Vuestra Boda - La Aventura",
+    "TITLE": "La aventura de Anna y Roger",
     "SUBTITLE": "Resolved los acertijos y descubrid los códigos secretos.",
     "SECTIONS": {
       "SPORTS": "Reto Olímpico",
@@ -46,11 +49,9 @@
     "PHASE1_HINT1": "Podréis encontrar detalles e información en",
     "PHASE1_HINT2": "Anna siempre triunfaba, pero con el triple salto, voló como nunca.",
     "PHASE1_HINT3": "El pobre Alberto no llegó a destacar nunca, pero su mejor resultado fue en el 400m vallas.",
-    "PHASE2_DESC": "",
     "PHASE2_HINT1": "El valor del esfuerzo podría equivaler al grado.",
     "PHASE2_HINT2": "El sistema francés de escalada os resultará útil.",
     "PHASE2_HINT3": "El mejor grado de cada uno será toda una referencia.",
-    "PHASE3_DESC": "",
     "PHASE3_HINT1": "Debes adivinar la última conexión curiosa de sus historias.",
     "PHASE3_HINT2": "Debes encontrar 2 cifras en esta fase.",
     "PHASE3_HINT3": "La historia contiene 2 pistas sobre la relación.",
@@ -73,6 +74,7 @@
     "RESOLVE_DATE_HINT": "La última coincidencia tiene que ver con una fecha.",
     "RESOLVE_DAY": "Anna y Roger se casaron el DIA 21, Alberto nació el DIA 21.",
     "RESOLVE_MONTH": "Anna y Roger se casaron el MES de marzo, Alberto nació el MES de marzo.",
-    "RESOLVE_DATE": "El 21 de marzo es la fecha en cuestión. Alberto nació en 1900 no sé qué; Y Anna y Roger se casaron el 2026."
+    "RESOLVE_DATE": "El 21 de marzo es la fecha en cuestión. Alberto nació en 1900 no sé qué; Y Anna y Roger se casaron el 2026.",
+    "ERROR": "Ese no es el número que dicta la jerarquía..."
   }
 }

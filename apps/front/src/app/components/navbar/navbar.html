@@ -1,17 +1,36 @@
 <div class="navbar bg-base-100 shadow-md px-4 border-b border-base-300">
-  <div class="flex-1">
-    <a class="text-xl font-bold text-primary">Wedding Adventure</a>
+  <div class="flex-1 flex items-center gap-2">
+    <button class="btn btn-ghost btn-circle btn-sm" routerLink="/">
+      <span class="text-xl">🏠</span>
+    </button>
+    <a class="text-xl font-bold text-primary cursor-pointer" routerLink="/">{{ 'APP_TITLE' | translate }}</a>
   </div>
   <div class="flex-none">
-    <select
-      class="select select-bordered select-sm w-full max-w-xs bg-white text-gray-700"
-      (change)="changeLang($event)"
-    >
-      @for (lang of languages; track lang.code) {
-        <option [value]="lang.code" [selected]="langService.currentLang() === lang.code">
-          {{ lang.labelTranslationKey | translate }}
-        </option>
-      }
-    </select>
+    <!-- Language Dropdown -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-2 normal-case border border-base-300 hover:bg-base-200">
+        <span class="text-lg">🌐</span>
+        <span>{{ langService.currentLang() | uppercase }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 border border-base-300 mt-2">
+        @for (lang of languages; track lang.code) {
+          <li>
+            <a 
+              [class.active]="langService.currentLang() === lang.code"
+              (click)="langService.setLanguage(lang.code)"
+              class="flex justify-between"
+            >
+              {{ lang.labelTranslationKey | translate }}
+              @if (langService.currentLang() === lang.code) {
+                <span class="text-xs">✓</span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
   </div>
 </div>

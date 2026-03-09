@@ -2,11 +2,12 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { CelebrationComponent } from '../shared/ui/celebration/celebration';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, CelebrationComponent],
   templateUrl: './home.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

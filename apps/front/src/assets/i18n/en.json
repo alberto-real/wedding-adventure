@@ -1,8 +1,11 @@
 {
-  "WELCOME": "Welcome, Anna & Roger!",
+  "WELCOME": "Welcome & Congratulations!",
+  "COUPLE_NAMES": "Anna & Roger",
   "BACK_TO_HOME": "Back to Home",
   "ALL_RIGHTS_RESERVED": "All rights reserved.",
   "PHASE": "Phase",
+  "CELEBRATION_MESSAGE": "Long live the newlyweds!",
+  "APP_TITLE": "Anna & Roger's Adventure",
   "LANGUAGES": {
     "CA": "Catalan",
     "ES": "Spanish",
@@ -15,7 +18,7 @@
     "CHALLENGES": "Team Challenges"
   },
   "HOME": {
-    "TITLE": "Your Wedding Adventure",
+    "TITLE": "Anna & Roger's Adventure",
     "SUBTITLE": "Solve the riddles and discover the secret codes.",
     "SECTIONS": {
       "SPORTS": "Olympic Challenge",
@@ -42,15 +45,12 @@
     "PHASE1_TITLE": "First Steps",
     "PHASE2_TITLE": "The Reunion",
     "PHASE3_TITLE": "Destiny",
-    "PHASE1_DESC": "",
     "PHASE1_HINT1": "You can find details and information at",
     "PHASE1_HINT2": "Anna always triumphed, but with the triple jump, she flew like never before.",
     "PHASE1_HINT3": "Poor Alberto never managed to stand out, but his best result was in the 400m hurdles.",
-    "PHASE2_DESC": "",
     "PHASE2_HINT1": "The effort value could be equivalent to the grade.",
     "PHASE2_HINT2": "The French climbing system will be useful to you.",
     "PHASE2_HINT3": "Everyone's best grade will be quite a reference.",
-    "PHASE3_DESC": "",
     "PHASE3_HINT1": "You must guess the last curious connection of their stories.",
     "PHASE3_HINT2": "You must find 2 digits in this phase.",
     "PHASE3_HINT3": "The story contains 2 hints about the relationship.",
@@ -73,6 +73,7 @@
     "RESOLVE_DATE_HINT": "The last coincidence has to do with a date.",
     "RESOLVE_DAY": "Anna & Roger got married on DAY 21, Alberto was born on DAY 21.",
     "RESOLVE_MONTH": "Anna & Roger got married in the MONTH of March, Alberto was born in the MONTH of March.",
-    "RESOLVE_DATE": "March 21 is the date in question. Alberto was born in 1900-something; And Anna & Roger got married in 2026."
+    "RESOLVE_DATE": "March 21 is the date in question. Alberto was born in 1900-something; And Anna & Roger got married in 2026.",
+    "ERROR": "That is not the number dictated by the hierarchy..."
   }
 }

@@ -1,12 +1,13 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, UpperCasePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../core/services/language.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, RouterModule, UpperCasePipe],
   templateUrl: './navbar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
