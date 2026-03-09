@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npx nx build front --prod",
+  "outputDirectory": "dist/apps/front/browser",
+  "installCommand": "npm ci",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
