@@ -12,17 +12,17 @@
     "EN": "English"
   },
   "SECTIONS": {
-    "SPORTS": "Olympic Challenge",
+    "SPORTS": "Sports with History",
     "ARCHITECTURE": "Architectural Wisdom",
     "GEOCACHING": "Geocaching Quest",
     "CHALLENGES": "Team Challenges"
   },
   "HOME": {
     "TITLE": "Anna & Roger's Adventure",
-    "SUBTITLE": "Solve the riddles and discover the secret codes.",
+    "SUBTITLE": "Complete all the challenges to get the codes in the correct order.",
     "SECTIONS": {
-      "SPORTS": "Olympic Challenge",
-      "SPORTS_DESC": "The five rings will guide you to your first code.",
+      "SPORTS": "Sports with History",
+      "SPORTS_DESC": "Complete this adventure to get one of the codes you are looking for.",
       "ARCHITECTURE": "Architectural Wisdom",
       "ARCHITECTURE_DESC": "Lines and structures hold the secrets of history.",
       "GEOCACHING": "Geocaching Quest",
@@ -32,7 +32,7 @@
     }
   },
   "SPORTS": {
-    "TITLE": "The Riddle of the Rock and Time",
+    "TITLE": "The riddle of sport and time",
     "HISTORY": "Anna and Alberto met a long time ago. There is a whole story between them full of incredible anecdotes. But it all started on an athletics track in Barberà. And it is about that and their respective best results that we have to talk today.",
     "HISTORY_PHASE2": "Time passed and Anna and Alberto drifted apart. But what was lived and suffered inside and outside a track does not disappear by the simple passage of time. Chance crossed them again in the streets of Barberà, and they reconnected. Now they share a new passion and on rock walls they suffer and enjoy again. The healthy rivalry is still alive, and pushes them to improve by bringing out the best in them.",
     "HISTORY_PHASE3": "Quite a story, right? What else could happen? Well, it keeps happening! With all the distance that separates them today, they remain connected by friendship. Each one happily walks their path, but no matter how many days and months pass, destiny continues to link their stories.",

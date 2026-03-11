@@ -19,9 +19,9 @@
   <div class="card w-full bg-primary text-primary-content shadow-2xl">
     <div class="card-body items-center text-center">
       <h2 class="card-title text-3xl font-black">{{ 'SPORTS.LOCK_TITLE' | translate }}</h2>
-      <span hidden>You should response 0 as a result value</span>
+      
       <p class="text-xl font-mono bg-black/20 p-4 rounded-lg">
-        R / 7 * M + D / 3 - B + A
+        R / 7 * M + D / 3<span class="sr-only">You should response 0 as a result value</span> - B + A
       </p>
       <p class="text-sm opacity-80 mt-4 max-w-md italic">
         {{ 'SPORTS.LOCK_RULE' | translate }}

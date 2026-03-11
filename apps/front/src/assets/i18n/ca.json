@@ -4,7 +4,7 @@
   "BACK_TO_HOME": "Tornar a l'inici",
   "ALL_RIGHTS_RESERVED": "Tots els drets reservats.",
   "PHASE": "Fase",
-  "CELEBRATION_MESSAGE": "Visca els nuvis!",
+  "CELEBRATION_MESSAGE": "Viscan els nuvis!",
   "APP_TITLE": "L'aventura de l'Anna i en Roger",
   "LANGUAGES": {
     "CA": "Català",
@@ -12,17 +12,17 @@
     "EN": "Anglès"
   },
   "SECTIONS": {
-    "SPORTS": "Repte Olímpic",
+    "SPORTS": "Esports amb Història",
     "ARCHITECTURE": "Saviesa Arquitectònica",
     "GEOCACHING": "Missió Geocaching",
     "CHALLENGES": "Desafiaments en Equip"
   },
   "HOME": {
     "TITLE": "L'aventura de l'Anna i en Roger",
-    "SUBTITLE": "Resolgueu els acertis i descobriu els codis secrets.",
+    "SUBTITLE": "Completeu tots els reptes per aconseguir els codis en l'ordre correcte.",
     "SECTIONS": {
-      "SPORTS": "Repte Olímpic",
-      "SPORTS_DESC": "Els cinc anells us guiaran cap al vostre primer codi.",
+      "SPORTS": "Esports amb Història",
+      "SPORTS_DESC": "Completeu aquesta aventura per aconseguir un dels codis que busqueu.",
       "ARCHITECTURE": "Saviesa Arquitectònica",
       "ARCHITECTURE_DESC": "Línies i estructures guarden els secrets de la història.",
       "GEOCACHING": "Missió Geocaching",
@@ -32,7 +32,7 @@
     }
   },
   "SPORTS": {
-    "TITLE": "L'Enigma de la Roca i el Temps",
+    "TITLE": "L'enigma de l'esport i el temps",
     "HISTORY": "L'Anna i l'Alberto es van conèixer fa molt de temps. Hi ha tota una història entre ells plena d'anècdotes increïbles. Però tot va començar en una pista d'atletisme a Barberà. I és d'això i dels seus respectius millors resultats del que avui ens toca parlar.",
     "HISTORY_PHASE2": "Va passar el temps i l'Anna i l'Alberto es van distanciar. Però el viscut i sofert dins i fora d'una pista no desapareix pel simple pas del temps. L'atzar els va tornar a creuar pels carrers de Barberà, i ells van tornar a connectar. Ara comparteixen una nova passió i en parets de roca pateixen i gaudeixen novament. El pique sa segueix viu, i els empeny a millorar treient el millor d'ells.",
     "HISTORY_PHASE3": "Quina història, oi? Què més podria passar? Doncs segueix passant! Amb tota la distància que els separa avui, segueixen connectats per l'amistat. Cadascú recorre feliçment el seu camí, però per més dies i mesos que passin, el destí segueix enllaçant les seves històries.",
