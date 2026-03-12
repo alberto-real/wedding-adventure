@@ -76,5 +76,53 @@
     "RESOLVE_MONTH": "L'Anna i el Roger es van casar el MES de març, l'Alberto va néixer el MES de març.",
     "RESOLVE_DATE": "El 21 de març és la data en qüestió. L'Alberto va néixer el 1900 no sé què; I l'Anna i el Roger es van casar el 2026.",
     "ERROR": "Aquest no és el número que dicta la jerarquia..."
+  },
+  "CHALLENGES": {
+    "INTRO": "Treballeu junts en equip per resoldre aquests minijocs! La comunicació i la col·laboració són les claus d'un matrimoni feliç.",
+    "PLAY": "Jugar",
+    "CREATE_ROOM": "Crear sala",
+    "JOIN_ROOM": "Unir-se a sala",
+    "ENTER_NAME": "El teu nom",
+    "ENTER_ROOM_CODE": "Codi de sala",
+    "BACK": "Enrere",
+    "BACK_TO_GAMES": "Tornar als jocs",
+    "LOBBY_DESC": "Crea una nova sala o uneix-te a una existent per jugar junts.",
+    "CONNECTING": "Connectant...",
+    "WAITING_PARTNER": "Esperant la teva parella...",
+    "ROOM_CODE": "Codi de sala",
+    "SHARE_CODE": "Comparteix aquest codi amb la teva parella perquè pugui unir-se.",
+    "PLAYERS_IN_ROOM": "Jugadors a la sala",
+    "ROOM_READY": "Sala llesta! A jugar!",
+    "ROOM_CLOSED": "La sala s'ha tancat per inactivitat. Crea o uneix-te a una nova sala.",
+    "RESET_GAME": "Reiniciar joc",
+    "LEAVE_TITLE": "Sortir de la sala?",
+    "LEAVE_MESSAGE": "Si surts, el joc acabarà per als dos jugadors. N'estàs segur?",
+    "LEAVE_CONFIRM": "Sortir",
+    "CANCEL": "Cancel·lar",
+    "GAME_READY_DESC": "Tots dos jugadors connectats! El minijoc començarà aquí aviat.",
+    "GAME_COMING_SOON": "Aquest minijoc estarà disponible aviat!",
+    "SCAN_QR": "O escaneja aquest codi QR:",
+    "SHARE_LINK": "Compartir enllaç d'invitació",
+    "COPIED": "Copiat!",
+    "TAP_TO_COPY": "Toca per copiar el codi",
+    "ERRORS": {
+      "ROOM_NOT_FOUND": "Sala no trobada. Revisa el codi i torna-ho a provar.",
+      "ROOM_FULL": "Aquesta sala ja està plena (màxim 2 jugadors).",
+      "ALREADY_IN_ROOM": "Ja ets en aquesta sala."
+    },
+    "GAMES": {
+      "SKI": {
+        "TITLE": "Esquiar per la neu",
+        "DESC": "Guieu-vos mútuament per les pistes en aquest desafiament cooperatiu d'esquí."
+      },
+      "PHOTOGRAPHERS": {
+        "TITLE": "Fotògrafs minuciosos",
+        "DESC": "Coordineu-vos per capturar les fotos perfectes amb precisió i treball en equip."
+      },
+      "DESIGNS": {
+        "TITLE": "Dissenys deconstruïts",
+        "DESC": "Reconstruïu dissenys creatius junts combinant les vostres perspectives úniques."
+      }
+    }
   }
 }

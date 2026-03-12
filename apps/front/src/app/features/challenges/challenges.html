@@ -2,15 +2,97 @@
   <div class="text-center space-y-4">
     <div class="text-7xl">🤝</div>
     <h1 class="text-4xl font-black text-primary">{{ 'SECTIONS.CHALLENGES' | translate }}</h1>
+    <p class="text-base-content/70 max-w-lg mx-auto">{{ 'CHALLENGES.INTRO' | translate }}</p>
   </div>
 
-  <div class="card bg-base-100 shadow-xl border border-base-300 w-full">
-    <div class="card-body items-center text-center">
-      <h2 class="card-title text-2xl">{{ 'HOME.SECTIONS.CHALLENGES_DESC' | translate }}</h2>
-      <p class="py-4">Aquí es donde los WebSockets permitirán a Anna y Roger trabajar juntos en tiempo real.</p>
-      <div class="card-actions">
-        <button class="btn btn-secondary" routerLink="/">{{ 'BACK_TO_HOME' | translate }}</button>
-      </div>
+  @if (!selectedGame()) {
+    <!-- Game selection grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full px-4">
+      @for (game of miniGames; track game.id) {
+        <div
+          class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 border border-base-300 group cursor-pointer"
+          (click)="selectGame(game)"
+        >
+          <div class="card-body items-center text-center gap-3">
+            <div class="text-5xl group-hover:scale-110 transition-transform duration-300">
+              {{ game.icon }}
+            </div>
+            <h2 class="card-title text-xl font-bold group-hover:text-primary transition-colors">
+              {{ game.titleKey | translate }}
+            </h2>
+            <p class="text-base-content/60 text-sm leading-tight">
+              {{ game.descKey | translate }}
+            </p>
+            <div class="card-actions mt-2">
+              <button class="btn btn-primary btn-sm">{{ 'CHALLENGES.PLAY' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      }
     </div>
-  </div>
+
+    <button class="btn btn-ghost" routerLink="/">{{ 'BACK_TO_HOME' | translate }}</button>
+  } @else {
+    <!-- Game lobby / active game -->
+    <div class="w-full">
+      <div class="flex items-center justify-between w-full mb-4 px-4">
+        <button class="btn btn-ghost btn-sm gap-2" (click)="backToGameList()">
+          ← {{ 'CHALLENGES.BACK_TO_GAMES' | translate }}
+        </button>
+
+        @if (isInRoom()) {
+          <button class="btn btn-warning btn-sm gap-2" (click)="resetGame()">
+            🔄 {{ 'CHALLENGES.RESET_GAME' | translate }}
+          </button>
+        }
+      </div>
+
+      @if (!isInRoom() && status() !== 'joining') {
+        <app-room-lobby
+          [gameType]="selectedGame()!.id"
+          [gameTitleKey]="selectedGame()!.titleKey"
+          [inviteRoomId]="inviteRoomId()"
+        />
+      }
+
+      @if (status() === 'joining') {
+        <div class="flex flex-col items-center gap-4 py-8">
+          <span class="loading loading-dots loading-lg text-primary"></span>
+          <p class="text-lg">{{ 'CHALLENGES.CONNECTING' | translate }}</p>
+        </div>
+      }
+
+      @if (status() === 'waiting') {
+        <app-room-lobby
+          [gameType]="selectedGame()!.id"
+          [gameTitleKey]="selectedGame()!.titleKey"
+          [inviteRoomId]="null"
+        />
+      }
+
+      @if (status() === 'ready') {
+        <div class="flex flex-col items-center gap-6 w-full">
+          <app-room-lobby
+            [gameType]="selectedGame()!.id"
+            [gameTitleKey]="selectedGame()!.titleKey"
+            [inviteRoomId]="null"
+          />
+
+          <div class="card bg-base-100 shadow-xl border border-primary/30 w-full max-w-2xl mx-auto">
+            <div class="card-body items-center text-center gap-4">
+              <div class="text-6xl">{{ selectedGame()!.icon }}</div>
+              <h2 class="card-title text-2xl">{{ selectedGame()!.titleKey | translate }}</h2>
+              <p class="text-base-content/60">{{ 'CHALLENGES.GAME_READY_DESC' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>
+
+<app-leave-confirm-modal
+  [visible]="showLeaveModal()"
+  (confirmed)="confirmLeave()"
+  (cancelled)="cancelLeave()"
+/>

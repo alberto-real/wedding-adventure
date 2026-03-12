@@ -1,0 +1,153 @@
+@if (status() === 'idle' || status() === 'closed') {
+  <div class="card bg-base-100 shadow-xl border border-base-300 w-full max-w-md mx-auto">
+    <div class="card-body items-center text-center gap-4">
+      <h2 class="card-title text-2xl">{{ gameTitleKey() | translate }}</h2>
+
+      @if (status() === 'closed') {
+        <div class="alert alert-warning">
+          <span>{{ 'CHALLENGES.ROOM_CLOSED' | translate }}</span>
+        </div>
+      }
+
+      @if (error()) {
+        <div class="alert alert-error">
+          <span>{{ 'CHALLENGES.ERRORS.' + error() | translate }}</span>
+        </div>
+      }
+
+      @if (mode() === 'choose') {
+        <p class="text-base-content/70">{{ 'CHALLENGES.LOBBY_DESC' | translate }}</p>
+        <div class="flex flex-col gap-3 w-full">
+          <button class="btn btn-primary btn-lg w-full" (click)="selectCreate()">
+            {{ 'CHALLENGES.CREATE_ROOM' | translate }}
+          </button>
+          <button class="btn btn-secondary btn-lg w-full" (click)="selectJoin()">
+            {{ 'CHALLENGES.JOIN_ROOM' | translate }}
+          </button>
+        </div>
+      }
+
+      @if (mode() === 'create') {
+        <div class="flex flex-col gap-3 w-full">
+          <input
+            type="text"
+            class="input input-bordered input-primary w-full text-center text-lg"
+            [placeholder]="'CHALLENGES.ENTER_NAME' | translate"
+            [ngModel]="playerName()"
+            (ngModelChange)="playerName.set($event)"
+            maxlength="20"
+          />
+          <button
+            class="btn btn-primary btn-lg w-full"
+            [disabled]="!playerName().trim()"
+            (click)="createRoom()"
+          >
+            {{ 'CHALLENGES.CREATE_ROOM' | translate }}
+          </button>
+          <button class="btn btn-ghost btn-sm" (click)="backToChoose()">
+            {{ 'CHALLENGES.BACK' | translate }}
+          </button>
+        </div>
+      }
+
+      @if (mode() === 'join') {
+        <div class="flex flex-col gap-3 w-full">
+          <input
+            type="text"
+            class="input input-bordered input-primary w-full text-center text-lg"
+            [placeholder]="'CHALLENGES.ENTER_NAME' | translate"
+            [ngModel]="playerName()"
+            (ngModelChange)="playerName.set($event)"
+            maxlength="20"
+          />
+          <input
+            type="text"
+            class="input input-bordered input-secondary w-full text-center text-lg uppercase tracking-widest"
+            [placeholder]="'CHALLENGES.ENTER_ROOM_CODE' | translate"
+            [ngModel]="joinRoomId()"
+            (ngModelChange)="joinRoomId.set($event)"
+            maxlength="6"
+          />
+          <button
+            class="btn btn-secondary btn-lg w-full"
+            [disabled]="!playerName().trim() || !joinRoomId().trim()"
+            (click)="joinRoom()"
+          >
+            {{ 'CHALLENGES.JOIN_ROOM' | translate }}
+          </button>
+          <button class="btn btn-ghost btn-sm" (click)="backToChoose()">
+            {{ 'CHALLENGES.BACK' | translate }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@if (status() === 'joining') {
+  <div class="flex flex-col items-center gap-4 py-8">
+    <span class="loading loading-dots loading-lg text-primary"></span>
+    <p class="text-lg">{{ 'CHALLENGES.CONNECTING' | translate }}</p>
+  </div>
+}
+
+@if (status() === 'waiting') {
+  <div class="card bg-base-100 shadow-xl border border-base-300 w-full max-w-md mx-auto">
+    <div class="card-body items-center text-center gap-4">
+      <h2 class="card-title text-xl">{{ 'CHALLENGES.WAITING_PARTNER' | translate }}</h2>
+
+      <!-- Room code with copy -->
+      <div class="bg-primary/10 rounded-2xl px-6 py-4 cursor-pointer" (click)="copyCode()">
+        <p class="text-sm text-base-content/60 mb-1">{{ 'CHALLENGES.ROOM_CODE' | translate }}</p>
+        <p class="text-3xl font-mono font-bold tracking-widest text-primary">{{ roomId() }}</p>
+        <p class="text-xs text-base-content/40 mt-1">{{ 'CHALLENGES.TAP_TO_COPY' | translate }}</p>
+      </div>
+
+      <!-- QR Code -->
+      @if (qrDataUrl()) {
+        <div class="py-2">
+          <p class="text-sm text-base-content/60 mb-2">{{ 'CHALLENGES.SCAN_QR' | translate }}</p>
+          <img [src]="qrDataUrl()" alt="QR Code" class="mx-auto rounded-lg" width="200" height="200" />
+        </div>
+      }
+
+      <!-- Share button -->
+      <button class="btn btn-secondary btn-sm gap-2 w-full max-w-xs" (click)="shareRoom()">
+        @if (copied()) {
+          ✓ {{ 'CHALLENGES.COPIED' | translate }}
+        } @else {
+          📤 {{ 'CHALLENGES.SHARE_LINK' | translate }}
+        }
+      </button>
+
+      <p class="text-base-content/60 text-sm">{{ 'CHALLENGES.SHARE_CODE' | translate }}</p>
+
+      <div class="divider"></div>
+
+      <div class="w-full">
+        <p class="text-sm text-base-content/60 mb-2">{{ 'CHALLENGES.PLAYERS_IN_ROOM' | translate }}</p>
+        @for (player of players(); track player) {
+          <div class="badge badge-primary badge-lg gap-2 m-1">{{ player }}</div>
+        }
+      </div>
+
+      <span class="loading loading-ring loading-md text-secondary"></span>
+    </div>
+  </div>
+}
+
+@if (status() === 'ready') {
+  <div class="card bg-base-100 shadow-xl border border-success/30 w-full max-w-md mx-auto">
+    <div class="card-body items-center text-center gap-4">
+      <div class="text-5xl">🎮</div>
+      <h2 class="card-title text-xl text-success">{{ 'CHALLENGES.ROOM_READY' | translate }}</h2>
+
+      <div class="w-full">
+        <p class="text-sm text-base-content/60 mb-2">{{ 'CHALLENGES.PLAYERS_IN_ROOM' | translate }}</p>
+        @for (player of players(); track player) {
+          <div class="badge badge-success badge-lg gap-2 m-1">{{ player }}</div>
+        }
+      </div>
+    </div>
+  </div>
+}

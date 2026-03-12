@@ -21,7 +21,8 @@
           },
           "apps/front/src/assets"
         ],
-        "styles": ["apps/front/src/styles.scss"]
+        "styles": ["apps/front/src/styles.scss"],
+        "allowedCommonJsDependencies": ["qrcode"]
       },
       "configurations": {
         "production": {

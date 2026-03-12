@@ -76,5 +76,53 @@
     "RESOLVE_MONTH": "Anna y Roger se casaron el MES de marzo, Alberto nació el MES de marzo.",
     "RESOLVE_DATE": "El 21 de marzo es la fecha en cuestión. Alberto nació en 1900 no sé qué; Y Anna y Roger se casaron el 2026.",
     "ERROR": "Ese no es el número que dicta la jerarquía..."
+  },
+  "CHALLENGES": {
+    "INTRO": "¡Trabajad juntos en equipo para resolver estos minijuegos! La comunicación y la colaboración son las claves de un matrimonio feliz.",
+    "PLAY": "Jugar",
+    "CREATE_ROOM": "Crear sala",
+    "JOIN_ROOM": "Unirse a sala",
+    "ENTER_NAME": "Tu nombre",
+    "ENTER_ROOM_CODE": "Código de sala",
+    "BACK": "Atrás",
+    "BACK_TO_GAMES": "Volver a los juegos",
+    "LOBBY_DESC": "Crea una nueva sala o únete a una existente para jugar juntos.",
+    "CONNECTING": "Conectando...",
+    "WAITING_PARTNER": "Esperando a tu pareja...",
+    "ROOM_CODE": "Código de sala",
+    "SHARE_CODE": "Comparte este código con tu pareja para que pueda unirse.",
+    "PLAYERS_IN_ROOM": "Jugadores en la sala",
+    "ROOM_READY": "¡Sala lista! ¡A jugar!",
+    "ROOM_CLOSED": "La sala se cerró por inactividad. Crea o únete a una nueva sala.",
+    "RESET_GAME": "Reiniciar juego",
+    "LEAVE_TITLE": "¿Salir de la sala?",
+    "LEAVE_MESSAGE": "Si sales, el juego terminará para ambos jugadores. ¿Estás seguro?",
+    "LEAVE_CONFIRM": "Salir",
+    "CANCEL": "Cancelar",
+    "GAME_READY_DESC": "¡Ambos jugadores conectados! El minijuego comenzará aquí pronto.",
+    "GAME_COMING_SOON": "¡Este minijuego estará disponible pronto!",
+    "SCAN_QR": "O escanea este código QR:",
+    "SHARE_LINK": "Compartir enlace de invitación",
+    "COPIED": "¡Copiado!",
+    "TAP_TO_COPY": "Toca para copiar el código",
+    "ERRORS": {
+      "ROOM_NOT_FOUND": "Sala no encontrada. Revisa el código e inténtalo de nuevo.",
+      "ROOM_FULL": "Esta sala ya está llena (máximo 2 jugadores).",
+      "ALREADY_IN_ROOM": "Ya estás en esta sala."
+    },
+    "GAMES": {
+      "SKI": {
+        "TITLE": "Esquiar por la nieve",
+        "DESC": "Guiaos mutuamente por las pistas en este desafío cooperativo de esquí."
+      },
+      "PHOTOGRAPHERS": {
+        "TITLE": "Fotógrafos minuciosos",
+        "DESC": "Coordinaos para capturar las fotos perfectas con precisión y trabajo en equipo."
+      },
+      "DESIGNS": {
+        "TITLE": "Diseños deconstruidos",
+        "DESC": "Reconstruid diseños creativos juntos combinando vuestras perspectivas únicas."
+      }
+    }
   }
 }

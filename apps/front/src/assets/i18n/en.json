@@ -75,5 +75,53 @@
     "RESOLVE_MONTH": "Anna & Roger got married in the MONTH of March, Alberto was born in the MONTH of March.",
     "RESOLVE_DATE": "March 21 is the date in question. Alberto was born in 1900-something; And Anna & Roger got married in 2026.",
     "ERROR": "That is not the number dictated by the hierarchy..."
+  },
+  "CHALLENGES": {
+    "INTRO": "Work together as a team to solve these mini-games. Communication and collaboration are the keys to a happy marriage!",
+    "PLAY": "Play",
+    "CREATE_ROOM": "Create Room",
+    "JOIN_ROOM": "Join Room",
+    "ENTER_NAME": "Your name",
+    "ENTER_ROOM_CODE": "Room code",
+    "BACK": "Back",
+    "BACK_TO_GAMES": "Back to games",
+    "LOBBY_DESC": "Create a new room or join an existing one to play together.",
+    "CONNECTING": "Connecting...",
+    "WAITING_PARTNER": "Waiting for your partner...",
+    "ROOM_CODE": "Room Code",
+    "SHARE_CODE": "Share this code with your partner so they can join.",
+    "PLAYERS_IN_ROOM": "Players in room",
+    "ROOM_READY": "Room ready! Let's play!",
+    "ROOM_CLOSED": "The room was closed due to inactivity. Create or join a new room.",
+    "RESET_GAME": "Reset Game",
+    "LEAVE_TITLE": "Leave the room?",
+    "LEAVE_MESSAGE": "If you leave, the game will end for both players. Are you sure?",
+    "LEAVE_CONFIRM": "Leave",
+    "CANCEL": "Cancel",
+    "GAME_READY_DESC": "Both players connected! The mini-game will start here soon.",
+    "GAME_COMING_SOON": "This mini-game is coming soon!",
+    "SCAN_QR": "Or scan this QR code:",
+    "SHARE_LINK": "Share invite link",
+    "COPIED": "Copied!",
+    "TAP_TO_COPY": "Tap to copy code",
+    "ERRORS": {
+      "ROOM_NOT_FOUND": "Room not found. Check the code and try again.",
+      "ROOM_FULL": "This room is already full (max 2 players).",
+      "ALREADY_IN_ROOM": "You are already in this room."
+    },
+    "GAMES": {
+      "SKI": {
+        "TITLE": "Skiing through the Snow",
+        "DESC": "Guide each other down the slopes in this cooperative skiing challenge."
+      },
+      "PHOTOGRAPHERS": {
+        "TITLE": "Meticulous Photographers",
+        "DESC": "Coordinate to capture the perfect shots with precision and teamwork."
+      },
+      "DESIGNS": {
+        "TITLE": "Deconstructed Designs",
+        "DESC": "Rebuild creative designs together by combining your unique perspectives."
+      }
+    }
   }
 }
