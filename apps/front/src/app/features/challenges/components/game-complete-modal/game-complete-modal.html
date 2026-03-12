@@ -1,0 +1,18 @@
+@if (visible()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div class="card bg-base-100 shadow-2xl w-full max-w-md animate-bounce-in">
+      <div class="card-body items-center text-center gap-4">
+        <div class="text-6xl">🏆</div>
+        <h2 class="card-title text-2xl text-success">
+          {{ 'CHALLENGES.GAME_COMPLETE_TITLE' | translate }}
+        </h2>
+        <p class="text-base-content/80 text-sm leading-relaxed whitespace-pre-line">
+          {{ messageKey() | translate }}
+        </p>
+        <button class="btn btn-primary btn-wide" (click)="close()">
+          {{ 'CHALLENGES.GAME_COMPLETE_OK' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

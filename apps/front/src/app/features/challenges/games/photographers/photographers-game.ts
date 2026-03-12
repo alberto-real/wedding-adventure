@@ -1,16 +1,371 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  computed,
+  output,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
+import { DecimalPipe, NgStyle } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { GameRoomService } from '../../services/game-room.service';
+import { GameCompleteModalComponent } from '../../components/game-complete-modal/game-complete-modal';
+
+interface PhotoTarget {
+  id: string;
+  nameKey: string;
+  icon: string;
+  x: number;
+  y: number;
+  zoom: number;
+  toleranceXY: number;
+  toleranceZoom: number;
+}
+
+/**
+ * Proposed target positions – adjust these values
+ * once the actual mountain.png image is in place.
+ */
+const PHOTO_TARGETS: PhotoTarget[] = [
+  {
+    id: 'wedding',
+    nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.WEDDING',
+    icon: '💒',
+    x: 51,
+    y: 23,
+    zoom: 5,
+    toleranceXY: 8,
+    toleranceZoom: 0,
+  },
+  {
+    id: 'van',
+    nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.VAN',
+    icon: '🚐',
+    x: 52,
+    y: 90,
+    zoom: 5,
+    toleranceXY: 8,
+    toleranceZoom: 0,
+  },
+  {
+    id: 'climber',
+    nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.CLIMBER',
+    icon: '🧗',
+    x: 44,
+    y: 38,
+    zoom: 5,
+    toleranceXY: 6,
+    toleranceZoom: 0,
+  },
+  {
+    id: 'bbq',
+    nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.BBQ',
+    icon: '🍖',
+    x: 63,
+    y: 73,
+    zoom: 5,
+    toleranceXY: 5,
+    toleranceZoom: 0,
+  },
+];
 
 @Component({
   selector: 'app-photographers-game',
-  imports: [TranslateModule],
-  template: `
-    <div class="text-center py-8">
-      <div class="text-6xl mb-4">📸</div>
-      <h2 class="text-2xl font-bold">{{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.TITLE' | translate }}</h2>
-      <p class="text-base-content/60 mt-2">{{ 'CHALLENGES.GAME_COMING_SOON' | translate }}</p>
-    </div>
-  `,
+  imports: [FormsModule, TranslateModule, DecimalPipe, NgStyle, GameCompleteModalComponent],
+  templateUrl: './photographers-game.html',
+  styleUrl: './photographers-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PhotographersGameComponent {}
+export class PhotographersGameComponent implements OnInit, OnDestroy {
+  private gameRoomService = inject(GameRoomService);
+  private translate = inject(TranslateService);
+
+  gameCompleted = output<void>();
+
+  readonly targets = PHOTO_TARGETS;
+
+  // --- Game phase ---
+  phase = signal<'intro' | 'playing' | 'completed'>('intro');
+  introClosing = signal(false);
+
+  // --- Camera state (start at max zoom + max focus = fully blurred & zoomed) ---
+  cameraX = signal(50);
+  cameraY = signal(50);
+  cameraZoom = signal(5);
+  cameraFocus = signal(0);
+
+  // --- Progress ---
+  capturedTargets = signal<string[]>([]);
+  showFlash = signal(false);
+  lastPhotoWrong = signal(false);
+  toastMessage = signal<string | null>(null);
+  showCompleteModal = signal(false);
+
+  // --- Sequential target: only the current one is revealed ---
+  readonly currentTarget = computed(() => {
+    const captured = this.capturedTargets();
+    return this.targets[captured.length] ?? null;
+  });
+
+  readonly currentTargetIndex = computed(() => this.capturedTargets().length);
+
+  // --- Role assignment ---
+  readonly role = computed(() => {
+    const players = this.gameRoomService.players();
+    const name = this.gameRoomService.localPlayerName();
+    if (!name || players.length < 2) return null;
+    return players.indexOf(name) === 0 ? 'horizontal' : 'vertical';
+  });
+
+  readonly roleLabelKey = computed(() =>
+    this.role() === 'horizontal'
+      ? 'CHALLENGES.GAMES.PHOTOGRAPHERS.ROLE_HORIZONTAL'
+      : 'CHALLENGES.GAMES.PHOTOGRAPHERS.ROLE_VERTICAL',
+  );
+
+  // --- Focus / blur mechanics ---
+  readonly correctFocus = computed(() => this.cameraZoom() * 20);
+
+  readonly blurAmount = computed(
+    () => Math.abs(this.cameraFocus() - this.correctFocus()) * 0.4,
+  );
+
+  readonly isInFocus = computed(() => this.blurAmount() < 1.5);
+
+  readonly focusBarWidth = computed(() =>
+    Math.max(5, 100 - this.blurAmount() * 5),
+  );
+
+  // --- Image CSS ---
+  readonly imageStyle = computed(() => ({
+    transform: `scale(${this.cameraZoom()})`,
+    'transform-origin': `${this.cameraX()}% ${this.cameraY()}%`,
+    filter: `blur(${this.blurAmount()}px)`,
+  }));
+
+  // --- Check if current target is in range (for visual feedback only) ---
+  readonly isTargetInRange = computed(() => {
+    const target = this.currentTarget();
+    if (!target || !this.isInFocus()) return false;
+    const x = this.cameraX();
+    const y = this.cameraY();
+    const zoom = this.cameraZoom();
+    return (
+      Math.abs(x - target.x) <= target.toleranceXY &&
+      Math.abs(y - target.y) <= target.toleranceXY &&
+      Math.abs(zoom - target.zoom) <= target.toleranceZoom
+    );
+  });
+
+  readonly isCompleted = computed(
+    () => this.capturedTargets().length === this.targets.length,
+  );
+
+  private timers: ReturnType<typeof setTimeout>[] = [];
+
+  ngOnInit(): void {
+    this.gameRoomService.onGameEvent((data) => {
+      const payload = data.payload as Record<string, unknown>;
+
+      if (data.event === 'camera-update') {
+        if (payload['role'] === 'horizontal' && this.role() !== 'horizontal') {
+          this.cameraX.set(payload['x'] as number);
+          this.cameraZoom.set(payload['zoom'] as number);
+        } else if (
+          payload['role'] === 'vertical' &&
+          this.role() !== 'vertical'
+        ) {
+          this.cameraY.set(payload['y'] as number);
+          this.cameraFocus.set(payload['focus'] as number);
+        }
+      } else if (data.event === 'take-photo') {
+        this.onPhotoResult(payload['targetId'] as string | null);
+      }
+    });
+
+    this.gameRoomService.onGameReset(() => this.resetLocalState());
+
+    this.startIntro();
+  }
+
+  ngOnDestroy(): void {
+    this.timers.forEach(clearTimeout);
+  }
+
+  private startIntro(): void {
+    this.phase.set('intro');
+    this.introClosing.set(false);
+
+    const t1 = setTimeout(() => this.introClosing.set(true), 1500);
+    const t2 = setTimeout(() => this.phase.set('playing'), 2500);
+    this.timers.push(t1, t2);
+  }
+
+  onCameraXChange(value: number): void {
+    this.cameraX.set(+value);
+    this.sendCameraUpdate();
+  }
+
+  onCameraYChange(value: number): void {
+    this.cameraY.set(+value);
+    this.sendCameraUpdate();
+  }
+
+  onZoomChange(value: number): void {
+    this.cameraZoom.set(+value);
+    this.sendCameraUpdate();
+  }
+
+  onFocusChange(value: number): void {
+    this.cameraFocus.set(+value);
+    this.sendCameraUpdate();
+  }
+
+  /** Always-visible button: validates if current target is in range */
+  takePhoto(): void {
+    this.playShutterSound();
+    this.lastPhotoWrong.set(false);
+    const target = this.currentTarget();
+    if (!target) return;
+
+    if (this.isTargetInRange()) {
+      // Correct! Broadcast to both players
+      this.gameRoomService.sendGameEvent('take-photo', {
+        targetId: target.id,
+      });
+    } else {
+      // Wrong position – broadcast miss so both see feedback
+      this.gameRoomService.sendGameEvent('take-photo', {
+        targetId: null,
+      });
+    }
+  }
+
+  isTargetCaptured(targetId: string): boolean {
+    return this.capturedTargets().includes(targetId);
+  }
+
+  isTargetRevealed(index: number): boolean {
+    return index <= this.capturedTargets().length;
+  }
+
+  private playShutterSound(): void {
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+
+    // Click burst (white noise)
+    const bufferSize = ctx.sampleRate * 0.08;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 10);
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    // Bandpass to shape it like a mechanical click
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 800;
+    filter.Q.value = 1;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.6, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+    noise.connect(filter).connect(gain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 0.08);
+
+    // Second click (mirror slap)
+    const buffer2 = ctx.createBuffer(1, ctx.sampleRate * 0.04, ctx.sampleRate);
+    const data2 = buffer2.getChannelData(0);
+    for (let i = 0; i < data2.length; i++) {
+      data2[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data2.length, 15);
+    }
+    const noise2 = ctx.createBufferSource();
+    noise2.buffer = buffer2;
+    const gain2 = ctx.createGain();
+    gain2.gain.setValueAtTime(0.3, now + 0.06);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    noise2.connect(gain2).connect(ctx.destination);
+    noise2.start(now + 0.06);
+    noise2.stop(now + 0.1);
+
+    // Cleanup
+    setTimeout(() => ctx.close(), 200);
+  }
+
+  private sendCameraUpdate(): void {
+    const r = this.role();
+    if (r === 'horizontal') {
+      this.gameRoomService.sendGameEvent('camera-update', {
+        role: 'horizontal',
+        x: this.cameraX(),
+        zoom: this.cameraZoom(),
+      });
+    } else if (r === 'vertical') {
+      this.gameRoomService.sendGameEvent('camera-update', {
+        role: 'vertical',
+        y: this.cameraY(),
+        focus: this.cameraFocus(),
+      });
+    }
+  }
+
+  private onPhotoResult(targetId: string | null): void {
+    if (!targetId) {
+      // Miss – shake feedback + toast
+      this.lastPhotoWrong.set(true);
+      this.showFlash.set(true);
+      this.toastMessage.set(
+        this.translate.instant('CHALLENGES.GAMES.PHOTOGRAPHERS.MISS_TOAST'),
+      );
+      const t = setTimeout(() => {
+        this.showFlash.set(false);
+        this.lastPhotoWrong.set(false);
+      }, 600);
+      const t2 = setTimeout(() => this.toastMessage.set(null), 3000);
+      this.timers.push(t, t2);
+      return;
+    }
+
+    if (this.capturedTargets().includes(targetId)) return;
+
+    this.capturedTargets.update((arr) => [...arr, targetId]);
+    this.showFlash.set(true);
+    const t1 = setTimeout(() => this.showFlash.set(false), 500);
+    this.timers.push(t1);
+
+    if (this.capturedTargets().length === this.targets.length) {
+      const t2 = setTimeout(() => {
+        this.phase.set('completed');
+        this.showCompleteModal.set(true);
+      }, 1000);
+      this.timers.push(t2);
+    }
+  }
+
+  closeCompleteModal(): void {
+    this.showCompleteModal.set(false);
+    this.gameCompleted.emit();
+  }
+
+  private resetLocalState(): void {
+    this.timers.forEach(clearTimeout);
+    this.timers = [];
+    this.cameraX.set(50);
+    this.cameraY.set(50);
+    this.cameraZoom.set(5);
+    this.cameraFocus.set(100);
+    this.capturedTargets.set([]);
+    this.showFlash.set(false);
+    this.lastPhotoWrong.set(false);
+    this.toastMessage.set(null);
+    this.showCompleteModal.set(false);
+    this.startIntro();
+  }
+}

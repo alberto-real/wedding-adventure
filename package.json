@@ -1,8 +1,15 @@
 {
   "name": "@wedding-adventure/source",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "serve": "npx nx run-many -t serve -p front back",
+    "build": "npx nx run-many -t build -p front back",
+    "test": "npx nx run-many -t test -p front back",
+    "lint": "npx nx run-many -t lint -p front back",
+    "e2e": "npx nx run-many -t e2e -p front back",
+    "prepare": "husky"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/core": "~21.1.0",

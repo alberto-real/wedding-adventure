@@ -21,8 +21,8 @@ import * as QRCode from 'qrcode';
 export class RoomLobbyComponent {
   private gameRoomService = inject(GameRoomService);
 
-  gameType = input.required<string>();
-  gameTitleKey = input.required<string>();
+  gameType = input<string>('challenges');
+  gameTitleKey = input<string>('SECTIONS.CHALLENGES');
   inviteRoomId = input<string | null>(null);
 
   readonly state = this.gameRoomService.state;
@@ -39,10 +39,9 @@ export class RoomLobbyComponent {
 
   readonly shareUrl = computed(() => {
     const id = this.roomId();
-    const game = this.gameType();
     if (!id) return null;
     const base = window.location.origin;
-    return `${base}/challenges?game=${game}&room=${id}`;
+    return `${base}/challenges?room=${id}`;
   });
 
   constructor() {

@@ -21,6 +21,8 @@ export class GameRoomService implements OnDestroy {
     error: null,
   });
 
+  readonly localPlayerName = signal<string | null>(null);
+
   readonly state = this._state.asReadonly();
   readonly roomId = computed(() => this._state().roomId);
   readonly players = computed(() => this._state().players);
@@ -30,6 +32,8 @@ export class GameRoomService implements OnDestroy {
   readonly playerCount = computed(() => this._state().players.length);
 
   private activityInterval: ReturnType<typeof setInterval> | null = null;
+  private pendingGameEventCbs: ((data: { event: string; payload: unknown; from: string }) => void)[] = [];
+  private pendingGameResetCbs: (() => void)[] = [];
 
   private getSocketUrl(): string {
     return window.location.hostname === 'localhost'
@@ -101,9 +105,20 @@ export class GameRoomService implements OnDestroy {
       }));
       this.stopActivityPing();
     });
+
+    // Register any callbacks that were queued before the socket existed
+    for (const cb of this.pendingGameEventCbs) {
+      this.socket.on('game-event', cb);
+    }
+    this.pendingGameEventCbs = [];
+    for (const cb of this.pendingGameResetCbs) {
+      this.socket.on('game-reset', cb);
+    }
+    this.pendingGameResetCbs = [];
   }
 
   createRoom(gameType: string, playerName: string): void {
+    this.localPlayerName.set(playerName);
     this.connect();
     this._state.update((s) => ({
       ...s,
@@ -115,6 +130,7 @@ export class GameRoomService implements OnDestroy {
   }
 
   joinRoom(roomId: string, playerName: string): void {
+    this.localPlayerName.set(playerName);
     this.connect();
     this._state.update((s) => ({
       ...s,
@@ -148,11 +164,19 @@ export class GameRoomService implements OnDestroy {
   }
 
   onGameEvent(callback: (data: { event: string; payload: unknown; from: string }) => void): void {
-    this.socket?.on('game-event', callback);
+    if (this.socket) {
+      this.socket.on('game-event', callback);
+    } else {
+      this.pendingGameEventCbs.push(callback);
+    }
   }
 
   onGameReset(callback: () => void): void {
-    this.socket?.on('game-reset', callback);
+    if (this.socket) {
+      this.socket.on('game-reset', callback);
+    } else {
+      this.pendingGameResetCbs.push(callback);
+    }
   }
 
   private startActivityPing(): void {
@@ -175,6 +199,7 @@ export class GameRoomService implements OnDestroy {
 
   private reset(): void {
     this.stopActivityPing();
+    this.localPlayerName.set(null);
     this._state.set({
       roomId: null,
       players: [],

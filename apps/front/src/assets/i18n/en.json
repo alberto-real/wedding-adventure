@@ -79,6 +79,7 @@
   "CHALLENGES": {
     "INTRO": "Work together as a team to solve these mini-games. Communication and collaboration are the keys to a happy marriage!",
     "PLAY": "Play",
+    "COMING_SOON": "Coming soon",
     "CREATE_ROOM": "Create Room",
     "JOIN_ROOM": "Join Room",
     "ENTER_NAME": "Your name",
@@ -93,6 +94,7 @@
     "PLAYERS_IN_ROOM": "Players in room",
     "ROOM_READY": "Room ready! Let's play!",
     "ROOM_CLOSED": "The room was closed due to inactivity. Create or join a new room.",
+    "LEAVE_ROOM": "Leave room",
     "RESET_GAME": "Reset Game",
     "LEAVE_TITLE": "Leave the room?",
     "LEAVE_MESSAGE": "If you leave, the game will end for both players. Are you sure?",
@@ -100,7 +102,10 @@
     "CANCEL": "Cancel",
     "GAME_READY_DESC": "Both players connected! The mini-game will start here soon.",
     "GAME_COMING_SOON": "This mini-game is coming soon!",
+    "GAME_COMPLETE_TITLE": "Challenge completed!",
+    "GAME_COMPLETE_OK": "Got it",
     "SCAN_QR": "Or scan this QR code:",
+    "SHARE": "Share",
     "SHARE_LINK": "Share invite link",
     "COPIED": "Copied!",
     "TAP_TO_COPY": "Tap to copy code",
@@ -116,7 +121,25 @@
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Meticulous Photographers",
-        "DESC": "Coordinate to capture the perfect shots with precision and teamwork."
+        "DESC": "Coordinate to capture the perfect shots with precision and teamwork.",
+        "MISSION": "Meticulous Photographers — Find and photograph the 4 hidden elements!",
+        "PAN_X": "Pan Left / Right",
+        "PAN_Y": "Pan Up / Down",
+        "ZOOM": "Zoom",
+        "FOCUS": "Focus",
+        "TAKE_PHOTO": "Take Photo!",
+        "MISS_TOAST": "That's not the right spot, keep looking!",
+        "ROLE_HORIZONTAL": "You control horizontal movement and zoom",
+        "ROLE_VERTICAL": "You control vertical movement and focus",
+        "COMPLETED": "All photos taken!",
+        "COMPLETED_DESC": "Great teamwork! You captured all 4 elements perfectly.",
+        "CLUE_MESSAGE": "The secret to a happy marriage is remembering that work always comes after your partner.\n\nLeave it for last. 💕",
+        "TARGETS": {
+          "WEDDING": "The stars of the event",
+          "CLIMBER": "The best helmet in the world",
+          "VAN": "Trade the ocean for the mountain",
+          "BBQ": "Churrasquito"
+        }
       },
       "DESIGNS": {
         "TITLE": "Deconstructed Designs",

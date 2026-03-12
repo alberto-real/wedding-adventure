@@ -80,6 +80,7 @@
   "CHALLENGES": {
     "INTRO": "Treballeu junts en equip per resoldre aquests minijocs! La comunicació i la col·laboració són les claus d'un matrimoni feliç.",
     "PLAY": "Jugar",
+    "COMING_SOON": "Properament",
     "CREATE_ROOM": "Crear sala",
     "JOIN_ROOM": "Unir-se a sala",
     "ENTER_NAME": "El teu nom",
@@ -94,6 +95,7 @@
     "PLAYERS_IN_ROOM": "Jugadors a la sala",
     "ROOM_READY": "Sala llesta! A jugar!",
     "ROOM_CLOSED": "La sala s'ha tancat per inactivitat. Crea o uneix-te a una nova sala.",
+    "LEAVE_ROOM": "Sortir de la sala",
     "RESET_GAME": "Reiniciar joc",
     "LEAVE_TITLE": "Sortir de la sala?",
     "LEAVE_MESSAGE": "Si surts, el joc acabarà per als dos jugadors. N'estàs segur?",
@@ -101,7 +103,10 @@
     "CANCEL": "Cancel·lar",
     "GAME_READY_DESC": "Tots dos jugadors connectats! El minijoc començarà aquí aviat.",
     "GAME_COMING_SOON": "Aquest minijoc estarà disponible aviat!",
+    "GAME_COMPLETE_TITLE": "Desafiament completat!",
+    "GAME_COMPLETE_OK": "Entès",
     "SCAN_QR": "O escaneja aquest codi QR:",
+    "SHARE": "Compartir",
     "SHARE_LINK": "Compartir enllaç d'invitació",
     "COPIED": "Copiat!",
     "TAP_TO_COPY": "Toca per copiar el codi",
@@ -117,7 +122,25 @@
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Fotògrafs minuciosos",
-        "DESC": "Coordineu-vos per capturar les fotos perfectes amb precisió i treball en equip."
+        "DESC": "Coordineu-vos per capturar les fotos perfectes amb precisió i treball en equip.",
+        "MISSION": "Fotògrafs minuciosos — Trobeu i fotografieu els 4 elements ocults!",
+        "PAN_X": "Moure esquerra / dreta",
+        "PAN_Y": "Moure amunt / avall",
+        "ZOOM": "Zoom",
+        "FOCUS": "Enfocament",
+        "TAKE_PHOTO": "Fer foto!",
+        "MISS_TOAST": "Aquest no és l'element esperat, seguiu buscant!",
+        "ROLE_HORIZONTAL": "Tu controles el moviment horitzontal i el zoom",
+        "ROLE_VERTICAL": "Tu controles el moviment vertical i l'enfocament",
+        "COMPLETED": "Totes les fotos fetes!",
+        "COMPLETED_DESC": "Gran treball en equip! Heu capturat els 4 elements perfectament.",
+        "CLUE_MESSAGE": "El secret d'un bon matrimoni és recordar que la feina sempre va després de la teva parella.\n\nDeixa-ho per al final. 💕",
+        "TARGETS": {
+          "WEDDING": "Els protagonistes de l'event",
+          "CLIMBER": "El millor casc del món",
+          "VAN": "Canvia l'oceà per la muntanya",
+          "BBQ": "Churrasquito"
+        }
       },
       "DESIGNS": {
         "TITLE": "Dissenys deconstruïts",

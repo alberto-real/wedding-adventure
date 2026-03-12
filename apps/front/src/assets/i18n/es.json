@@ -80,6 +80,7 @@
   "CHALLENGES": {
     "INTRO": "¡Trabajad juntos en equipo para resolver estos minijuegos! La comunicación y la colaboración son las claves de un matrimonio feliz.",
     "PLAY": "Jugar",
+    "COMING_SOON": "Próximamente",
     "CREATE_ROOM": "Crear sala",
     "JOIN_ROOM": "Unirse a sala",
     "ENTER_NAME": "Tu nombre",
@@ -94,6 +95,7 @@
     "PLAYERS_IN_ROOM": "Jugadores en la sala",
     "ROOM_READY": "¡Sala lista! ¡A jugar!",
     "ROOM_CLOSED": "La sala se cerró por inactividad. Crea o únete a una nueva sala.",
+    "LEAVE_ROOM": "Salir de la sala",
     "RESET_GAME": "Reiniciar juego",
     "LEAVE_TITLE": "¿Salir de la sala?",
     "LEAVE_MESSAGE": "Si sales, el juego terminará para ambos jugadores. ¿Estás seguro?",
@@ -101,7 +103,10 @@
     "CANCEL": "Cancelar",
     "GAME_READY_DESC": "¡Ambos jugadores conectados! El minijuego comenzará aquí pronto.",
     "GAME_COMING_SOON": "¡Este minijuego estará disponible pronto!",
+    "GAME_COMPLETE_TITLE": "¡Desafío completado!",
+    "GAME_COMPLETE_OK": "Entendido",
     "SCAN_QR": "O escanea este código QR:",
+    "SHARE": "Compartir",
     "SHARE_LINK": "Compartir enlace de invitación",
     "COPIED": "¡Copiado!",
     "TAP_TO_COPY": "Toca para copiar el código",
@@ -117,7 +122,25 @@
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Fotógrafos minuciosos",
-        "DESC": "Coordinaos para capturar las fotos perfectas con precisión y trabajo en equipo."
+        "DESC": "Coordinaos para capturar las fotos perfectas con precisión y trabajo en equipo.",
+        "MISSION": "Fotógrafos minuciosos — ¡Encontrad y fotografiad los 4 elementos ocultos!",
+        "PAN_X": "Mover izquierda / derecha",
+        "PAN_Y": "Mover arriba / abajo",
+        "ZOOM": "Zoom",
+        "FOCUS": "Enfoque",
+        "TAKE_PHOTO": "¡Hacer foto!",
+        "MISS_TOAST": "Este no es el elemento esperado, ¡seguid buscando!",
+        "ROLE_HORIZONTAL": "Tú controlas el movimiento horizontal y el zoom",
+        "ROLE_VERTICAL": "Tú controlas el movimiento vertical y el enfoque",
+        "COMPLETED": "¡Todas las fotos tomadas!",
+        "COMPLETED_DESC": "¡Gran trabajo en equipo! Habéis capturado los 4 elementos perfectamente.",
+        "CLUE_MESSAGE": "El secreto de un buen matrimonio es recordar que el trabajo siempre va después de tu pareja.\n\nDéjalo para al final. 💕",
+        "TARGETS": {
+          "WEDDING": "Los protagonistas del evento",
+          "CLIMBER": "El mejor casco del mundo",
+          "VAN": "Cambia el oceano por la montaña",
+          "BBQ": "Churrasquito"
+        }
       },
       "DESIGNS": {
         "TITLE": "Diseños deconstruidos",

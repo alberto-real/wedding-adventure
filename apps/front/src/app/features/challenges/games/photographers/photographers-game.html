@@ -1,0 +1,203 @@
+<!-- Camera flash effect (white = success, red tint = miss) -->
+@if (showFlash()) {
+  <div class="camera-flash" [class.miss]="lastPhotoWrong()"></div>
+}
+
+<!-- ===== INTRO ANIMATION ===== -->
+@if (phase() === 'intro') {
+  <div class="camera-intro" [class.closing]="introClosing()">
+    <div class="intro-icon">📷</div>
+    <div class="intro-text">
+      {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.MISSION' | translate }}
+    </div>
+  </div>
+}
+
+<!-- ===== GAME AREA ===== -->
+<div class="flex flex-col items-center gap-3 w-full">
+
+  <!-- Target checklist (sequential: only current + captured are shown, rest = ???) -->
+  <div class="flex flex-wrap justify-center gap-2">
+    @for (target of targets; track target.id; let i = $index) {
+      <div
+        class="badge gap-1 text-sm"
+        [class.badge-success]="isTargetCaptured(target.id)"
+        [class.badge-ghost]="!isTargetCaptured(target.id) && currentTargetIndex() !== i"
+        [class.badge-primary]="currentTargetIndex() === i && !isTargetCaptured(target.id)"
+      >
+        @if (isTargetRevealed(i)) {
+          <span>{{ target.icon }}</span>
+          <span>{{ target.nameKey | translate }}</span>
+          @if (isTargetCaptured(target.id)) {
+            <span>✓</span>
+          }
+        } @else {
+          <span>❓</span>
+          <span>???</span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Viewfinder -->
+  <div class="viewfinder-wrapper">
+    <div
+      class="viewfinder"
+      [class.target-detected]="isTargetInRange() && !isCompleted()"
+      [class.shake]="lastPhotoWrong()"
+    >
+      <img
+        src="assets/images/mountain.png"
+        alt="Mountain scene"
+        class="viewfinder-image"
+        [ngStyle]="imageStyle()"
+      />
+
+      <!-- Grid overlay (rule of thirds) -->
+      <div class="viewfinder-grid">
+        <div class="line-v" style="left: 33.33%"></div>
+        <div class="line-v" style="left: 66.66%"></div>
+        <div class="line-h" style="top: 33.33%"></div>
+        <div class="line-h" style="top: 66.66%"></div>
+      </div>
+
+      <!-- Center crosshair -->
+      <div class="viewfinder-crosshair"></div>
+    </div>
+
+    <!-- Focus bar indicator -->
+    <div class="w-full max-w-[300px] md:max-w-[400px] h-1.5 rounded-full bg-base-300 mt-2">
+      <div
+        class="h-full rounded-full transition-all duration-200"
+        [class.bg-error]="blurAmount() > 5"
+        [class.bg-warning]="blurAmount() <= 5 && blurAmount() > 1.5"
+        [class.bg-success]="blurAmount() <= 1.5"
+        [style.width.%]="focusBarWidth()"
+      ></div>
+    </div>
+
+    <!-- Camera info bar -->
+    <div class="flex justify-between text-xs text-base-content/50 w-full max-w-[300px] md:max-w-[400px] mt-1 px-1">
+      <span>{{ cameraZoom() | number:'1.1-1' }}x</span>
+      <span>
+        {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.FOCUS' | translate }}:
+        @if (isInFocus()) {
+          <span class="text-success">●</span>
+        } @else {
+          <span class="text-error">●</span>
+        }
+      </span>
+      <span>{{ cameraX() | number:'1.0-0' }}, {{ cameraY() | number:'1.0-0' }}</span>
+    </div>
+  </div>
+
+  <!-- Take Photo button (always visible during play) -->
+  @if (phase() === 'playing' && !isCompleted()) {
+    <button
+      class="btn btn-lg gap-2"
+      [class.btn-success]="isTargetInRange()"
+      [class.btn-neutral]="!isTargetInRange()"
+      [class.animate-bounce]="isTargetInRange()"
+      (click)="takePhoto()"
+    >
+      📸 {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.TAKE_PHOTO' | translate }}
+    </button>
+  }
+
+  <!-- Controls (role-specific) -->
+  @if (phase() === 'playing' && !isCompleted()) {
+    <div class="card bg-base-200 shadow-md w-full max-w-md">
+      <div class="card-body p-4 gap-3">
+        @if (role() === 'horizontal') {
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold flex justify-between">
+              <span>↔ {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.PAN_X' | translate }}</span>
+              <span class="font-mono text-xs">{{ cameraX() }}%</span>
+            </label>
+            <input
+              type="range"
+              class="range range-primary range-sm"
+              min="0" max="100" step="1"
+              [ngModel]="cameraX()"
+              (ngModelChange)="onCameraXChange($event)"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold flex justify-between">
+              <span>🔍 {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.ZOOM' | translate }}</span>
+              <span class="font-mono text-xs">{{ cameraZoom() | number:'1.1-1' }}x</span>
+            </label>
+            <input
+              type="range"
+              class="range range-secondary range-sm"
+              min="1" max="5" step="0.1"
+              [ngModel]="cameraZoom()"
+              (ngModelChange)="onZoomChange($event)"
+            />
+          </div>
+        } @else if (role() === 'vertical') {
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold flex justify-between">
+              <span>↕ {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.PAN_Y' | translate }}</span>
+              <span class="font-mono text-xs">{{ cameraY() }}%</span>
+            </label>
+            <input
+              type="range"
+              class="range range-primary range-sm"
+              min="0" max="100" step="1"
+              [ngModel]="cameraY()"
+              (ngModelChange)="onCameraYChange($event)"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-sm font-semibold flex justify-between">
+              <span>🎯 {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.FOCUS' | translate }}</span>
+              <span
+                class="badge badge-sm"
+                [class.badge-success]="isInFocus()"
+                [class.badge-error]="!isInFocus()"
+              >
+                @if (isInFocus()) { ✓ } @else { ✗ }
+              </span>
+            </label>
+            <input
+              type="range"
+              class="range range-accent range-sm"
+              min="0" max="100" step="1"
+              [ngModel]="cameraFocus()"
+              (ngModelChange)="onFocusChange($event)"
+            />
+          </div>
+        }
+
+        <div class="text-xs text-center text-base-content/40">
+          {{ roleLabelKey() | translate }}
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Completed badge -->
+  @if (isCompleted()) {
+    <div class="flex items-center gap-2 py-2">
+      <span class="text-2xl">🏆</span>
+      <span class="text-success font-bold">{{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.COMPLETED' | translate }}</span>
+    </div>
+  }
+</div>
+
+<!-- Game complete modal -->
+<app-game-complete-modal
+  [visible]="showCompleteModal()"
+  [messageKey]="'CHALLENGES.GAMES.PHOTOGRAPHERS.CLUE_MESSAGE'"
+  (closed)="closeCompleteModal()"
+/>
+
+<!-- Toast for miss feedback -->
+@if (toastMessage()) {
+  <div class="toast toast-center toast-bottom z-50">
+    <div class="alert alert-warning text-sm shadow-lg">
+      <span>{{ toastMessage() }}</span>
+    </div>
+  </div>
+}
