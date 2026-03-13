@@ -149,9 +149,44 @@
           "BBQ": "Churrasquito"
         }
       },
-      "DESIGNS": {
-        "TITLE": "Dissenys deconstruïts",
-        "DESC": "Reconstruïu dissenys creatius junts combinant les vostres perspectives úniques."
+      "MAZE": {
+        "TITLE": "Rogaine d'Orientació",
+        "DESC": "Navegueu junts pel laberint recollint tots els controls de la cursa.",
+        "INTRO_DESC": "Un jugador controla el moviment horitzontal i l'altre el vertical. Recolliu els 4 controls, resoleu les proves i torneu al campament base!",
+        "ROLE_HORIZONTAL": "🔵 Moviment horitzontal (← →) + Lector",
+        "ROLE_VERTICAL": "🔴 Moviment vertical (↑ ↓) + Respostes",
+        "RETURN_TO_BASE": "Torneu al campament base!",
+        "TIME_UP": "S'ha acabat el temps!",
+        "TIME_UP_DESC": "No heu completat el recorregut a temps. Coordineu-vos millor i torneu-ho a provar!",
+        "TRY_AGAIN": "Tornar-ho a provar",
+        "CLUE_MESSAGE": "A la vida, com en una cursa d'orientació, el camí importa més que la meta.\n\nPerò sense mapa ni brúixola... millor tenir bona companyia. 🧭",
+        "QUIZ": {
+          "READ_ALOUD": "Llegeix en veu alta al teu company:",
+          "CHOOSE_ANSWER": "Escolta i tria la resposta:",
+          "WAITING": "Esperant la resposta del teu company...",
+          "CORRECT": "Correcte! ✅",
+          "WRONG": "Incorrecte! +20s ❌",
+          "Q1_QUESTION": "Quina és la muntanya més alta dels Pirineus?",
+          "Q1_A": "Aneto (3.404m)",
+          "Q1_B": "Mont Perdut (3.355m)",
+          "Q1_C": "Posets (3.375m)",
+          "Q1_D": "Vignemale (3.298m)",
+          "Q2_QUESTION": "En BTT, què significa 'enduro'?",
+          "Q2_A": "Només pujada cronometrada",
+          "Q2_B": "Baixades cronometrades, pujades lliures",
+          "Q2_C": "Circuit tancat en pla",
+          "Q2_D": "Contrarellotge en carretera",
+          "Q3_QUESTION": "Com es diu el nus més usat per encordar-se en escalada?",
+          "Q3_A": "Vuit doble",
+          "Q3_B": "As de guia",
+          "Q3_C": "Ballestrinc",
+          "Q3_D": "Nus dinàmic",
+          "Q4_QUESTION": "Què és imprescindible en un descens de barrancs aquàtics?",
+          "Q4_A": "Neoprè",
+          "Q4_B": "Crampons",
+          "Q4_C": "Piolet",
+          "Q4_D": "Bastons de trekking"
+        }
       }
     }
   }

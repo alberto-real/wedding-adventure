@@ -148,9 +148,44 @@
           "BBQ": "Churrasquito"
         }
       },
-      "DESIGNS": {
-        "TITLE": "Deconstructed Designs",
-        "DESC": "Rebuild creative designs together by combining your unique perspectives."
+      "MAZE": {
+        "TITLE": "Orienteering Rogaine",
+        "DESC": "Navigate together through the maze collecting all the race checkpoints.",
+        "INTRO_DESC": "One player controls horizontal movement and the other controls vertical. Collect the 4 checkpoints, solve the challenges, and return to base camp!",
+        "ROLE_HORIZONTAL": "🔵 Horizontal movement (← →) + Reader",
+        "ROLE_VERTICAL": "🔴 Vertical movement (↑ ↓) + Answers",
+        "RETURN_TO_BASE": "Return to base camp!",
+        "TIME_UP": "Time's up!",
+        "TIME_UP_DESC": "You didn't complete the course in time. Coordinate better and try again!",
+        "TRY_AGAIN": "Try again",
+        "CLUE_MESSAGE": "In life, like in an orienteering race, the journey matters more than the finish line.\n\nBut without a map or compass... better to have good company. 🧭",
+        "QUIZ": {
+          "READ_ALOUD": "Read aloud to your partner:",
+          "CHOOSE_ANSWER": "Listen and choose the answer:",
+          "WAITING": "Waiting for your partner's answer...",
+          "CORRECT": "Correct! ✅",
+          "WRONG": "Wrong! +20s ❌",
+          "Q1_QUESTION": "What is the highest mountain in the Pyrenees?",
+          "Q1_A": "Aneto (3,404m)",
+          "Q1_B": "Monte Perdido (3,355m)",
+          "Q1_C": "Posets (3,375m)",
+          "Q1_D": "Vignemale (3,298m)",
+          "Q2_QUESTION": "In MTB, what does 'enduro' mean?",
+          "Q2_A": "Uphill time trial only",
+          "Q2_B": "Timed downhills, free uphills",
+          "Q2_C": "Closed flat circuit",
+          "Q2_D": "Road time trial",
+          "Q3_QUESTION": "What is the most common knot for tying into a climbing harness?",
+          "Q3_A": "Figure-eight follow-through",
+          "Q3_B": "Bowline",
+          "Q3_C": "Clove hitch",
+          "Q3_D": "Munter hitch",
+          "Q4_QUESTION": "What is essential for a wet canyoneering descent?",
+          "Q4_A": "Wetsuit",
+          "Q4_B": "Crampons",
+          "Q4_C": "Ice axe",
+          "Q4_D": "Trekking poles"
+        }
       }
     }
   }

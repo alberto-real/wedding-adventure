@@ -83,6 +83,9 @@
           @case ('ski') {
             <app-ski-game (gameCompleted)="onGameCompleted()" />
           }
+          @case ('maze') {
+            <app-maze-game (gameCompleted)="onGameCompleted()" />
+          }
           @default {
             <div class="card bg-base-100 shadow-xl border border-primary/30 w-full max-w-2xl mx-auto">
               <div class="card-body items-center text-center gap-4">

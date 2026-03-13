@@ -17,6 +17,7 @@ import { RoomLobbyComponent } from './components/room-lobby/room-lobby';
 import { LeaveConfirmModalComponent } from './components/leave-confirm-modal/leave-confirm-modal';
 import { PhotographersGameComponent } from './games/photographers/photographers-game';
 import { SkiGameComponent } from './games/ski/ski-game';
+import { MazeGameComponent } from './games/maze/maze-game';
 
 interface MiniGame {
   id: string;
@@ -35,6 +36,7 @@ interface MiniGame {
     LeaveConfirmModalComponent,
     PhotographersGameComponent,
     SkiGameComponent,
+    MazeGameComponent,
   ],
   providers: [GameRoomService],
   templateUrl: './challenges.html',
@@ -63,11 +65,11 @@ export class ChallengesComponent implements OnInit, OnDestroy {
       enabled: true,
     },
     {
-      id: 'designs',
-      icon: '🎨',
-      titleKey: 'CHALLENGES.GAMES.DESIGNS.TITLE',
-      descKey: 'CHALLENGES.GAMES.DESIGNS.DESC',
-      enabled: false,
+      id: 'maze',
+      icon: '🧭',
+      titleKey: 'CHALLENGES.GAMES.MAZE.TITLE',
+      descKey: 'CHALLENGES.GAMES.MAZE.DESC',
+      enabled: true,
     },
   ];
 

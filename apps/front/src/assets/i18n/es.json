@@ -149,9 +149,44 @@
           "BBQ": "Churrasquito"
         }
       },
-      "DESIGNS": {
-        "TITLE": "Diseños deconstruidos",
-        "DESC": "Reconstruid diseños creativos juntos combinando vuestras perspectivas únicas."
+      "MAZE": {
+        "TITLE": "Rogaine de Orientación",
+        "DESC": "Navegad juntos por el laberinto recogiendo todos los controles de la carrera.",
+        "INTRO_DESC": "Un jugador controla el movimiento horizontal y el otro el vertical. ¡Recoged los 4 controles, resolved las pruebas y volved al campamento base!",
+        "ROLE_HORIZONTAL": "🔵 Movimiento horizontal (← →) + Lector",
+        "ROLE_VERTICAL": "🔴 Movimiento vertical (↑ ↓) + Respuestas",
+        "RETURN_TO_BASE": "¡Volved al campamento base!",
+        "TIME_UP": "¡Se acabó el tiempo!",
+        "TIME_UP_DESC": "No habéis completado el recorrido a tiempo. ¡Coordinaos mejor e intentadlo de nuevo!",
+        "TRY_AGAIN": "Intentar de nuevo",
+        "CLUE_MESSAGE": "En la vida, como en una carrera de orientación, el camino importa más que la meta.\n\nPero sin mapa ni brújula... mejor tener buena compañía. 🧭",
+        "QUIZ": {
+          "READ_ALOUD": "Lee en voz alta a tu compañero:",
+          "CHOOSE_ANSWER": "Escucha y elige la respuesta:",
+          "WAITING": "Esperando respuesta de tu compañero...",
+          "CORRECT": "¡Correcto! ✅",
+          "WRONG": "¡Incorrecto! +20s ❌",
+          "Q1_QUESTION": "¿Cuál es la montaña más alta de los Pirineos?",
+          "Q1_A": "Aneto (3.404m)",
+          "Q1_B": "Monte Perdido (3.355m)",
+          "Q1_C": "Posets (3.375m)",
+          "Q1_D": "Vignemale (3.298m)",
+          "Q2_QUESTION": "En BTT, ¿qué significa 'enduro'?",
+          "Q2_A": "Solo subida cronometrada",
+          "Q2_B": "Bajadas cronometradas, subidas libres",
+          "Q2_C": "Circuito cerrado en llano",
+          "Q2_D": "Contrarreloj en carretera",
+          "Q3_QUESTION": "¿Cómo se llama el nudo más usado para encordarse en escalada?",
+          "Q3_A": "Ocho doble",
+          "Q3_B": "As de guía",
+          "Q3_C": "Ballestrinque",
+          "Q3_D": "Nudo dinámico",
+          "Q4_QUESTION": "¿Qué es imprescindible en un descenso de barrancos acuáticos?",
+          "Q4_A": "Neopreno",
+          "Q4_B": "Crampones",
+          "Q4_C": "Piolet",
+          "Q4_D": "Bastones de trekking"
+        }
       }
     }
   }

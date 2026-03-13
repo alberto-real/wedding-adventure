@@ -479,15 +479,15 @@ export class SkiGameComponent implements OnInit, OnDestroy {
   }
 
   private stopMusic(): void {
-    if (this.musicGain) {
+    if (this.musicGain && this.musicCtx) {
       try {
         this.musicGain.gain.setValueAtTime(
           this.musicGain.gain.value,
-          this.musicCtx!.currentTime,
+          this.musicCtx.currentTime,
         );
         this.musicGain.gain.linearRampToValueAtTime(
           0,
-          this.musicCtx!.currentTime + 0.3,
+          this.musicCtx.currentTime + 0.3,
         );
       } catch {
         // Context may already be closed
@@ -497,6 +497,7 @@ export class SkiGameComponent implements OnInit, OnDestroy {
       const ctxRef = this.musicCtx;
       this.musicCtx = null;
       this.musicGain = null;
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       setTimeout(() => ctxRef.close().catch(() => {}), 400);
     }
   }

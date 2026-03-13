@@ -1,0 +1,236 @@
+<!-- Intro overlay -->
+@if (phase() === 'intro') {
+  <div
+    class="fixed inset-0 z-40 flex items-center justify-center bg-gradient-to-b from-green-200/90 to-white/90 backdrop-blur-sm transition-opacity duration-500"
+    [class.opacity-0]="introClosing()"
+  >
+    <div class="text-center space-y-4 animate-fade-in">
+      <div class="text-7xl">🧭</div>
+      <h2 class="text-3xl font-black text-primary">
+        {{ 'CHALLENGES.GAMES.MAZE.TITLE' | translate }}
+      </h2>
+      <p class="text-base-content/70 max-w-xs mx-auto text-sm">
+        {{ 'CHALLENGES.GAMES.MAZE.INTRO_DESC' | translate }}
+      </p>
+      @if (role()) {
+        <div
+          class="badge badge-lg gap-1"
+          [class.badge-info]="role() === 'blue'"
+          [class.badge-error]="role() === 'red'"
+        >
+          {{
+            (role() === 'blue'
+              ? 'CHALLENGES.GAMES.MAZE.ROLE_HORIZONTAL'
+              : 'CHALLENGES.GAMES.MAZE.ROLE_VERTICAL'
+            ) | translate
+          }}
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Countdown overlay -->
+@if (phase() === 'countdown') {
+  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
+    <div class="countdown-number">
+      {{ countdownValue() }}
+    </div>
+  </div>
+}
+
+<!-- Game UI -->
+@if (
+  phase() === 'playing' ||
+  phase() === 'gameover' ||
+  phase() === 'completed'
+) {
+  <div class="flex flex-col items-center gap-3 w-full">
+    <!-- HUD -->
+    <div class="flex items-center justify-between w-full max-w-sm px-2">
+      <div class="flex gap-1">
+        @for (cp of checkpointsStatus(); track $index) {
+          <span
+            class="text-lg transition-all duration-300"
+            [class.opacity-20]="cp.collected"
+          >
+            {{ cp.emoji }}
+          </span>
+        }
+      </div>
+      <div class="flex items-center gap-3">
+        <span
+          class="text-xs font-mono"
+          [class.text-error]="timeRemaining() < 30"
+          [class.animate-pulse]="timeRemaining() < 30"
+        >
+          ⏱️ {{ timeDisplay() }}
+        </span>
+        <span class="text-xs text-base-content/60">
+          👣 {{ moveCount() }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Return to base message -->
+    @if (allCollected() && !quizActive()) {
+      <div class="badge badge-warning badge-sm animate-pulse">
+        {{ 'CHALLENGES.GAMES.MAZE.RETURN_TO_BASE' | translate }}
+      </div>
+    }
+
+    <!-- Maze grid -->
+    <div class="maze-container">
+      <div class="maze-grid">
+        @for (row of gridCells(); track $index) {
+          @for (cell of row; track $index) {
+            <div
+              class="cell"
+              [class.wall]="cell.isWall && !cell.isFogged"
+              [class.path]="!cell.isWall && !cell.isFogged"
+              [class.fogged]="cell.isFogged"
+              [class.base-flash]="cell.isBaseFlashing"
+            >
+              @if (cell.emoji) {
+                <span
+                  class="cell-emoji"
+                  [class.player]="cell.isPlayer"
+                  [class.checkpoint]="cell.isCheckpoint"
+                  [class.fogged-beacon]="cell.isFoggedBeacon"
+                >
+                  {{ cell.emoji }}
+                </span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="py-2">
+      @if (role() === 'blue') {
+        <div class="flex gap-6 justify-center">
+          <button
+            class="btn btn-info btn-square btn-lg text-2xl"
+            [disabled]="quizActive()"
+            (click)="move('left')"
+          >
+            ←
+          </button>
+          <button
+            class="btn btn-info btn-square btn-lg text-2xl"
+            [disabled]="quizActive()"
+            (click)="move('right')"
+          >
+            →
+          </button>
+        </div>
+      }
+      @if (role() === 'red') {
+        <div class="flex flex-col gap-3 items-center">
+          <button
+            class="btn btn-error btn-square btn-lg text-2xl"
+            [disabled]="quizActive()"
+            (click)="move('up')"
+          >
+            ↑
+          </button>
+          <button
+            class="btn btn-error btn-square btn-lg text-2xl"
+            [disabled]="quizActive()"
+            (click)="move('down')"
+          >
+            ↓
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Quiz overlay -->
+@if (quizActive() && activeQuiz(); as quiz) {
+  <div
+    class="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4"
+  >
+    <div class="card bg-base-100 shadow-2xl w-full max-w-sm animate-bounce-in">
+      <div class="card-body items-center text-center gap-3">
+        <div class="text-4xl">{{ activeQuizEmoji() }}</div>
+
+        @if (quizResult() === 'pending') {
+          @if (role() === 'blue') {
+            <!-- Reader: sees the question -->
+            <p class="text-xs text-base-content/50 uppercase tracking-wide">
+              {{ 'CHALLENGES.GAMES.MAZE.QUIZ.READ_ALOUD' | translate }}
+            </p>
+            <p class="text-lg font-bold leading-snug">
+              {{ quiz.questionKey | translate }}
+            </p>
+            <p class="text-xs text-base-content/40 mt-2">
+              {{ 'CHALLENGES.GAMES.MAZE.QUIZ.WAITING' | translate }}
+            </p>
+          } @else {
+            <!-- Answerer: sees the options -->
+            <p class="text-xs text-base-content/50 uppercase tracking-wide">
+              {{ 'CHALLENGES.GAMES.MAZE.QUIZ.CHOOSE_ANSWER' | translate }}
+            </p>
+            <div class="flex flex-col gap-2 w-full mt-1">
+              @for (opt of quiz.optionKeys; track $index) {
+                <button
+                  class="btn btn-outline btn-sm text-left justify-start"
+                  (click)="submitAnswer($index)"
+                >
+                  {{ opt | translate }}
+                </button>
+              }
+            </div>
+          }
+        } @else {
+          <!-- Result -->
+          <p
+            class="text-xl font-black"
+            [class.text-success]="quizResult() === 'correct'"
+            [class.text-error]="quizResult() === 'wrong'"
+          >
+            {{
+              (quizResult() === 'correct'
+                ? 'CHALLENGES.GAMES.MAZE.QUIZ.CORRECT'
+                : 'CHALLENGES.GAMES.MAZE.QUIZ.WRONG'
+              ) | translate
+            }}
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Game over overlay -->
+@if (phase() === 'gameover') {
+  <div
+    class="fixed inset-0 z-40 flex items-center justify-center bg-black/50 p-4"
+  >
+    <div class="card bg-base-100 shadow-2xl w-full max-w-sm animate-bounce-in">
+      <div class="card-body items-center text-center gap-4">
+        <div class="text-5xl">⏰</div>
+        <h2 class="card-title text-xl text-error">
+          {{ 'CHALLENGES.GAMES.MAZE.TIME_UP' | translate }}
+        </h2>
+        <p class="text-base-content/70 text-sm">
+          {{ 'CHALLENGES.GAMES.MAZE.TIME_UP_DESC' | translate }}
+        </p>
+        <button class="btn btn-primary btn-wide" (click)="retryGame()">
+          {{ 'CHALLENGES.GAMES.MAZE.TRY_AGAIN' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Completion modal -->
+<app-game-complete-modal
+  [visible]="showCompleteModal()"
+  [messageKey]="'CHALLENGES.GAMES.MAZE.CLUE_MESSAGE'"
+  (closed)="closeCompleteModal()"
+/>

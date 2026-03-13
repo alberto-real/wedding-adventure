@@ -165,6 +165,8 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
   );
 
   private timers: ReturnType<typeof setTimeout>[] = [];
+  private musicCtx: AudioContext | null = null;
+  private musicGain: GainNode | null = null;
 
   ngOnInit(): void {
     this.gameRoomService.onGameEvent((data) => {
@@ -192,6 +194,7 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopMusic();
     this.timers.forEach(clearTimeout);
   }
 
@@ -200,7 +203,10 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     this.introClosing.set(false);
 
     const t1 = setTimeout(() => this.introClosing.set(true), 1500);
-    const t2 = setTimeout(() => this.phase.set('playing'), 2500);
+    const t2 = setTimeout(() => {
+      this.phase.set('playing');
+      this.startMusic();
+    }, 2500);
     this.timers.push(t1, t2);
   }
 
@@ -299,6 +305,133 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     setTimeout(() => ctx.close(), 200);
   }
 
+  // --- Music (ambient exploration loop) ---
+
+  private startMusic(): void {
+    this.stopMusic();
+    const ctx = new AudioContext();
+    this.musicCtx = ctx;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.value = 0.12;
+    masterGain.connect(ctx.destination);
+    this.musicGain = masterGain;
+
+    const bpm = 70;
+    const beat = 60 / bpm;
+    const barLen = beat * 4;
+    const loopLen = barLen * 4;
+
+    // Ambient pad chords (sine waves, soft)
+    const chords = [
+      [261, 329, 392],  // C maj
+      [220, 277, 329],  // Am
+      [246, 311, 370],  // Bm-ish
+      [196, 261, 329],  // G/C
+    ];
+
+    // Gentle melody (triangle wave)
+    const melodyNotes = [
+      { t: 0, f: 659, d: beat * 2 },
+      { t: beat * 2, f: 587, d: beat },
+      { t: beat * 3, f: 523, d: beat },
+      { t: barLen, f: 440, d: beat * 3 },
+      { t: barLen + beat * 3, f: 494, d: beat },
+      { t: barLen * 2, f: 523, d: beat * 2 },
+      { t: barLen * 2 + beat * 2, f: 587, d: beat * 2 },
+      { t: barLen * 3, f: 523, d: beat * 2 },
+      { t: barLen * 3 + beat * 2, f: 440, d: beat * 2 },
+    ];
+
+    const scheduleLoop = (startTime: number) => {
+      if (!this.musicCtx || this.musicCtx !== ctx) return;
+
+      // Pad chords
+      chords.forEach((chord, barIdx) => {
+        const t0 = startTime + barIdx * barLen;
+        chord.forEach((freq) => {
+          const osc = ctx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const g = ctx.createGain();
+          g.gain.setValueAtTime(0, t0);
+          g.gain.linearRampToValueAtTime(0.15, t0 + beat);
+          g.gain.setValueAtTime(0.15, t0 + barLen - beat);
+          g.gain.linearRampToValueAtTime(0, t0 + barLen);
+          osc.connect(g).connect(masterGain);
+          osc.start(t0);
+          osc.stop(t0 + barLen + 0.05);
+        });
+      });
+
+      // Melody
+      for (const note of melodyNotes) {
+        const osc = ctx.createOscillator();
+        osc.type = 'triangle';
+        osc.frequency.value = note.f;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.25, startTime + note.t);
+        g.gain.exponentialRampToValueAtTime(
+          0.001,
+          startTime + note.t + note.d,
+        );
+        osc.connect(g).connect(masterGain);
+        osc.start(startTime + note.t);
+        osc.stop(startTime + note.t + note.d + 0.02);
+      }
+
+      const nextStart = startTime + loopLen;
+      const timer = setTimeout(
+        () => scheduleLoop(nextStart),
+        (nextStart - ctx.currentTime - 0.5) * 1000,
+      );
+      this.timers.push(timer);
+    };
+
+    scheduleLoop(ctx.currentTime + 0.05);
+  }
+
+  private stopMusic(): void {
+    if (this.musicGain && this.musicCtx) {
+      try {
+        this.musicGain.gain.setValueAtTime(
+          this.musicGain.gain.value,
+          this.musicCtx.currentTime,
+        );
+        this.musicGain.gain.linearRampToValueAtTime(
+          0,
+          this.musicCtx.currentTime + 0.5,
+        );
+      } catch {
+        // Context may already be closed
+      }
+    }
+    if (this.musicCtx) {
+      const ctxRef = this.musicCtx;
+      this.musicCtx = null;
+      this.musicGain = null;
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      setTimeout(() => ctxRef.close().catch(() => {}), 600);
+    }
+  }
+
+  private playSuccessSound(): void {
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+    [523, 659, 784].forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.25, now + i * 0.12);
+      g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.2);
+      osc.connect(g).connect(ctx.destination);
+      osc.start(now + i * 0.12);
+      osc.stop(now + i * 0.12 + 0.2);
+    });
+    setTimeout(() => ctx.close(), 600);
+  }
+
   private sendCameraUpdate(): void {
     const r = this.role();
     if (r === 'horizontal') {
@@ -337,10 +470,12 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
 
     this.capturedTargets.update((arr) => [...arr, targetId]);
     this.showFlash.set(true);
+    this.playSuccessSound();
     const t1 = setTimeout(() => this.showFlash.set(false), 500);
     this.timers.push(t1);
 
     if (this.capturedTargets().length === this.targets.length) {
+      this.stopMusic();
       const t2 = setTimeout(() => {
         this.phase.set('completed');
         this.showCompleteModal.set(true);
