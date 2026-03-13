@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Left ring (A) -->
+  <circle cx="24" cy="32" r="16" fill="none" stroke="#d4a843" stroke-width="4"/>
+  <circle cx="24" cy="32" r="13" fill="none" stroke="#f0d060" stroke-width="2" opacity="0.5"/>
+  <!-- Right ring (R) - overlapping -->
+  <circle cx="40" cy="32" r="16" fill="none" stroke="#d4a843" stroke-width="4"/>
+  <circle cx="40" cy="32" r="13" fill="none" stroke="#f0d060" stroke-width="2" opacity="0.5"/>
+  <!-- Overlap fix: redraw front arcs to show interlocking -->
+  <!-- Right ring passes over left ring at top -->
+  <path d="M 32,19.1 A 16,16 0 0,1 40,16" fill="none" stroke="#d4a843" stroke-width="4"/>
+  <!-- Left ring passes over right ring at bottom -->
+  <path d="M 32,44.9 A 16,16 0 0,1 24,48" fill="none" stroke="#d4a843" stroke-width="4"/>
+  <!-- Letter A -->
+  <text x="19" y="37" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#7c3aed">A</text>
+  <!-- Ampersand (smaller) -->
+  <text x="32" y="35" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#7c3aed">&amp;</text>
+  <!-- Letter R -->
+  <text x="45" y="37" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#7c3aed">R</text>
+</svg>
