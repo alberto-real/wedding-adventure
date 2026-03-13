@@ -1,0 +1,218 @@
+.game-area {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 9 / 10;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(170deg, #eef3f8, #e4ecf4, #dce6f0);
+  border: 2px solid oklch(0.869 0.022 252.89);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+
+  &.shake {
+    animation: shake 0.3s ease-out;
+  }
+}
+
+.slope-lines {
+  position: absolute;
+  inset: -60px 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 56px,
+    rgba(180, 200, 220, 0.15) 56px,
+    rgba(180, 200, 220, 0.15) 60px
+  );
+  pointer-events: none;
+}
+
+.track-boundary {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #f97316 0,
+    #f97316 12px,
+    transparent 12px,
+    transparent 24px
+  );
+  opacity: 0.5;
+  z-index: 2;
+
+  &.left {
+    left: 3%;
+  }
+  &.right {
+    right: 3%;
+  }
+}
+
+.obstacle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 1.6rem;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.3s;
+
+  &.hit {
+    opacity: 0.2;
+    filter: grayscale(1);
+  }
+}
+
+.finish-line {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: translateY(-50%);
+  z-index: 5;
+  font-size: 1.2rem;
+
+  .finish-bar {
+    flex: 1;
+    height: 4px;
+    background: repeating-linear-gradient(
+      to right,
+      #000 0,
+      #000 8px,
+      #fff 8px,
+      #fff 16px
+    );
+    border-radius: 2px;
+  }
+}
+
+.rope {
+  position: absolute;
+  height: 0;
+  border-top: 2px dashed;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 8;
+  transition: border-color 0.3s;
+}
+
+.skier {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+  z-index: 10;
+  line-height: 1;
+
+  &.mine {
+    z-index: 11;
+  }
+
+  &.partner {
+    opacity: 0.6;
+  }
+
+  &.skier-blue::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.3);
+    z-index: -1;
+  }
+
+  &.skier-red::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: rgba(248, 113, 113, 0.3);
+    z-index: -1;
+  }
+
+  &.invincible {
+    animation: blink 0.2s step-end infinite;
+  }
+}
+
+.countdown-number {
+  font-size: 6rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  animation: countdown-pop 0.4s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s ease-out;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes countdown-pop {
+  0% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

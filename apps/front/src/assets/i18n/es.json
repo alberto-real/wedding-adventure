@@ -118,7 +118,14 @@
     "GAMES": {
       "SKI": {
         "TITLE": "Esquiar por la nieve",
-        "DESC": "Guiaos mutuamente por las pistas en este desafío cooperativo de esquí."
+        "DESC": "Guiaos mutuamente por las pistas en este desafío cooperativo de esquí.",
+        "INTRO_DESC": "Esquivad los obstáculos juntos bajando por la montaña. ¡Cada jugador controla un esquiador!",
+        "ROLE_BLUE": "🔵 Esquiador azul",
+        "ROLE_RED": "🔴 Esquiador rojo",
+        "GAME_OVER": "¡Os habéis estrellado!",
+        "GAME_OVER_DESC": "Habéis perdido todas las vidas. ¡Coordinaos mejor e intentadlo de nuevo!",
+        "TRY_AGAIN": "Intentar de nuevo",
+        "CLUE_MESSAGE": "Compartir hobbies, como deportes de aventura y montaña, son la clave de un matrimonio feliz.\n\nY cuando se trata de ser feliz no hay que perder ni un segundo. 🎿"
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Fotógrafos minuciosos",

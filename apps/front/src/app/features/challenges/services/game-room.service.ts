@@ -36,9 +36,12 @@ export class GameRoomService implements OnDestroy {
   private pendingGameResetCbs: (() => void)[] = [];
 
   private getSocketUrl(): string {
-    return window.location.hostname === 'localhost'
-      ? 'http://localhost:3000/game'
-      : `${window.location.origin}/game`;
+    const loc = window.location;
+    // In development (ports 4200/3000), point to backend port
+    if (loc.port === '4200') {
+      return `${loc.protocol}//${loc.hostname}:3000/game`;
+    }
+    return `${loc.origin}/game`;
   }
 
   private connect(): void {

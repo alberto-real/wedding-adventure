@@ -117,7 +117,14 @@
     "GAMES": {
       "SKI": {
         "TITLE": "Skiing through the Snow",
-        "DESC": "Guide each other down the slopes in this cooperative skiing challenge."
+        "DESC": "Guide each other down the slopes in this cooperative skiing challenge.",
+        "INTRO_DESC": "Dodge obstacles together as you race downhill. Each player controls one skier!",
+        "ROLE_BLUE": "🔵 Blue skier",
+        "ROLE_RED": "🔴 Red skier",
+        "GAME_OVER": "You crashed!",
+        "GAME_OVER_DESC": "You lost all your lives. Coordinate better and try again!",
+        "TRY_AGAIN": "Try again",
+        "CLUE_MESSAGE": "Sharing hobbies, like adventure and mountain sports, is the key to a happy marriage.\n\nAnd when it comes to being happy, don't waste a single second. 🎿"
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Meticulous Photographers",

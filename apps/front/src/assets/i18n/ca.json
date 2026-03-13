@@ -118,7 +118,14 @@
     "GAMES": {
       "SKI": {
         "TITLE": "Esquiar per la neu",
-        "DESC": "Guieu-vos mútuament per les pistes en aquest desafiament cooperatiu d'esquí."
+        "DESC": "Guieu-vos mútuament per les pistes en aquest desafiament cooperatiu d'esquí.",
+        "INTRO_DESC": "Esquiveu els obstacles junts baixant per la muntanya. Cada jugador controla un esquiador!",
+        "ROLE_BLUE": "🔵 Esquiador blau",
+        "ROLE_RED": "🔴 Esquiador vermell",
+        "GAME_OVER": "Us heu estavellat!",
+        "GAME_OVER_DESC": "Heu perdut totes les vides. Coordineu-vos millor i torneu-ho a provar!",
+        "TRY_AGAIN": "Tornar-ho a provar",
+        "CLUE_MESSAGE": "Compartir hobbies, com esports d'aventura i muntanya, són la clau d'un matrimoni feliç.\n\nI quan es tracta de ser feliç no cal perdre ni un segon. 🎿"
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Fotògrafs minuciosos",

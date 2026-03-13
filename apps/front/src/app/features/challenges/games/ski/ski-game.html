@@ -1,0 +1,180 @@
+<!-- Intro overlay -->
+@if (phase() === 'intro') {
+  <div
+    class="fixed inset-0 z-40 flex items-center justify-center bg-gradient-to-b from-sky-200/90 to-white/90 backdrop-blur-sm transition-opacity duration-500"
+    [class.opacity-0]="introClosing()"
+  >
+    <div class="text-center space-y-4 animate-fade-in">
+      <div class="text-7xl">⛷️</div>
+      <h2 class="text-3xl font-black text-primary">
+        {{ 'CHALLENGES.GAMES.SKI.TITLE' | translate }}
+      </h2>
+      <p class="text-base-content/70 max-w-xs mx-auto text-sm">
+        {{ 'CHALLENGES.GAMES.SKI.INTRO_DESC' | translate }}
+      </p>
+      @if (role()) {
+        <div
+          class="badge badge-lg gap-1"
+          [class.badge-info]="role() === 'blue'"
+          [class.badge-error]="role() === 'red'"
+        >
+          {{
+            (role() === 'blue'
+              ? 'CHALLENGES.GAMES.SKI.ROLE_BLUE'
+              : 'CHALLENGES.GAMES.SKI.ROLE_RED'
+            ) | translate
+          }}
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Countdown overlay -->
+@if (phase() === 'countdown') {
+  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
+    <div class="countdown-number">
+      {{ countdownValue() }}
+    </div>
+  </div>
+}
+
+<!-- Game UI -->
+@if (
+  phase() === 'playing' ||
+  phase() === 'gameover' ||
+  phase() === 'completed'
+) {
+  <div class="flex flex-col items-center gap-3 w-full">
+    <!-- HUD -->
+    <div class="flex items-center justify-between w-full max-w-sm px-2">
+      <div class="flex gap-1">
+        @for (alive of livesArray(); track $index) {
+          <span class="text-lg transition-opacity" [class.opacity-20]="!alive">
+            ❤️
+          </span>
+        }
+      </div>
+      <div class="flex items-center gap-2 flex-1 ml-4">
+        <progress
+          class="progress progress-primary flex-1 h-2"
+          [value]="progressPercent()"
+          max="100"
+        ></progress>
+        <span class="text-xs font-mono text-base-content/60">
+          {{ progressPercent() | number: '1.0-0' }}%
+        </span>
+      </div>
+    </div>
+
+    <!-- Game area -->
+    <div class="game-area" [class.shake]="shakeActive()">
+      <!-- Scrolling slope lines -->
+      <div
+        class="slope-lines"
+        [style.transform]="'translateY(' + slopeBgOffsetY() + 'px)'"
+      ></div>
+
+      <!-- Track boundaries -->
+      <div class="track-boundary left"></div>
+      <div class="track-boundary right"></div>
+
+      <!-- Obstacles -->
+      @for (obs of visibleObstacles(); track obs.id) {
+        <div
+          class="obstacle"
+          [class.hit]="obs.hit"
+          [style.left.%]="obs.x"
+          [style.top.%]="obs.screenY"
+        >
+          {{ obs.emoji }}
+        </div>
+      }
+
+      <!-- Finish line -->
+      @if (showFinishLine()) {
+        <div class="finish-line" [style.top.%]="finishLineScreenY()">
+          <span>🏁</span>
+          <div class="finish-bar"></div>
+          <span>🏁</span>
+        </div>
+      }
+
+      <!-- Rope between skiers -->
+      <div
+        class="rope"
+        [style.left.%]="ropeLeft()"
+        [style.width.%]="ropeWidth()"
+        [style.top.%]="SKIER_Y_PERCENT"
+        [style.borderColor]="ropeColor()"
+      ></div>
+
+      <!-- Partner skier -->
+      <div
+        class="skier partner"
+        [class.skier-blue]="role() === 'red'"
+        [class.skier-red]="role() === 'blue'"
+        [style.left.%]="partnerX()"
+        [style.top.%]="SKIER_Y_PERCENT"
+      >
+        ⛷️
+      </div>
+
+      <!-- My skier -->
+      <div
+        class="skier mine"
+        [class.skier-blue]="role() === 'blue'"
+        [class.skier-red]="role() === 'red'"
+        [class.invincible]="isInvincible()"
+        [style.left.%]="myX()"
+        [style.top.%]="SKIER_Y_PERCENT"
+      >
+        ⛷️
+      </div>
+    </div>
+
+    <!-- Slider control -->
+      <div #controlsRef class="w-full max-w-sm px-4">
+        <input
+          type="range"
+          min="5"
+          max="95"
+          step="1"
+          [value]="myX()"
+          (input)="onMoveX($any($event.target).value)"
+          class="range range-sm"
+          [class.range-info]="role() === 'blue'"
+          [class.range-error]="role() === 'red'"
+        />
+      </div>
+  </div>
+}
+
+<!-- Game over overlay -->
+@if (phase() === 'gameover') {
+  <div
+    class="fixed inset-0 z-40 flex items-center justify-center bg-black/50 p-4"
+  >
+    <div class="card bg-base-100 shadow-2xl w-full max-w-sm animate-bounce-in">
+      <div class="card-body items-center text-center gap-4">
+        <div class="text-5xl">💥</div>
+        <h2 class="card-title text-xl text-error">
+          {{ 'CHALLENGES.GAMES.SKI.GAME_OVER' | translate }}
+        </h2>
+        <p class="text-base-content/70 text-sm">
+          {{ 'CHALLENGES.GAMES.SKI.GAME_OVER_DESC' | translate }}
+        </p>
+        <button class="btn btn-primary btn-wide" (click)="retryGame()">
+          {{ 'CHALLENGES.GAMES.SKI.TRY_AGAIN' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Completion modal -->
+<app-game-complete-modal
+  [visible]="showCompleteModal()"
+  [messageKey]="'CHALLENGES.GAMES.SKI.CLUE_MESSAGE'"
+  (closed)="closeCompleteModal()"
+/>
