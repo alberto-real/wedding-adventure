@@ -4,11 +4,16 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/front/src",
-  "tags": ["scope:front", "type:app"],
+  "tags": [
+    "scope:front",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/front",
         "browser": "apps/front/src/main.ts",
@@ -21,8 +26,12 @@
           },
           "apps/front/src/assets"
         ],
-        "styles": ["apps/front/src/styles.scss"],
-        "allowedCommonJsDependencies": ["qrcode"]
+        "styles": [
+          "apps/front/src/styles.scss"
+        ],
+        "allowedCommonJsDependencies": [
+          "qrcode"
+        ]
       },
       "configurations": {
         "production": {
@@ -38,7 +47,8 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "serviceWorker": "apps/front/ngsw-config.json"
         },
         "development": {
           "optimization": false,

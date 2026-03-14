@@ -1,7 +1,7 @@
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
-  importProvidersFrom,
+  importProvidersFrom, isDevMode,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { appRoutes } from './app.routes';
@@ -11,6 +11,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { DEFAULT_LANGUAGE_CODE, SUPPORTED_LANGUAGES } from './core/constants/languages';
+import { provideServiceWorker } from '@angular/service-worker';
 
 const getInitialLanguage = (): string => {
   const browserLang = window.navigator.language.split('-')[0];
@@ -35,6 +36,9 @@ export const appConfig: ApplicationConfig = {
       }),
       lang: getInitialLanguage(),
     }),
-    importProvidersFrom(SocketIoModule.forRoot(socketConfig)),
+    importProvidersFrom(SocketIoModule.forRoot(socketConfig)), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
   ],
 };

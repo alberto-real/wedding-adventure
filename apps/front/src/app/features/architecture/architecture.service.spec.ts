@@ -14,9 +14,9 @@ describe('ArchitectureService', () => {
   });
 
   it('should unlock hints for each phase', () => {
-    service.unlockNextHint(1);
+    service.unlockNextHint(1, 1);
     expect(service.phase1HintsUnlocked()).toBe(1);
-    service.unlockNextHint(2);
+    service.unlockNextHint(2, 1);
     expect(service.phase2HintsUnlocked()).toBe(1);
   });
 
@@ -28,9 +28,16 @@ describe('ArchitectureService', () => {
   });
 
   it('should not exceed max stage for hints', () => {
-    service.unlockNextHint(1);
-    service.unlockNextHint(1);
+    service.unlockNextHint(1, 1);
+    service.unlockNextHint(1, 1);
     expect(service.phase1HintsUnlocked()).toBe(1);
+  });
+
+  it('should allow multiple hints if max is higher', () => {
+    service.unlockNextHint(1, 2);
+    expect(service.phase1HintsUnlocked()).toBe(1);
+    service.unlockNextHint(1, 2);
+    expect(service.phase1HintsUnlocked()).toBe(2);
   });
 
   it('should not exceed max stage for resolution', () => {

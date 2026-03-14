@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -22,21 +22,21 @@ export class ArchitectureService {
   readonly phase4ResolutionStage = signal(0);
   readonly phase5ResolutionStage = signal(0);
 
-  unlockNextHint(phaseId: number): void {
-    const signalMap: Record<number, any> = {
+  unlockNextHint(phaseId: number, max: number): void {
+    const signalMap: Record<number, WritableSignal<number>> = {
       1: this.phase1HintsUnlocked,
       2: this.phase2HintsUnlocked,
       3: this.phase3HintsUnlocked,
       4: this.phase4HintsUnlocked,
       5: this.phase5HintsUnlocked,
     };
-    if (signalMap[phaseId] && signalMap[phaseId]() < 1) {
+    if (signalMap[phaseId] && signalMap[phaseId]() < max) {
       signalMap[phaseId].update((v: number) => v + 1);
     }
   }
 
   advanceResolution(phaseId: number): void {
-    const signalMap: Record<number, any> = {
+    const signalMap: Record<number, WritableSignal<number>> = {
       1: this.phase1ResolutionStage,
       2: this.phase2ResolutionStage,
       3: this.phase3ResolutionStage,
