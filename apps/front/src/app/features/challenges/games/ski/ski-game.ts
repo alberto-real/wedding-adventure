@@ -37,6 +37,7 @@ const SKIER_HITBOX = 5;
 const COLLISION_THRESHOLD_Y = 18;
 const HIT_INVINCIBILITY_MS = 1500;
 const MAX_LIVES = 3;
+const MAX_ROPE_DISTANCE = 45;
 
 const COURSE_OBSTACLES: Obstacle[] = [
   // Warm-up
@@ -160,7 +161,7 @@ export class SkiGameComponent implements OnInit, OnDestroy {
   readonly ropeColor = computed(() => {
     const dist = this.ropeWidth();
     if (dist < 25) return '#22c55e';
-    if (dist < 45) return '#eab308';
+    if (dist < MAX_ROPE_DISTANCE) return '#eab308';
     return '#ef4444';
   });
 
@@ -175,7 +176,19 @@ export class SkiGameComponent implements OnInit, OnDestroy {
       const payload = data.payload as Record<string, unknown>;
 
       if (data.event === 'ski-move') {
-        this.partnerX.set(payload['x'] as number);
+        const newPartnerX = payload['x'] as number;
+        this.partnerX.set(newPartnerX);
+
+        const currentX = this.myX();
+        if (newPartnerX - currentX > MAX_ROPE_DISTANCE) {
+          const draggedX = newPartnerX - MAX_ROPE_DISTANCE;
+          this.myX.set(draggedX);
+          this.gameRoomService.sendGameEvent('ski-move', { x: draggedX });
+        } else if (currentX - newPartnerX > MAX_ROPE_DISTANCE) {
+          const draggedX = newPartnerX + MAX_ROPE_DISTANCE;
+          this.myX.set(draggedX);
+          this.gameRoomService.sendGameEvent('ski-move', { x: draggedX });
+        }
       } else if (data.event === 'ski-hit') {
         const obsId = payload['obstacleId'] as number;
         this.hitObstacleIds.update((set) => {
@@ -198,8 +211,26 @@ export class SkiGameComponent implements OnInit, OnDestroy {
   }
 
   onMoveX(value: number): void {
-    this.myX.set(+value);
-    this.gameRoomService.sendGameEvent('ski-move', { x: +value });
+    const newX = +value;
+    const currentPartnerX = this.partnerX();
+
+    let partnerDragged = false;
+    let expectedPartnerX = currentPartnerX;
+
+    if (newX - currentPartnerX > MAX_ROPE_DISTANCE) {
+      expectedPartnerX = newX - MAX_ROPE_DISTANCE;
+      partnerDragged = true;
+    } else if (currentPartnerX - newX > MAX_ROPE_DISTANCE) {
+      expectedPartnerX = newX + MAX_ROPE_DISTANCE;
+      partnerDragged = true;
+    }
+
+    this.myX.set(newX);
+    this.gameRoomService.sendGameEvent('ski-move', { x: newX });
+
+    if (partnerDragged) {
+      this.partnerX.set(expectedPartnerX);
+    }
   }
 
   closeCompleteModal(): void {
