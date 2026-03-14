@@ -7,16 +7,16 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-// In production: CORS is not needed because Nginx reverse proxy
-// ensures everything is same-origin.
-// In development: Angular dev server runs on port 4200, NestJS on 3000,
-// so we need CORS for localhost only.
+// In production: CORS is handled by reverse proxy (same-origin) or
+// configured via CORS_ORIGIN env var for cross-origin deployments (e.g. Vercel + Railway).
+// In development: allow any origin so LAN/WiFi testing works.
 const isProduction = process.env.NODE_ENV === 'production';
+const corsOrigin = process.env.CORS_ORIGIN;
 
 @WebSocketGateway({
   cors: isProduction
-    ? false
-    : { origin: ['http://localhost:4200', 'http://localhost:4300'] },
+    ? (corsOrigin ? { origin: corsOrigin.split(',') } : false)
+    : { origin: true },
 })
 export class AppGateway {
   @WebSocketServer() server!: Server;

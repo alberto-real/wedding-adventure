@@ -9,6 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const corsOrigin = process.env.CORS_ORIGIN;
 
 /** Configurable inactivity timeout in ms (default: 60 seconds) */
 const ROOM_INACTIVITY_TIMEOUT_MS = parseInt(
@@ -33,8 +34,8 @@ interface GameRoom {
 @WebSocketGateway({
   namespace: '/game',
   cors: isProduction
-    ? false
-    : { origin: ['http://localhost:4200', 'http://localhost:4300'] },
+    ? (corsOrigin ? { origin: corsOrigin.split(',') } : false)
+    : { origin: true },
 })
 export class GameRoomGateway implements OnGatewayDisconnect {
   @WebSocketServer() server!: Server;

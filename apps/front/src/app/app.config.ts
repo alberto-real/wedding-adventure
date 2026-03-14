@@ -19,8 +19,18 @@ const getInitialLanguage = (): string => {
   return isSupported ? browserLang : DEFAULT_LANGUAGE_CODE;
 };
 
+const getSocketUrl = (): string => {
+  const { hostname, protocol } = window.location;
+  if (hostname === 'localhost' || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)) {
+    // Local development (including LAN/WiFi): backend on port 3000
+    return `${protocol}//${hostname}:3000`;
+  }
+  // Production: same origin (reverse proxy) or cross-origin backend
+  return window.location.origin;
+};
+
 const socketConfig: SocketIoConfig = {
-  url: window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin,
+  url: getSocketUrl(),
   options: {},
 };
 
