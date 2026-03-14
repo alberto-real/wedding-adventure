@@ -8,6 +8,7 @@
     "test": "npx nx run-many -t test -p front back",
     "lint": "npx nx run-many -t lint -p front back",
     "e2e": "npx nx run-many -t e2e -p front back",
+    "host": "npx nx serve front --host 0.0.0.0",
     "prepare": "husky"
   },
   "private": true,

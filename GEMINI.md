@@ -51,3 +51,6 @@ npx nx build back     # Build backend
 npx nx test front     # Test frontend
 npx nx test back      # Test backend
 ```
+
+## UI Patterns
+- **Minigame Info Panels:** Use a standardized `alert alert-info shadow-sm py-2 px-4 max-w-md` component incorporating an SVG info icon and translated text (e.g. `COLLABORATION_HINT`) at the top of each minigame view to provide players with an immediate understanding of their objective and the need to collaborate.

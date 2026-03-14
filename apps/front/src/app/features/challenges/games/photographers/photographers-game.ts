@@ -25,6 +25,9 @@ interface PhotoTarget {
   toleranceZoom: number;
 }
 
+const TOLERANCE_XY = 2;
+const TOLERANCE_ZOOM = 0;
+
 /**
  * Proposed target positions – adjust these values
  * once the actual mountain.png image is in place.
@@ -37,8 +40,8 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     x: 51,
     y: 23,
     zoom: 5,
-    toleranceXY: 8,
-    toleranceZoom: 0,
+    toleranceXY: TOLERANCE_XY,
+    toleranceZoom: TOLERANCE_ZOOM,
   },
   {
     id: 'van',
@@ -47,8 +50,8 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     x: 52,
     y: 90,
     zoom: 5,
-    toleranceXY: 8,
-    toleranceZoom: 0,
+    toleranceXY: TOLERANCE_XY,
+    toleranceZoom: TOLERANCE_ZOOM,
   },
   {
     id: 'climber',
@@ -57,8 +60,8 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     x: 44,
     y: 38,
     zoom: 5,
-    toleranceXY: 6,
-    toleranceZoom: 0,
+    toleranceXY: TOLERANCE_XY,
+    toleranceZoom: TOLERANCE_ZOOM,
   },
   {
     id: 'bbq',
@@ -67,8 +70,8 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     x: 63,
     y: 73,
     zoom: 5,
-    toleranceXY: 5,
-    toleranceZoom: 0,
+    toleranceXY: TOLERANCE_XY,
+    toleranceZoom: TOLERANCE_ZOOM,
   },
 ];
 
