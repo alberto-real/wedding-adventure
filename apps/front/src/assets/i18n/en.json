@@ -191,5 +191,32 @@
         }
       }
     }
+  },
+  "ARCHITECTURE": {
+    "TITLE": "The Enigma of Lines and Spaces",
+    "INTRO": "Anna, it's time to remember and share with Roger everything we were taught in history classes at uni. When they talked to us about 20th-century architecture, they always repeatedly mentioned 5 architects: Le Corbusier, Mies Van der Rohe, Lloyd Wright, Alvar Aalto, and Louis Kahn. To find out the next number for the box, you will have to solve the following questions, order them according to which architect they correspond to, and solve the following formula (without decimals):",
+    "FORMULA": "X = (KAHN - WRIGHT + CORBU) / (AALTO + MIES)",
+    "PHASE1_TITLE": "Question 1",
+    "PHASE1_DESC": "From one of these 5 architects, we have a building in Barcelona that we are very proud of, to the point that it was dismantled and later rebuilt to keep it with us forever. The most innovative thing about the building is that a few metal pillars support the entire concrete slab. Could you tell me the number of pillars the building has?",
+    "PHASE2_TITLE": "Question 2",
+    "PHASE2_DESC": "In what year did I die?",
+    "PHASE3_TITLE": "Question 3",
+    "PHASE3_DESC": "This year marks 50 years since his death. They have put on a very cool exhibition at the Serralves Foundation in Porto. He wasn't the only one to build a library, but he was the only one to use an element to let in zenithal light that he repeated many times. Can you deduce which element I'm talking about and tell me how many times he repeats this element in the building?",
+    "PHASE4_TITLE": "Question 4",
+    "PHASE4_DESC": "At uni, they spoke A LOT about this architect with round glasses. It was never clear to me if he was innovative or if he knew how to copy very well. Even so, I think he was one of the first to think about densifying the city and providing housing for many people; we could say he created social housing. Do you know which building I'm talking about? What you need to know is the number of apartments inside the building.",
+    "PHASE5_TITLE": "Question 5",
+    "PHASE5_DESC": "One of these architects has a museum in the USA that is from the same collection as the one we have in Bilbao by the flamboyant Gehry. Find the museum and tell me what year it opened.",
+    "HINT_MIES": "Architect: Mies van der Rohe - Barcelona Pavilion",
+    "HINT_KAHN": "Architect: Louis Kahn",
+    "HINT_AALTO": "Architect: Alvar Aalto",
+    "HINT_CORBU": "Architect: Le Corbusier - Unité d'Habitation",
+    "HINT_WRIGHT": "Architect: Frank Lloyd Wright - Guggenheim NY",
+    "RESOLVE_MIES": "Result: 8 pillars",
+    "RESOLVE_KAHN": "Result: 1974",
+    "RESOLVE_AALTO": "Result: 57",
+    "RESOLVE_CORBU": "Result: 337",
+    "RESOLVE_WRIGHT": "Result: 1959",
+    "LOCK_TITLE": "The Final Challenge",
+    "LOCK_RULE": "Round the result of the equation without decimals to get the final code."
   }
 }

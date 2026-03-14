@@ -192,5 +192,32 @@
         }
       }
     }
+  },
+  "ARCHITECTURE": {
+    "TITLE": "L'enigma de les línies i els espais",
+    "INTRO": "Anna, és el moment per recordar i compartir amb el Roger tot allò que ens explicaven a les classes d’història de la uni. Quan ens parlaven d’arquitectura del segle XX sempre ens parlaven de 5 arquitectes repetidament: Le Corbusier, Mies Van der Rohe, Lloyd Writgh, Alvar Aalto i Lous Khan. Per poder esbrinar el següent número de la caixa haureu d’esbrinar les següents preguntes, endreçar-les segons a quin arquitecte corresponent i resoldre la fórmula següent (sense decimals):",
+    "FORMULA": "X = (KAHN - WRIGHT + CORBU) / (AALTO + MIES)",
+    "PHASE1_TITLE": "Pregunta 1",
+    "PHASE1_DESC": "D’un d’aquest 5 arquitectes tenim un edifici a Barcelona del que estem molt orgullosos, fins al punt que es va desmuntar i muntar posteriorment per tenir-lo sempre amb nosaltres. El més innovador de l’edifici és que uns quants pilarets metàl·lics suporten tota la llosa de formigó. Podríeu dir-me el número de pilars que té l’edifici?",
+    "PHASE2_TITLE": "Pregunta 2",
+    "PHASE2_DESC": "Quin any vaig morir?",
+    "PHASE3_TITLE": "Pregunta 3",
+    "PHASE3_DESC": "Aquest any fa 50 any de la seva mort. Li han fet una exposició molt guai a la fundació Serralves a Oporto. No és l’únic que va fer una biblioteca, però si que és l’únic que va fer servir un element per fer entrar la llum zenital que va repetir moltes vegades. Podeu deduir de quin element parlo i dir-me quantes vegades repeteix aquest element en l’edifici?",
+    "PHASE4_TITLE": "Pregunta 4",
+    "PHASE4_DESC": "A la uni ens parlaven MOLT d’aquest arquitecte d’ulleres rodones. Mai m’ha quedat clar si va ser innovador o va saber copiar molt bé. Tot i així crec que va ser dels primers en pensar en densificar la ciutat i donar habitatges a molta gent, podríem dir que va crear l’habitatge social. Sabeu de quin edifici parlo? El que necessiteu saber és el número d’habitatges que hi ha dintre l’edifici.",
+    "PHASE5_TITLE": "Pregunta 5",
+    "PHASE5_DESC": "Un d’aquest arquitectes té un museu a EEUU que és de la mateixa col·lecció que el que tenim a Bilbao de l’estrambòtic Gehry. Trobeu el museu i digueu-me quin any es va inaugurar.",
+    "HINT_MIES": "Arquitecte: Mies van der Rohe - Pavelló Barcelona",
+    "HINT_KAHN": "Arquitecte: Louis Kahn",
+    "HINT_AALTO": "Arquitecte: Alvar Aalto",
+    "HINT_CORBU": "Arquitecte: Le Corbusier - Unité d'Habitation",
+    "HINT_WRIGHT": "Arquitecte: Frank Lloyd Wright - Guggenheim NY",
+    "RESOLVE_MIES": "Resultat: 8 pilars",
+    "RESOLVE_KAHN": "Resultat: 1974",
+    "RESOLVE_AALTO": "Resultat: 57",
+    "RESOLVE_CORBU": "Resultat: 337",
+    "RESOLVE_WRIGHT": "Resultat: 1959",
+    "LOCK_TITLE": "El repte final",
+    "LOCK_RULE": "Arrodoniu el resultat de l'equació sense decimals per obtenir el codi final."
   }
 }

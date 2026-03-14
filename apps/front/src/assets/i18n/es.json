@@ -192,5 +192,32 @@
         }
       }
     }
+  },
+  "ARCHITECTURE": {
+    "TITLE": "El enigma de las líneas y los espacios",
+    "INTRO": "Anna, es el momento de recordar y compartir con Roger todo lo que nos explicaban en las clases de historia de la uni. Cuando nos hablaban de arquitectura del siglo XX siempre nos hablaban de 5 arquitectos repetidamente: Le Corbusier, Mies Van der Rohe, Lloyd Wright, Alvar Aalto y Louis Kahn. Para poder averiguar el siguiente número de la caja tendréis que averiguar las siguientes preguntas, ordenarlas según a qué arquitecto corresponden y resolver la fórmula siguiente (sin decimales):",
+    "FORMULA": "X = (KAHN - WRIGHT + CORBU) / (AALTO + MIES)",
+    "PHASE1_TITLE": "Pregunta 1",
+    "PHASE1_DESC": "De uno de estos 5 arquitectos tenemos un edificio en Barcelona del que estamos muy orgullosos, hasta el punto que se desmontó y montó posteriormente para tenerlo siempre con nosotros. Lo más innovador del edificio es que unos cuantos pilares metálicos soportan toda la losa de hormigón. ¿Podríais decirme el número de pilares que tiene el edificio?",
+    "PHASE2_TITLE": "Pregunta 2",
+    "PHASE2_DESC": "¿En qué año morí?",
+    "PHASE3_TITLE": "Pregunta 3",
+    "PHASE3_DESC": "Este año hace 50 años de su muerte. Le han hecho una exposición muy guay en la fundación Serralves en Oporto. No es el único que hizo una biblioteca, pero sí que es el único que utilizó un elemento para dejar entrar la luz cenital que repitió muchas veces. ¿Podéis deducir de qué elemento hablo y decirme cuántas veces repite este elemento en el edificio?",
+    "PHASE4_TITLE": "Pregunta 4",
+    "PHASE4_DESC": "En la uni nos hablaban MUCHO de este arquitecto de gafas redondas. Nunca me ha quedado claro si fue innovador o supo copiar muy bien. Aun así creo que fue de los primeros en pensar en densificar la ciudad y dar viviendas a mucha gente, podríamos decir que creó la vivienda social. ¿Sabéis de qué edificio hablo? Lo que necesitáis saber es el número de viviendas que hay dentro del edificio.",
+    "PHASE5_TITLE": "Pregunta 5",
+    "PHASE5_DESC": "Uno de estos arquitectos tiene un museo en EEUU que es de la misma colección que el que tenemos en Bilbao del estrambótico Gehry. Encontrad el museo y decididme en qué año se inauguró.",
+    "HINT_MIES": "Arquitecto: Mies van der Rohe - Pabellón Barcelona",
+    "HINT_KAHN": "Arquitecto: Louis Kahn",
+    "HINT_AALTO": "Arquitecto: Alvar Aalto",
+    "HINT_CORBU": "Arquitecto: Le Corbusier - Unité d'Habitation",
+    "HINT_WRIGHT": "Arquitecto: Frank Lloyd Wright - Guggenheim NY",
+    "RESOLVE_MIES": "Resultado: 8 pilares",
+    "RESOLVE_KAHN": "Resultado: 1974",
+    "RESOLVE_AALTO": "Resultado: 57",
+    "RESOLVE_CORBU": "Resultado: 337",
+    "RESOLVE_WRIGHT": "Resultado: 1959",
+    "LOCK_TITLE": "El reto final",
+    "LOCK_RULE": "Redondead el resultado de la ecuación sin decimales para obtener el código final."
   }
 }
