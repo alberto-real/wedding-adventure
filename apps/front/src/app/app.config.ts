@@ -22,10 +22,8 @@ const getInitialLanguage = (): string => {
 const getSocketUrl = (): string => {
   const { hostname, protocol } = window.location;
   if (hostname === 'localhost' || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)) {
-    // Local development (including LAN/WiFi): backend on port 3000
     return `${protocol}//${hostname}:3000`;
   }
-  // Production: Railway backend
   return 'https://wedding-adventureback-production.up.railway.app';
 };
 

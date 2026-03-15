@@ -36,12 +36,11 @@ export class GameRoomService implements OnDestroy {
   private pendingGameResetCbs: (() => void)[] = [];
 
   private getSocketUrl(): string {
-    const loc = window.location;
-    // In development (ports 4200/3000), point to backend port
-    if (loc.port === '4200') {
-      return `${loc.protocol}//${loc.hostname}:3000/game`;
+    const { hostname, protocol } = window.location;
+    if (hostname === 'localhost' || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)) {
+      return `${protocol}//${hostname}:3000/game`;
     }
-    return `${loc.origin}/game`;
+    return 'https://wedding-adventureback-production.up.railway.app/game';
   }
 
   private connect(): void {
