@@ -25,8 +25,8 @@ const getSocketUrl = (): string => {
     // Local development (including LAN/WiFi): backend on port 3000
     return `${protocol}//${hostname}:3000`;
   }
-  // Production: same origin (reverse proxy) or cross-origin backend
-  return window.location.origin;
+  // Production: Railway backend
+  return 'https://wedding-adventureback-production.up.railway.app';
 };
 
 const socketConfig: SocketIoConfig = {
