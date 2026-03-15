@@ -25,7 +25,7 @@ FROM node:20-alpine AS production
 WORKDIR /app
 
 # Copy the built application from the build stage
-COPY --from=build /app/dist/apps/back ./
+COPY --from=build /app/apps/back/dist ./
 
 # Install only production dependencies from the built output
 RUN if [ -f package.json ]; then npm ci --only=production 2>/dev/null || true; fi
