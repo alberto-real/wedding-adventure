@@ -13,7 +13,7 @@ export interface PhaseResolutionStep {
 export interface PhaseConfig {
   id: number;
   titleKey: string;
-  badgeLabel: string;
+  badgeLabel?: string;
   historyKey?: string;
   rules?: string[];
   hints: PhaseHint[];

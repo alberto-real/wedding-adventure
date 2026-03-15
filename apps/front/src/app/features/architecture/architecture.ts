@@ -36,7 +36,6 @@ export class ArchitectureComponent {
     {
       id: 1,
       titleKey: 'ARCHITECTURE.PHASE1_TITLE',
-      badgeLabel: 'M',
       historyKey: 'ARCHITECTURE.PHASE1_DESC',
       hints: [
         { labelKey: 'ARCHITECTURE.HINT_MIES_ARCHITECT' },
@@ -47,7 +46,6 @@ export class ArchitectureComponent {
     {
       id: 2,
       titleKey: 'ARCHITECTURE.PHASE2_TITLE',
-      badgeLabel: 'K',
       historyKey: 'ARCHITECTURE.PHASE2_DESC',
       hints: [{ labelKey: 'ARCHITECTURE.HINT_KAHN' }],
       resolutionSteps: [{ labelKey: 'ARCHITECTURE.RESOLVE_KAHN', isBold: true }],
@@ -55,7 +53,6 @@ export class ArchitectureComponent {
     {
       id: 3,
       titleKey: 'ARCHITECTURE.PHASE3_TITLE',
-      badgeLabel: 'A',
       historyKey: 'ARCHITECTURE.PHASE3_DESC',
       hints: [
         { labelKey: 'ARCHITECTURE.HINT_AALTO_ARCHITECT' },
@@ -66,7 +63,6 @@ export class ArchitectureComponent {
     {
       id: 4,
       titleKey: 'ARCHITECTURE.PHASE4_TITLE',
-      badgeLabel: 'C',
       historyKey: 'ARCHITECTURE.PHASE4_DESC',
       hints: [
         { labelKey: 'ARCHITECTURE.HINT_CORBU_ARCHITECT' },
@@ -77,7 +73,6 @@ export class ArchitectureComponent {
     {
       id: 5,
       titleKey: 'ARCHITECTURE.PHASE5_TITLE',
-      badgeLabel: 'W',
       historyKey: 'ARCHITECTURE.PHASE5_DESC',
       hints: [
         { labelKey: 'ARCHITECTURE.HINT_WRIGHT_ARCHITECT' },
