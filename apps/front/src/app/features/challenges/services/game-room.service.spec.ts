@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { GameRoomService } from './game-room.service';
 import { io } from 'socket.io-client';
+import { ToastService } from '../../../core/services/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 
 vi.mock('socket.io-client', () => {
   const socketMock = {
@@ -32,7 +34,11 @@ describe('GameRoomService', () => {
     vi.mocked(io).mockReturnValue(socketMock as any);
 
     TestBed.configureTestingModule({
-      providers: [GameRoomService]
+      providers: [
+        GameRoomService,
+        ToastService,
+        { provide: TranslateService, useValue: { instant: (key: string) => key } },
+      ]
     });
     service = TestBed.inject(GameRoomService);
   });
@@ -149,14 +155,14 @@ describe('GameRoomService', () => {
     onCreated({ roomId: 'R1', players: ['P1'] });
 
     const onDisconnect = socketMock.on.mock.calls.find((c: any) => c[0] === 'disconnect')[1];
-    onDisconnect();
+    onDisconnect('transport close');
     expect(service.status()).toBe('closed');
   });
 
   it('should handle disconnect event without room', () => {
     service.createRoom('ski', 'P1');
     const onDisconnect = socketMock.on.mock.calls.find((c: any) => c[0] === 'disconnect')[1];
-    onDisconnect();
+    onDisconnect('transport close');
     expect(service.status()).toBe('idle');
   });
 
@@ -253,6 +259,62 @@ describe('GameRoomService', () => {
     socketMock.emit.mockClear();
     vi.advanceTimersByTime(30000);
     expect(socketMock.emit).not.toHaveBeenCalledWith('room-activity', expect.anything());
+  });
+
+  it('should mark player ready', () => {
+    service.createRoom('ski', 'P1');
+    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    onCreated({ roomId: 'R1', players: ['P1'] });
+
+    service.markReady();
+    expect(socketMock.emit).toHaveBeenCalledWith('player-ready', { roomId: 'R1' });
+  });
+
+  it('should not mark ready without room', () => {
+    service.markReady();
+    expect(socketMock.emit).not.toHaveBeenCalled();
+  });
+
+  it('should update readyPlayers on player-ready event', () => {
+    service.createRoom('ski', 'P1');
+    const onPlayerReady = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-ready')[1];
+
+    onPlayerReady({ playerName: 'P1', readyPlayers: ['P1'] });
+    expect(service.readyPlayers()).toEqual(['P1']);
+  });
+
+  it('should clear readyPlayers on game-start event', () => {
+    service.createRoom('ski', 'P1');
+    const onPlayerReady = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-ready')[1];
+    onPlayerReady({ playerName: 'P1', readyPlayers: ['P1'] });
+
+    const onGameStart = socketMock.on.mock.calls.find((c: any) => c[0] === 'game-start')[1];
+    onGameStart();
+    expect(service.readyPlayers()).toEqual([]);
+  });
+
+  it('should register onGameStart callback on socket', () => {
+    service.createRoom('ski', 'P1');
+    const cb = vi.fn();
+    service.onGameStart(cb);
+    expect(socketMock.on).toHaveBeenCalledWith('game-start', cb);
+  });
+
+  it('should queue onGameStart callback when no socket', () => {
+    const cb = vi.fn();
+    service.onGameStart(cb);
+    service.createRoom('ski', 'P1');
+    expect(socketMock.on).toHaveBeenCalledWith('game-start', cb);
+  });
+
+  it('should clear readyPlayers on game-reset event', () => {
+    service.createRoom('ski', 'P1');
+    const onPlayerReady = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-ready')[1];
+    onPlayerReady({ playerName: 'P1', readyPlayers: ['P1'] });
+
+    const onReset = socketMock.on.mock.calls.find((c: any[]) => c[0] === 'game-reset' && typeof c[1] === 'function');
+    onReset[1]();
+    expect(service.readyPlayers()).toEqual([]);
   });
 
   it('should call leaveRoom on ngOnDestroy', () => {

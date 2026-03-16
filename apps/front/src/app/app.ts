@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { NavbarComponent } from './components/navbar/navbar';
 import { FooterComponent } from './components/footer/footer';
+import { ToastComponent } from './core/components/toast/toast';
 
 @Component({
   standalone: true,
@@ -14,6 +15,7 @@ import { FooterComponent } from './components/footer/footer';
     TranslateModule,
     NavbarComponent,
     FooterComponent,
+    ToastComponent,
   ],
   selector: 'app-root',
   templateUrl: './app.html',

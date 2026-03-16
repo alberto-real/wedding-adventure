@@ -12,6 +12,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { GameRoomService } from '../../services/game-room.service';
 import { GameCompleteModalComponent } from '../../components/game-complete-modal/game-complete-modal';
+import { GameRulesModalComponent } from '../../components/game-rules-modal/game-rules-modal';
 
 interface Checkpoint {
   row: number;
@@ -95,7 +96,7 @@ const QUIZ: QuizItem[] = [
 
 @Component({
   selector: 'app-maze-game',
-  imports: [TranslateModule, GameCompleteModalComponent],
+  imports: [TranslateModule, GameCompleteModalComponent, GameRulesModalComponent],
   templateUrl: './maze-game.html',
   styleUrl: './maze-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -112,6 +113,14 @@ export class MazeGameComponent implements OnInit, OnDestroy {
   countdownValue = signal<number | null>(null);
   introClosing = signal(false);
   showCompleteModal = signal(false);
+  showRulesModal = signal(false);
+  waitingForPartner = signal(false);
+
+  readonly partnerReady = computed(() => {
+    const ready = this.gameRoomService.readyPlayers();
+    const localName = this.gameRoomService.localPlayerName();
+    return ready.some((name) => name !== localName);
+  });
 
   // --- Maze state ---
   maze = signal<number[][]>([]);
@@ -244,6 +253,7 @@ export class MazeGameComponent implements OnInit, OnDestroy {
     this.initMaze();
 
     this.gameRoomService.onGameEvent((data) => {
+      if (data.from === this.gameRoomService.localPlayerName()) return;
       const payload = data.payload as Record<string, unknown>;
 
       if (data.event === 'maze-move') {
@@ -264,6 +274,7 @@ export class MazeGameComponent implements OnInit, OnDestroy {
     });
 
     this.gameRoomService.onGameReset(() => this.resetLocalState());
+    this.gameRoomService.onGameStart(() => this.beginCountdown());
     this.startIntro();
   }
 
@@ -550,22 +561,32 @@ export class MazeGameComponent implements OnInit, OnDestroy {
   private startIntro(): void {
     this.phase.set('intro');
     this.introClosing.set(false);
+  }
 
-    const t1 = setTimeout(() => this.introClosing.set(true), 1500);
-    const t2 = setTimeout(() => {
+  startGame(): void {
+    this.waitingForPartner.set(true);
+    this.gameRoomService.markReady();
+  }
+
+  private beginCountdown(): void {
+    this.waitingForPartner.set(false);
+    this.introClosing.set(true);
+
+    const t1 = setTimeout(() => {
       this.phase.set('countdown');
       this.countdownValue.set(3);
-    }, 2000);
-    const t3 = setTimeout(() => this.countdownValue.set(2), 3000);
-    const t4 = setTimeout(() => this.countdownValue.set(1), 4000);
-    const t5 = setTimeout(() => {
+    }, 500);
+
+    const t2 = setTimeout(() => this.countdownValue.set(2), 1500);
+    const t3 = setTimeout(() => this.countdownValue.set(1), 2500);
+    const t4 = setTimeout(() => {
       this.countdownValue.set(null);
       this.phase.set('playing');
       this.startTimer();
       this.startMusic();
-    }, 5000);
+    }, 3500);
 
-    this.timers.push(t1, t2, t3, t4, t5);
+    this.timers.push(t1, t2, t3, t4);
   }
 
   // --- Timer ---
@@ -823,6 +844,7 @@ export class MazeGameComponent implements OnInit, OnDestroy {
     this.quizCpIndex.set(-1);
     this.quizResult.set('pending');
     this.showCompleteModal.set(false);
+    this.waitingForPartner.set(false);
     this.countdownValue.set(null);
     // Re-generate maze with new seed
     this.initMaze();

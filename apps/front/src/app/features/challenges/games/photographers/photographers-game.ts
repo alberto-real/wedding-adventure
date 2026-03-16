@@ -13,10 +13,12 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GameRoomService } from '../../services/game-room.service';
 import { GameCompleteModalComponent } from '../../components/game-complete-modal/game-complete-modal';
+import { GameRulesModalComponent } from '../../components/game-rules-modal/game-rules-modal';
 
 interface PhotoTarget {
   id: string;
   nameKey: string;
+  hintKey: string;
   icon: string;
   x: number;
   y: number;
@@ -36,6 +38,7 @@ const PHOTO_TARGETS: PhotoTarget[] = [
   {
     id: 'wedding',
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.WEDDING',
+    hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.WEDDING',
     icon: '💒',
     x: 51,
     y: 23,
@@ -46,6 +49,7 @@ const PHOTO_TARGETS: PhotoTarget[] = [
   {
     id: 'van',
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.VAN',
+    hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.VAN',
     icon: '🚐',
     x: 52,
     y: 90,
@@ -56,6 +60,7 @@ const PHOTO_TARGETS: PhotoTarget[] = [
   {
     id: 'climber',
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.CLIMBER',
+    hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.CLIMBER',
     icon: '🧗',
     x: 44,
     y: 38,
@@ -66,6 +71,7 @@ const PHOTO_TARGETS: PhotoTarget[] = [
   {
     id: 'bbq',
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.BBQ',
+    hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.BBQ',
     icon: '🍖',
     x: 63,
     y: 73,
@@ -77,7 +83,7 @@ const PHOTO_TARGETS: PhotoTarget[] = [
 
 @Component({
   selector: 'app-photographers-game',
-  imports: [FormsModule, TranslateModule, DecimalPipe, NgStyle, GameCompleteModalComponent],
+  imports: [FormsModule, TranslateModule, DecimalPipe, NgStyle, GameCompleteModalComponent, GameRulesModalComponent],
   templateUrl: './photographers-game.html',
   styleUrl: './photographers-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,6 +112,15 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
   lastPhotoWrong = signal(false);
   toastMessage = signal<string | null>(null);
   showCompleteModal = signal(false);
+  showRulesModal = signal(false);
+  waitingForPartner = signal(false);
+  activeHint = signal<string | null>(null);
+
+  readonly partnerReady = computed(() => {
+    const ready = this.gameRoomService.readyPlayers();
+    const localName = this.gameRoomService.localPlayerName();
+    return ready.some((name) => name !== localName);
+  });
 
   // --- Sequential target: only the current one is revealed ---
   readonly currentTarget = computed(() => {
@@ -163,6 +178,8 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     );
   });
 
+  readonly isMaxZoom = computed(() => this.cameraZoom() >= 5);
+
   readonly isCompleted = computed(
     () => this.capturedTargets().length === this.targets.length,
   );
@@ -192,6 +209,7 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     });
 
     this.gameRoomService.onGameReset(() => this.resetLocalState());
+    this.gameRoomService.onGameStart(() => this.beginCountdown());
 
     this.startIntro();
   }
@@ -204,13 +222,22 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
   private startIntro(): void {
     this.phase.set('intro');
     this.introClosing.set(false);
+  }
 
-    const t1 = setTimeout(() => this.introClosing.set(true), 1500);
-    const t2 = setTimeout(() => {
+  startGame(): void {
+    this.waitingForPartner.set(true);
+    this.gameRoomService.markReady();
+  }
+
+  private beginCountdown(): void {
+    this.waitingForPartner.set(false);
+    this.introClosing.set(true);
+
+    const t1 = setTimeout(() => {
       this.phase.set('playing');
       this.startMusic();
-    }, 2500);
-    this.timers.push(t1, t2);
+    }, 500);
+    this.timers.push(t1);
   }
 
   onCameraXChange(value: number): void {
@@ -487,6 +514,12 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleHint(targetId: string): void {
+    this.activeHint.update((current) =>
+      current === targetId ? null : targetId,
+    );
+  }
+
   closeCompleteModal(): void {
     this.showCompleteModal.set(false);
     this.gameCompleted.emit();
@@ -504,6 +537,7 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     this.lastPhotoWrong.set(false);
     this.toastMessage.set(null);
     this.showCompleteModal.set(false);
+    this.waitingForPartner.set(false);
     this.startIntro();
   }
 }

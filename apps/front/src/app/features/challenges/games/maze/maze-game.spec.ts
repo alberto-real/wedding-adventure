@@ -35,8 +35,11 @@ describe('MazeGameComponent', () => {
       roomId: signal('TEST'),
       onGameEvent: vi.fn(),
       onGameReset: vi.fn(),
+      onGameStart: vi.fn(),
       sendGameEvent: vi.fn(),
-      resetGame: vi.fn()
+      resetGame: vi.fn(),
+      markReady: vi.fn(),
+      readyPlayers: signal([])
     };
 
     await TestBed.configureTestingModule({
@@ -50,6 +53,12 @@ describe('MazeGameComponent', () => {
   afterEach(() => {
     vi.useRealTimers();
   });
+
+  function triggerGameStart(component: MazeGameComponent): void {
+    component.startGame();
+    const onStartCb = gameRoomServiceMock.onGameStart.mock.calls[0][0];
+    onStartCb();
+  }
 
   it('should create and generate maze', () => {
     const fixture = TestBed.createComponent(MazeGameComponent);
@@ -70,7 +79,9 @@ describe('MazeGameComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.introClosing()).toBe(false);
-    vi.advanceTimersByTime(1500);
+
+    // User clicks "Start"
+    triggerGameStart(fixture.componentInstance);
     expect(fixture.componentInstance.introClosing()).toBe(true);
 
     vi.advanceTimersByTime(500);
@@ -367,7 +378,8 @@ describe('MazeGameComponent', () => {
   it('should handle time up (game over)', () => {
     const fixture = TestBed.createComponent(MazeGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(5000);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(3500);
 
     fixture.componentInstance.elapsed.set(179);
     vi.advanceTimersByTime(1000);
@@ -509,7 +521,8 @@ describe('MazeGameComponent', () => {
   it('should clean up on destroy', () => {
     const fixture = TestBed.createComponent(MazeGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(5000);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(3500);
 
     fixture.componentInstance.ngOnDestroy();
   });

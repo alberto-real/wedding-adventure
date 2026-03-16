@@ -34,8 +34,11 @@ describe('SkiGameComponent', () => {
       localPlayerName: signal('P1'),
       onGameEvent: vi.fn(),
       onGameReset: vi.fn(),
+      onGameStart: vi.fn(),
       sendGameEvent: vi.fn(),
-      resetGame: vi.fn()
+      resetGame: vi.fn(),
+      markReady: vi.fn(),
+      readyPlayers: signal([])
     };
 
     await TestBed.configureTestingModule({
@@ -50,13 +53,22 @@ describe('SkiGameComponent', () => {
     vi.useRealTimers();
   });
 
+  /** Simulates clicking Start + the backend confirming both players ready */
+  function triggerGameStart(component: SkiGameComponent): void {
+    component.startGame();
+    const onStartCb = gameRoomServiceMock.onGameStart.mock.calls[0][0];
+    onStartCb();
+  }
+
   it('should create and start intro', () => {
     const fixture = TestBed.createComponent(SkiGameComponent);
     fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
     expect(fixture.componentInstance.phase()).toBe('intro');
+    expect(fixture.componentInstance.introClosing()).toBe(false);
 
-    vi.advanceTimersByTime(1500);
+    // User clicks "Start"
+    triggerGameStart(fixture.componentInstance);
     expect(fixture.componentInstance.introClosing()).toBe(true);
 
     vi.advanceTimersByTime(500);
@@ -99,7 +111,8 @@ describe('SkiGameComponent', () => {
   it('should handle collisions and lose lives', () => {
     const fixture = TestBed.createComponent(SkiGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(5000);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(3500);
 
     expect(fixture.componentInstance.lives()).toBe(3);
 
@@ -116,7 +129,8 @@ describe('SkiGameComponent', () => {
   it('should handle game over', () => {
     const fixture = TestBed.createComponent(SkiGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(5000);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(3500);
 
     const onEvent = gameRoomServiceMock.onGameEvent.mock.calls[0][0];
     onEvent({ event: 'ski-hit', payload: { obstacleId: 1 } });
@@ -296,7 +310,8 @@ describe('SkiGameComponent', () => {
   it('should handle game reset', () => {
     const fixture = TestBed.createComponent(SkiGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(5000);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(3500);
 
     fixture.componentInstance.lives.set(1);
     fixture.componentInstance.scrollY.set(1000);
@@ -315,7 +330,8 @@ describe('SkiGameComponent', () => {
   it('should clean up on destroy', () => {
     const fixture = TestBed.createComponent(SkiGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(5000);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(3500);
 
     fixture.componentInstance.ngOnDestroy();
   });

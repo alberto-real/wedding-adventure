@@ -14,6 +14,7 @@ import { DecimalPipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { GameRoomService } from '../../services/game-room.service';
 import { GameCompleteModalComponent } from '../../components/game-complete-modal/game-complete-modal';
+import { GameRulesModalComponent } from '../../components/game-rules-modal/game-rules-modal';
 
 interface Obstacle {
   id: number;
@@ -75,7 +76,7 @@ const COURSE_OBSTACLES: Obstacle[] = [
 
 @Component({
   selector: 'app-ski-game',
-  imports: [TranslateModule, DecimalPipe, GameCompleteModalComponent],
+  imports: [TranslateModule, DecimalPipe, GameCompleteModalComponent, GameRulesModalComponent],
   templateUrl: './ski-game.html',
   styleUrl: './ski-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,6 +105,14 @@ export class SkiGameComponent implements OnInit, OnDestroy {
   isInvincible = signal(false);
   shakeActive = signal(false);
   showCompleteModal = signal(false);
+  showRulesModal = signal(false);
+  waitingForPartner = signal(false);
+
+  readonly partnerReady = computed(() => {
+    const ready = this.gameRoomService.readyPlayers();
+    const localName = this.gameRoomService.localPlayerName();
+    return ready.some((name) => name !== localName);
+  });
 
   // --- Constants for template ---
   readonly SKIER_Y_PERCENT = SKIER_Y_RATIO * 100;
@@ -173,6 +182,7 @@ export class SkiGameComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.gameRoomService.onGameEvent((data) => {
+      if (data.from === this.gameRoomService.localPlayerName()) return;
       const payload = data.payload as Record<string, unknown>;
 
       if (data.event === 'ski-move') {
@@ -201,6 +211,7 @@ export class SkiGameComponent implements OnInit, OnDestroy {
     });
 
     this.gameRoomService.onGameReset(() => this.resetLocalState());
+    this.gameRoomService.onGameStart(() => this.beginCountdown());
     this.startIntro();
   }
 
@@ -247,25 +258,33 @@ export class SkiGameComponent implements OnInit, OnDestroy {
   private startIntro(): void {
     this.phase.set('intro');
     this.introClosing.set(false);
+  }
 
-    const t1 = setTimeout(() => this.introClosing.set(true), 1500);
+  startGame(): void {
+    this.waitingForPartner.set(true);
+    this.gameRoomService.markReady();
+  }
 
-    const t2 = setTimeout(() => {
+  private beginCountdown(): void {
+    this.waitingForPartner.set(false);
+    this.introClosing.set(true);
+
+    const t1 = setTimeout(() => {
       this.phase.set('countdown');
       this.countdownValue.set(3);
-    }, 2000);
+    }, 500);
 
-    const t3 = setTimeout(() => this.countdownValue.set(2), 3000);
-    const t4 = setTimeout(() => this.countdownValue.set(1), 4000);
-    const t5 = setTimeout(() => {
+    const t2 = setTimeout(() => this.countdownValue.set(2), 1500);
+    const t3 = setTimeout(() => this.countdownValue.set(1), 2500);
+    const t4 = setTimeout(() => {
       this.countdownValue.set(null);
       this.phase.set('playing');
       this.startGameLoop();
       this.startMusic();
       this.scrollToControls();
-    }, 5000);
+    }, 3500);
 
-    this.timers.push(t1, t2, t3, t4, t5);
+    this.timers.push(t1, t2, t3, t4);
   }
 
   private scrollToControls(): void {
@@ -599,6 +618,7 @@ export class SkiGameComponent implements OnInit, OnDestroy {
     this.isInvincible.set(false);
     this.shakeActive.set(false);
     this.showCompleteModal.set(false);
+    this.waitingForPartner.set(false);
     this.countdownValue.set(null);
     this.startIntro();
   }

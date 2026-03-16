@@ -27,6 +27,7 @@ interface GameRoom {
   id: string;
   gameType: string;
   players: Player[];
+  readyPlayers: Set<string>;
   inactivityTimer: ReturnType<typeof setTimeout> | null;
   createdAt: number;
 }
@@ -74,6 +75,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
       id: roomId,
       gameType: data.gameType,
       players: [{ socketId: client.id, name: data.playerName }],
+      readyPlayers: new Set(),
       inactivityTimer: null,
       createdAt: Date.now(),
     };
@@ -161,6 +163,30 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     this.resetInactivityTimer(data.roomId);
   }
 
+  @SubscribeMessage('player-ready')
+  handlePlayerReady(
+    @MessageBody() data: { roomId: string },
+    @ConnectedSocket() client: Socket,
+  ) {
+    const room = this.rooms.get(data.roomId);
+    if (!room) return;
+    const player = room.players.find((p) => p.socketId === client.id);
+    if (!player) return;
+
+    room.readyPlayers.add(player.name);
+    this.resetInactivityTimer(data.roomId);
+
+    this.server.to(data.roomId).emit('player-ready', {
+      playerName: player.name,
+      readyPlayers: Array.from(room.readyPlayers),
+    });
+
+    if (room.readyPlayers.size >= MAX_PLAYERS_PER_ROOM && room.players.length >= MAX_PLAYERS_PER_ROOM) {
+      this.server.to(data.roomId).emit('game-start');
+      room.readyPlayers.clear();
+    }
+  }
+
   @SubscribeMessage('reset-game')
   handleResetGame(
     @MessageBody() data: { roomId: string },
@@ -170,6 +196,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     if (!room) return;
     if (!room.players.some((p) => p.socketId === client.id)) return;
 
+    room.readyPlayers.clear();
     this.resetInactivityTimer(data.roomId);
     this.server.to(data.roomId).emit('game-reset', {
       roomId: data.roomId,

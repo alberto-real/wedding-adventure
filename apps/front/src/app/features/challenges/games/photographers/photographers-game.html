@@ -3,15 +3,43 @@
   <div class="camera-flash" [class.miss]="lastPhotoWrong()"></div>
 }
 
-<!-- ===== INTRO ANIMATION ===== -->
+<!-- ===== INTRO ===== -->
 @if (phase() === 'intro') {
   <div class="camera-intro" [class.closing]="introClosing()">
     <div class="intro-icon">📷</div>
     <div class="intro-text">
       {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.MISSION' | translate }}
     </div>
+    @if (waitingForPartner()) {
+      <div class="flex flex-col items-center gap-2 pt-4">
+        <span class="loading loading-spinner loading-md text-primary"></span>
+        <p class="text-sm text-base-content/60">
+          {{ 'CHALLENGES.WAITING_FOR_PARTNER' | translate }}
+        </p>
+      </div>
+    } @else {
+      @if (partnerReady()) {
+        <div class="badge badge-warning badge-sm animate-pulse">
+          {{ 'CHALLENGES.PARTNER_WAITING' | translate }}
+        </div>
+      }
+      <div class="flex gap-3 pt-4">
+        <button class="btn btn-outline border-white/40 text-white" (click)="showRulesModal.set(true)">
+          {{ 'CHALLENGES.RULES' | translate }}
+        </button>
+        <button class="btn btn-primary btn-wide" (click)="startGame()">
+          {{ 'CHALLENGES.START_GAME' | translate }}
+        </button>
+      </div>
+    }
   </div>
 }
+
+<app-game-rules-modal
+  [visible]="showRulesModal()"
+  [rulesKey]="'CHALLENGES.GAMES.PHOTOGRAPHERS.RULES'"
+  (closed)="showRulesModal.set(false)"
+/>
 
 <!-- ===== GAME AREA ===== -->
 <div class="flex flex-col items-center gap-3 w-full">
@@ -26,21 +54,33 @@
 
   <div class="flex flex-wrap justify-center gap-2">
     @for (target of targets; track target.id; let i = $index) {
-      <div
-        class="badge gap-1 text-sm"
-        [class.badge-success]="isTargetCaptured(target.id)"
-        [class.badge-ghost]="!isTargetCaptured(target.id) && currentTargetIndex() !== i"
-        [class.badge-primary]="currentTargetIndex() === i && !isTargetCaptured(target.id)"
-      >
-        @if (isTargetRevealed(i)) {
-          <span>{{ target.icon }}</span>
-          <span>{{ target.nameKey | translate }}</span>
-          @if (isTargetCaptured(target.id)) {
-            <span>✓</span>
+      <div class="relative">
+        <div
+          class="badge gap-1 text-sm"
+          [class.badge-success]="isTargetCaptured(target.id)"
+          [class.badge-ghost]="!isTargetCaptured(target.id) && currentTargetIndex() !== i"
+          [class.badge-primary]="currentTargetIndex() === i && !isTargetCaptured(target.id)"
+        >
+          @if (isTargetRevealed(i)) {
+            <span>{{ target.icon }}</span>
+            <span>{{ target.nameKey | translate }}</span>
+            @if (isTargetCaptured(target.id)) {
+              <span>✓</span>
+            } @else {
+              <button
+                class="ml-1 cursor-pointer hover:scale-125 transition-transform"
+                (click)="toggleHint(target.id)"
+              >💡</button>
+            }
+          } @else {
+            <span>❓</span>
+            <span>???</span>
           }
-        } @else {
-          <span>❓</span>
-          <span>???</span>
+        </div>
+        @if (activeHint() === target.id) {
+          <div class="absolute z-10 top-full mt-1 left-1/2 -translate-x-1/2 bg-base-100 text-base-content text-xs rounded-lg shadow-lg px-3 py-2 whitespace-nowrap border border-base-300">
+            {{ target.hintKey | translate }}
+          </div>
         }
       </div>
     }
@@ -102,9 +142,10 @@
   @if (phase() === 'playing' && !isCompleted()) {
     <button
       class="btn btn-lg gap-2"
-      [class.btn-success]="isTargetInRange()"
-      [class.btn-neutral]="!isTargetInRange()"
-      [class.animate-bounce]="isTargetInRange()"
+      [class.btn-success]="isTargetInRange() && isMaxZoom()"
+      [class.btn-neutral]="!isTargetInRange() || !isMaxZoom()"
+      [class.animate-bounce]="isTargetInRange() && isMaxZoom()"
+      [disabled]="!isMaxZoom()"
       (click)="takePhoto()"
     >
       📸 {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.TAKE_PHOTO' | translate }}

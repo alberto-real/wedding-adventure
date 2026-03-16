@@ -1,5 +1,7 @@
-import { Injectable, signal, computed, OnDestroy } from '@angular/core';
+import { Injectable, inject, signal, computed, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from '../../../core/services/toast.service';
 
 export interface RoomState {
   roomId: string | null;
@@ -9,8 +11,16 @@ export interface RoomState {
   error: string | null;
 }
 
+const ERROR_TRANSLATION_MAP: Record<string, string> = {
+  ROOM_NOT_FOUND: 'CHALLENGES.ERRORS.ROOM_NOT_FOUND',
+  ROOM_FULL: 'CHALLENGES.ERRORS.ROOM_FULL',
+  ALREADY_IN_ROOM: 'CHALLENGES.ERRORS.ALREADY_IN_ROOM',
+};
+
 @Injectable()
 export class GameRoomService implements OnDestroy {
+  private readonly toastService = inject(ToastService);
+  private readonly translate = inject(TranslateService);
   private socket: Socket | null = null;
 
   private readonly _state = signal<RoomState>({
@@ -31,9 +41,12 @@ export class GameRoomService implements OnDestroy {
   readonly isReady = computed(() => this._state().status === 'ready');
   readonly playerCount = computed(() => this._state().players.length);
 
+  readonly readyPlayers = signal<string[]>([]);
+
   private activityInterval: ReturnType<typeof setInterval> | null = null;
   private pendingGameEventCbs: ((data: { event: string; payload: unknown; from: string }) => void)[] = [];
   private pendingGameResetCbs: (() => void)[] = [];
+  private pendingGameStartCbs: (() => void)[] = [];
 
   private getSocketUrl(): string {
     const { hostname, protocol } = window.location;
@@ -48,6 +61,8 @@ export class GameRoomService implements OnDestroy {
 
     this.socket = io(this.getSocketUrl(), {
       transports: ['websocket', 'polling'],
+      reconnectionAttempts: 3,
+      reconnectionDelay: 2000,
     });
 
     this.socket.on('room-created', (data: { roomId: string; players: string[] }) => {
@@ -83,9 +98,13 @@ export class GameRoomService implements OnDestroy {
         status: 'idle',
         error: data.message,
       }));
+      const translationKey = ERROR_TRANSLATION_MAP[data.message];
+      if (translationKey) {
+        this.showTranslatedToast(translationKey, 'error');
+      }
     });
 
-    this.socket.on('room-closed', () => {
+    this.socket.on('room-closed', (data?: { reason?: string }) => {
       this._state.update((s) => ({
         ...s,
         roomId: null,
@@ -93,19 +112,44 @@ export class GameRoomService implements OnDestroy {
         status: 'closed',
       }));
       this.stopActivityPing();
+      if (data?.reason === 'INACTIVITY_TIMEOUT') {
+        this.showTranslatedToast('CHALLENGES.ERRORS.INACTIVITY_TIMEOUT', 'warning');
+      }
+    });
+
+    this.socket.on('player-ready', (data: { playerName: string; readyPlayers: string[] }) => {
+      this.readyPlayers.set(data.readyPlayers);
+    });
+
+    this.socket.on('game-start', () => {
+      this.readyPlayers.set([]);
     });
 
     this.socket.on('game-reset', () => {
-      // Emit a signal that components can react to
+      this.readyPlayers.set([]);
       this._state.update((s) => ({ ...s }));
     });
 
-    this.socket.on('disconnect', () => {
+    this.socket.on('connect_error', () => {
+      this._state.update((s) => ({
+        ...s,
+        status: 'idle',
+        error: 'CONNECTION_FAILED',
+      }));
+      this.showTranslatedToast('CHALLENGES.ERRORS.CONNECTION_FAILED', 'error');
+      this.stopActivityPing();
+    });
+
+    this.socket.on('disconnect', (reason: string) => {
       this._state.update((s) => ({
         ...s,
         status: s.roomId ? 'closed' : 'idle',
       }));
       this.stopActivityPing();
+      // Only show toast for unexpected disconnects (not user-initiated)
+      if (reason !== 'io client disconnect') {
+        this.showTranslatedToast('CHALLENGES.ERRORS.CONNECTION_LOST', 'warning');
+      }
     });
 
     // Register any callbacks that were queued before the socket existed
@@ -117,6 +161,10 @@ export class GameRoomService implements OnDestroy {
       this.socket.on('game-reset', cb);
     }
     this.pendingGameResetCbs = [];
+    for (const cb of this.pendingGameStartCbs) {
+      this.socket.on('game-start', cb);
+    }
+    this.pendingGameStartCbs = [];
   }
 
   createRoom(gameType: string, playerName: string): void {
@@ -181,6 +229,26 @@ export class GameRoomService implements OnDestroy {
     }
   }
 
+  markReady(): void {
+    const roomId = this._state().roomId;
+    if (roomId && this.socket) {
+      this.socket.emit('player-ready', { roomId });
+    }
+  }
+
+  onGameStart(callback: () => void): void {
+    if (this.socket) {
+      this.socket.on('game-start', callback);
+    } else {
+      this.pendingGameStartCbs.push(callback);
+    }
+  }
+
+  private showTranslatedToast(key: string, type: 'info' | 'warning' | 'error' | 'success'): void {
+    const message = this.translate.instant(key);
+    this.toastService.show(message, type);
+  }
+
   private startActivityPing(): void {
     this.stopActivityPing();
     // Send activity ping every 30 seconds to prevent inactivity timeout
@@ -202,6 +270,7 @@ export class GameRoomService implements OnDestroy {
   private reset(): void {
     this.stopActivityPing();
     this.localPlayerName.set(null);
+    this.readyPlayers.set([]);
     this._state.set({
       roomId: null,
       players: [],

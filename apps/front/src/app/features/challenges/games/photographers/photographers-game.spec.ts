@@ -34,7 +34,10 @@ describe('PhotographersGameComponent', () => {
       localPlayerName: signal('P1'),
       onGameEvent: vi.fn(),
       onGameReset: vi.fn(),
-      sendGameEvent: vi.fn()
+      onGameStart: vi.fn(),
+      sendGameEvent: vi.fn(),
+      markReady: vi.fn(),
+      readyPlayers: signal([])
     };
 
     await TestBed.configureTestingModule({
@@ -49,16 +52,24 @@ describe('PhotographersGameComponent', () => {
     vi.useRealTimers();
   });
 
+  function triggerGameStart(component: PhotographersGameComponent): void {
+    component.startGame();
+    const onStartCb = gameRoomServiceMock.onGameStart.mock.calls[0][0];
+    onStartCb();
+  }
+
   it('should create and start intro', () => {
     const fixture = TestBed.createComponent(PhotographersGameComponent);
     fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
     expect(fixture.componentInstance.phase()).toBe('intro');
+    expect(fixture.componentInstance.introClosing()).toBe(false);
 
-    vi.advanceTimersByTime(1500);
+    // User clicks "Start"
+    triggerGameStart(fixture.componentInstance);
     expect(fixture.componentInstance.introClosing()).toBe(true);
 
-    vi.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(500);
     expect(fixture.componentInstance.phase()).toBe('playing');
   });
 
@@ -264,7 +275,8 @@ describe('PhotographersGameComponent', () => {
   it('should handle game reset', () => {
     const fixture = TestBed.createComponent(PhotographersGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(2500);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(500);
 
     fixture.componentInstance.capturedTargets.set(['wedding']);
 
@@ -382,7 +394,8 @@ describe('PhotographersGameComponent', () => {
   it('should clean up on destroy', () => {
     const fixture = TestBed.createComponent(PhotographersGameComponent);
     fixture.detectChanges();
-    vi.advanceTimersByTime(2500);
+    triggerGameStart(fixture.componentInstance);
+    vi.advanceTimersByTime(500);
 
     fixture.componentInstance.ngOnDestroy();
   });

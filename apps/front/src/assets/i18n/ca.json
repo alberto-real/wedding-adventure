@@ -80,6 +80,10 @@
   "CHALLENGES": {
     "INTRO": "Treballeu junts en equip per resoldre aquests minijocs! La comunicació i la col·laboració són les claus d'un matrimoni feliç.",
     "PLAY": "Jugar",
+    "START_GAME": "Començar",
+    "RULES": "Regles",
+    "WAITING_FOR_PARTNER": "Esperant l'altre jugador...",
+    "PARTNER_WAITING": "El teu company està esperant!",
     "COMING_SOON": "Properament",
     "CREATE_ROOM": "Crear sala",
     "JOIN_ROOM": "Unir-se a sala",
@@ -113,7 +117,10 @@
     "ERRORS": {
       "ROOM_NOT_FOUND": "Sala no trobada. Revisa el codi i torna-ho a provar.",
       "ROOM_FULL": "Aquesta sala ja està plena (màxim 2 jugadors).",
-      "ALREADY_IN_ROOM": "Ja ets en aquesta sala."
+      "ALREADY_IN_ROOM": "Ja ets en aquesta sala.",
+      "CONNECTION_FAILED": "No s'ha pogut connectar al servidor. Comprova la teva connexió.",
+      "CONNECTION_LOST": "S'ha perdut la connexió amb el servidor.",
+      "INACTIVITY_TIMEOUT": "La sala s'ha tancat per inactivitat."
     },
     "GAMES": {
       "SKI": {
@@ -126,6 +133,7 @@
         "GAME_OVER": "Us heu estavellat!",
         "GAME_OVER_DESC": "Heu perdut totes les vides. Coordineu-vos millor i torneu-ho a provar!",
         "TRY_AGAIN": "Tornar-ho a provar",
+        "RULES": "Cada jugador controla un esquiador (blau o vermell) amb un lliscador.\n\nEls dos esquiadors estan units per una corda. Si s'allunyen massa, s'arrossegaran mútuament.\n\nEsquiveu els obstacles junts baixant per la muntanya. Teniu 3 vides.\n\nCoordineu els moviments i comuniqueu-vos per arribar al final.",
         "CLUE_MESSAGE": "Compartir hobbies, com esports d'aventura i muntanya, són la clau d'un matrimoni feliç.\n\nI quan es tracta de ser feliç no cal perdre ni un segon. 🎿"
       },
       "PHOTOGRAPHERS": {
@@ -143,16 +151,23 @@
         "ROLE_VERTICAL": "Tu controles el moviment vertical i l'enfocament",
         "COMPLETED": "Totes les fotos fetes!",
         "COMPLETED_DESC": "Gran treball en equip! Heu capturat els 4 elements perfectament.",
+        "RULES": "Un jugador controla el moviment horitzontal i el zoom de la càmera.\nL'altre jugador controla el moviment vertical i l'enfocament.\n\nHeu de trobar i fotografiar 4 elements ocults a la imatge, un per un.\n\nEl botó de foto només s'activa quan el zoom està al màxim (5x).\nQuan la càmera estigui ben enfocada i apuntant a l'objectiu, premeu el botó de foto.\n\nPodeu demanar una pista per a cada element prement 💡.\n\nComuniqueu-vos per coordinar la posició i l'enfocament.",
         "CLUE_MESSAGE": "El secret d'un bon matrimoni és recordar que la feina sempre va després de la teva parella.\n\nDeixa-ho per al final. 💕",
         "TARGETS": {
           "WEDDING": "Els protagonistes de l'event",
           "CLIMBER": "El millor casc del món",
           "VAN": "Canvia l'oceà per la muntanya",
           "BBQ": "Churrasquito"
+        },
+        "HINTS": {
+          "WEDDING": "Els nuvis són els protagonistes",
+          "VAN": "Una furgoneta blanca \"mountain\" edition",
+          "CLIMBER": "Un casc rosa",
+          "BBQ": "Un jove i tendre vedell"
         }
       },
       "MAZE": {
-        "TITLE": "Rogaine d'Orientació",
+        "TITLE": "RAID d'Orientació",
         "DESC": "Navegueu junts pel laberint recollint tots els controls de la cursa.",
         "INTRO_DESC": "Un jugador controla el moviment horitzontal i l'altre el vertical. Recolliu els 4 controls, resoleu les proves i torneu al campament base!",
         "ROLE_HORIZONTAL": "🔵 Moviment horitzontal (← →) + Lector",
@@ -162,6 +177,7 @@
         "TIME_UP": "S'ha acabat el temps!",
         "TIME_UP_DESC": "No heu completat el recorregut a temps. Coordineu-vos millor i torneu-ho a provar!",
         "TRY_AGAIN": "Tornar-ho a provar",
+        "RULES": "Un jugador controla el moviment horitzontal (← →) i llegeix les preguntes en veu alta.\nL'altre controla el moviment vertical (↑ ↓) i respon les preguntes.\n\nNavegueu pel laberint recollint els 4 controls. Cada control activa una prova.\n\nTeniu 3 minuts. Les respostes incorrectes afegeixen 20 segons de penalització.\n\nDesprés de recollir tots els controls, torneu al campament base.",
         "CLUE_MESSAGE": "En el matrimoni, com en una cursa d'orientació, de vegades els protagonistes perden el rumb i se surten del camí.\n\n Recordar que col·laborar és sempre el primer. 🧭",
         "QUIZ": {
           "READ_ALOUD": "Llegeix en veu alta al teu company:",

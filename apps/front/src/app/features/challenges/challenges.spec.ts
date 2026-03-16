@@ -18,11 +18,14 @@ describe('ChallengesComponent', () => {
       localPlayerName: signal('P1'),
       onGameEvent: vi.fn(),
       onGameReset: vi.fn(),
+      onGameStart: vi.fn(),
       sendGameEvent: vi.fn(),
       leaveRoom: vi.fn(),
       resetGame: vi.fn(),
       createRoom: vi.fn(),
-      joinRoom: vi.fn()
+      joinRoom: vi.fn(),
+      markReady: vi.fn(),
+      readyPlayers: signal([])
     };
 
     await TestBed.configureTestingModule({

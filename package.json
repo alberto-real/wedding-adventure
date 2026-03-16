@@ -1,9 +1,9 @@
 {
   "name": "@wedding-adventure/source",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "scripts": {
-    "serve": "npx nx run-many -t serve -p front back",
+    "start": "npx nx run-many -t serve -p front back",
     "build": "npx nx run-many -t build -p front back",
     "test": "npx nx run-many -t test -p front back",
     "lint": "npx nx run-many -t lint -p front back",

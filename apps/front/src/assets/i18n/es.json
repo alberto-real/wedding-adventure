@@ -80,6 +80,10 @@
   "CHALLENGES": {
     "INTRO": "¡Trabajad juntos en equipo para resolver estos minijuegos! La comunicación y la colaboración son las claves de un matrimonio feliz.",
     "PLAY": "Jugar",
+    "START_GAME": "Empezar",
+    "RULES": "Reglas",
+    "WAITING_FOR_PARTNER": "Esperando al otro jugador...",
+    "PARTNER_WAITING": "¡Tu compañero está esperando!",
     "COMING_SOON": "Próximamente",
     "CREATE_ROOM": "Crear sala",
     "JOIN_ROOM": "Unirse a sala",
@@ -113,7 +117,10 @@
     "ERRORS": {
       "ROOM_NOT_FOUND": "Sala no encontrada. Revisa el código e inténtalo de nuevo.",
       "ROOM_FULL": "Esta sala ya está llena (máximo 2 jugadores).",
-      "ALREADY_IN_ROOM": "Ya estás en esta sala."
+      "ALREADY_IN_ROOM": "Ya estás en esta sala.",
+      "CONNECTION_FAILED": "No se pudo conectar al servidor. Comprueba tu conexión.",
+      "CONNECTION_LOST": "Se ha perdido la conexión con el servidor.",
+      "INACTIVITY_TIMEOUT": "La sala se cerró por inactividad."
     },
     "GAMES": {
       "SKI": {
@@ -126,6 +133,7 @@
         "GAME_OVER": "¡Os habéis estrellado!",
         "GAME_OVER_DESC": "Habéis perdido todas las vidas. ¡Coordinaos mejor e intentadlo de nuevo!",
         "TRY_AGAIN": "Intentar de nuevo",
+        "RULES": "Cada jugador controla un esquiador (azul o rojo) usando un deslizador.\n\nLos dos esquiadores están unidos por una cuerda. Si se alejan demasiado, se arrastrarán mutuamente.\n\nEsquivad los obstáculos juntos bajando por la montaña. Tenéis 3 vidas.\n\nCoordinad vuestros movimientos y comunicaos para llegar al final.",
         "CLUE_MESSAGE": "Compartir hobbies, como deportes de aventura y montaña, son la clave de un matrimonio feliz.\n\nY cuando se trata de ser feliz no hay que perder ni un segundo. 🎿"
       },
       "PHOTOGRAPHERS": {
@@ -143,16 +151,23 @@
         "ROLE_VERTICAL": "Tú controlas el movimiento vertical y el enfoque",
         "COMPLETED": "¡Todas las fotos tomadas!",
         "COMPLETED_DESC": "¡Gran trabajo en equipo! Habéis capturado los 4 elementos perfectamente.",
+        "RULES": "Un jugador controla el movimiento horizontal y el zoom de la cámara.\nEl otro jugador controla el movimiento vertical y el enfoque.\n\nDebéis encontrar y fotografiar 4 elementos ocultos en la imagen, uno por uno.\n\nEl botón de foto solo se activa cuando el zoom está al máximo (5x).\nCuando la cámara esté bien enfocada y apuntando al objetivo, pulsad el botón de foto.\n\nPodéis pedir una pista para cada elemento pulsando 💡.\n\nComunicaos para coordinar la posición y el enfoque.",
         "CLUE_MESSAGE": "El secreto de un buen matrimonio es recordar que el trabajo siempre va después de tu pareja.\n\nDéjalo para al final. 💕",
         "TARGETS": {
           "WEDDING": "Los protagonistas del evento",
           "CLIMBER": "El mejor casco del mundo",
           "VAN": "Cambia el oceano por la montaña",
           "BBQ": "Churrasquito"
+        },
+        "HINTS": {
+          "WEDDING": "Los novios son los protagonistas",
+          "VAN": "Una furgoneta blanca \"mountain\" edition",
+          "CLIMBER": "Un casco rosa",
+          "BBQ": "Un joven y tierno ternero"
         }
       },
       "MAZE": {
-        "TITLE": "Rogaine de Orientación",
+        "TITLE": "RAID de Orientación",
         "DESC": "Navegad juntos por el laberinto recogiendo todos los controles de la carrera.",
         "INTRO_DESC": "Un jugador controla el movimiento horizontal y el otro el vertical. ¡Recoged los 4 controles, resolved las pruebas y volved al campamento base!",
         "ROLE_HORIZONTAL": "🔵 Movimiento horizontal (← →) + Lector",
@@ -162,6 +177,7 @@
         "TIME_UP": "¡Se acabó el tiempo!",
         "TIME_UP_DESC": "No habéis completado el recorrido a tiempo. ¡Coordinaos mejor e intentadlo de nuevo!",
         "TRY_AGAIN": "Intentar de nuevo",
+        "RULES": "Un jugador controla el movimiento horizontal (← →) y lee las preguntas en voz alta.\nEl otro controla el movimiento vertical (↑ ↓) y responde a las preguntas.\n\nNavegad por el laberinto recogiendo los 4 controles. Cada control activa una prueba.\n\nTenéis 3 minutos. Las respuestas incorrectas añaden 20 segundos de penalización.\n\nTras recoger todos los controles, volved al campamento base.",
         "CLUE_MESSAGE": "En el matrimonio, como en una carrera de orientación, a veces los protagonistas pierden el rumbo y  se salen del camino.\n\n Recordar que colaborar es siempre lo primero. 🧭",
         "QUIZ": {
           "READ_ALOUD": "Lee en voz alta a tu compañero:",

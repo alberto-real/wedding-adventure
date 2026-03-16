@@ -4,7 +4,7 @@
     class="fixed inset-0 z-40 flex items-center justify-center bg-gradient-to-b from-green-200/90 to-white/90 backdrop-blur-sm transition-opacity duration-500"
     [class.opacity-0]="introClosing()"
   >
-    <div class="text-center space-y-4 animate-fade-in">
+    <div class="text-center space-y-6 animate-fade-in">
       <div class="text-7xl">🧭</div>
       <h2 class="text-3xl font-black text-primary">
         {{ 'CHALLENGES.GAMES.MAZE.TITLE' | translate }}
@@ -26,9 +26,37 @@
           }}
         </div>
       }
+      @if (waitingForPartner()) {
+        <div class="flex flex-col items-center gap-2 pt-2">
+          <span class="loading loading-spinner loading-md text-primary"></span>
+          <p class="text-sm text-base-content/60">
+            {{ 'CHALLENGES.WAITING_FOR_PARTNER' | translate }}
+          </p>
+        </div>
+      } @else {
+        @if (partnerReady()) {
+          <div class="badge badge-warning badge-sm animate-pulse">
+            {{ 'CHALLENGES.PARTNER_WAITING' | translate }}
+          </div>
+        }
+        <div class="flex gap-3 pt-2">
+          <button class="btn btn-outline" (click)="showRulesModal.set(true)">
+            {{ 'CHALLENGES.RULES' | translate }}
+          </button>
+          <button class="btn btn-primary btn-wide" (click)="startGame()">
+            {{ 'CHALLENGES.START_GAME' | translate }}
+          </button>
+        </div>
+      }
     </div>
   </div>
 }
+
+<app-game-rules-modal
+  [visible]="showRulesModal()"
+  [rulesKey]="'CHALLENGES.GAMES.MAZE.RULES'"
+  (closed)="showRulesModal.set(false)"
+/>
 
   <div class="flex items-center justify-center">
     <!-- INFO PANEL -->
