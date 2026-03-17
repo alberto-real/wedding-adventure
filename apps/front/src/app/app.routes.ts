@@ -22,6 +22,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./features/challenges/challenges').then((m) => m.ChallengesComponent),
   },
   {
+    path: 'admin',
+    loadComponent: () => import('./features/admin/admin').then((m) => m.AdminComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

@@ -21,7 +21,11 @@
           <button class="btn btn-primary flex-1" (click)="selectCreate()">
             {{ 'CHALLENGES.CREATE_ROOM' | translate }}
           </button>
-          <button class="btn btn-secondary flex-1" (click)="selectJoin()">
+          <button
+            class="btn btn-secondary flex-1"
+            [disabled]="!hasWaitingRooms()"
+            (click)="selectJoin()"
+          >
             {{ 'CHALLENGES.JOIN_ROOM' | translate }}
           </button>
         </div>

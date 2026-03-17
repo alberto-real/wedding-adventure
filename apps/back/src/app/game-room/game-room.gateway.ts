@@ -7,6 +7,7 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { GameRoomStore, GameRoom } from './game-room.store';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const corsOrigin = process.env.CORS_ORIGIN;
@@ -18,20 +19,6 @@ const ROOM_INACTIVITY_TIMEOUT_MS = parseInt(
 );
 const MAX_PLAYERS_PER_ROOM = 2;
 
-interface Player {
-  socketId: string;
-  name: string;
-}
-
-interface GameRoom {
-  id: string;
-  gameType: string;
-  players: Player[];
-  readyPlayers: Set<string>;
-  inactivityTimer: ReturnType<typeof setTimeout> | null;
-  createdAt: number;
-}
-
 @WebSocketGateway({
   namespace: '/game',
   cors: isProduction
@@ -41,10 +28,10 @@ interface GameRoom {
 export class GameRoomGateway implements OnGatewayDisconnect {
   @WebSocketServer() server!: Server;
 
-  private rooms = new Map<string, GameRoom>();
+  constructor(private readonly store: GameRoomStore) {}
 
   handleDisconnect(client: Socket) {
-    for (const [roomId, room] of this.rooms) {
+    for (const [roomId, room] of this.store.entries()) {
       const playerIndex = room.players.findIndex(
         (p) => p.socketId === client.id,
       );
@@ -80,7 +67,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
       createdAt: Date.now(),
     };
 
-    this.rooms.set(roomId, room);
+    this.store.set(roomId, room);
     client.join(roomId);
     this.resetInactivityTimer(roomId);
 
@@ -95,7 +82,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     @MessageBody() data: { roomId: string; playerName: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const room = this.rooms.get(data.roomId);
+    const room = this.store.get(data.roomId);
 
     if (!room) {
       client.emit('room-error', { message: 'ROOM_NOT_FOUND' });
@@ -127,7 +114,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     @MessageBody() data: { roomId: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const room = this.rooms.get(data.roomId);
+    const room = this.store.get(data.roomId);
     if (!room) return;
 
     const playerIndex = room.players.findIndex(
@@ -156,7 +143,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     @MessageBody() data: { roomId: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const room = this.rooms.get(data.roomId);
+    const room = this.store.get(data.roomId);
     if (!room) return;
     if (!room.players.some((p) => p.socketId === client.id)) return;
 
@@ -168,7 +155,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     @MessageBody() data: { roomId: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const room = this.rooms.get(data.roomId);
+    const room = this.store.get(data.roomId);
     if (!room) return;
     const player = room.players.find((p) => p.socketId === client.id);
     if (!player) return;
@@ -192,7 +179,7 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     @MessageBody() data: { roomId: string },
     @ConnectedSocket() client: Socket,
   ) {
-    const room = this.rooms.get(data.roomId);
+    const room = this.store.get(data.roomId);
     if (!room) return;
     if (!room.players.some((p) => p.socketId === client.id)) return;
 
@@ -209,13 +196,12 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     @MessageBody() data: { roomId: string; event: string; payload: unknown },
     @ConnectedSocket() client: Socket,
   ) {
-    const room = this.rooms.get(data.roomId);
+    const room = this.store.get(data.roomId);
     if (!room) return;
     if (!room.players.some((p) => p.socketId === client.id)) return;
 
     this.resetInactivityTimer(data.roomId);
 
-    // Broadcast game event to all players in the room
     this.server.to(data.roomId).emit('game-event', {
       event: data.event,
       payload: data.payload,
@@ -223,8 +209,17 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     });
   }
 
+  forceCloseRoom(roomId: string): boolean {
+    const room = this.store.get(roomId);
+    if (!room) return false;
+
+    this.server.to(roomId).emit('room-closed', { reason: 'ADMIN_CLOSED' });
+    this.destroyRoom(roomId);
+    return true;
+  }
+
   private resetInactivityTimer(roomId: string) {
-    const room = this.rooms.get(roomId);
+    const room = this.store.get(roomId);
     if (!room) return;
 
     if (room.inactivityTimer) {
@@ -240,20 +235,19 @@ export class GameRoomGateway implements OnGatewayDisconnect {
   }
 
   private destroyRoom(roomId: string) {
-    const room = this.rooms.get(roomId);
+    const room = this.store.get(roomId);
     if (!room) return;
 
     if (room.inactivityTimer) {
       clearTimeout(room.inactivityTimer);
     }
 
-    // Disconnect remaining sockets from the room
     for (const player of room.players) {
       const socket = this.server.sockets.sockets.get(player.socketId);
       socket?.leave(roomId);
     }
 
-    this.rooms.delete(roomId);
+    this.store.delete(roomId);
   }
 
   private generateRoomId(): string {
@@ -262,7 +256,6 @@ export class GameRoomGateway implements OnGatewayDisconnect {
     for (let i = 0; i < 6; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    // Ensure uniqueness
-    return this.rooms.has(result) ? this.generateRoomId() : result;
+    return this.store.has(result) ? this.generateRoomId() : result;
   }
 }

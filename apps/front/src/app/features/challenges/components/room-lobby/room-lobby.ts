@@ -6,11 +6,21 @@ import {
   input,
   computed,
   effect,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { GameRoomService } from '../../services/game-room.service';
 import * as QRCode from 'qrcode';
+
+function getBackendUrl(): string {
+  const { hostname, protocol } = window.location;
+  if (hostname === 'localhost' || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)) {
+    return `${protocol}//${hostname}:3000`;
+  }
+  return 'https://wedding-adventureback-production.up.railway.app';
+}
 
 @Component({
   selector: 'app-room-lobby',
@@ -18,7 +28,7 @@ import * as QRCode from 'qrcode';
   templateUrl: './room-lobby.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RoomLobbyComponent {
+export class RoomLobbyComponent implements OnInit, OnDestroy {
   private gameRoomService = inject(GameRoomService);
 
   gameType = input<string>('challenges');
@@ -36,6 +46,10 @@ export class RoomLobbyComponent {
   mode = signal<'choose' | 'create' | 'join'>('choose');
   qrDataUrl = signal<string | null>(null);
   copied = signal(false);
+  hasWaitingRooms = signal(false);
+
+  private waitingCheckInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly backendUrl = getBackendUrl();
 
   readonly shareUrl = computed(() => {
     const id = this.roomId();
@@ -65,6 +79,29 @@ export class RoomLobbyComponent {
         this.qrDataUrl.set(null);
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.checkWaitingRooms();
+    this.waitingCheckInterval = setInterval(() => this.checkWaitingRooms(), 10000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.waitingCheckInterval) {
+      clearInterval(this.waitingCheckInterval);
+    }
+  }
+
+  private async checkWaitingRooms(): Promise<void> {
+    try {
+      const res = await fetch(`${this.backendUrl}/back/admin/rooms/waiting-count`);
+      if (res.ok) {
+        const data = await res.json();
+        this.hasWaitingRooms.set(data.waitingCount > 0);
+      }
+    } catch {
+      // Silently fail - don't block UI
+    }
   }
 
   selectCreate(): void {

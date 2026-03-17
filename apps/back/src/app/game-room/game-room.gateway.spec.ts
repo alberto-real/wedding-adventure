@@ -1,4 +1,5 @@
 import { GameRoomGateway } from './game-room.gateway';
+import { GameRoomStore } from './game-room.store';
 
 function createMockSocket(id = 'socket-1') {
   return {
@@ -24,7 +25,7 @@ describe('GameRoomGateway', () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
-    gateway = new GameRoomGateway();
+    gateway = new GameRoomGateway(new GameRoomStore());
     server = createMockServer();
     (gateway as unknown as { server: typeof server }).server = server;
   });
