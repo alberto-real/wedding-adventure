@@ -40,9 +40,9 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.WEDDING',
     hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.WEDDING',
     icon: '💒',
-    x: 51,
-    y: 23,
-    zoom: 5,
+    x: 53,
+    y: 24,
+    zoom: 7,
     toleranceXY: TOLERANCE_XY,
     toleranceZoom: TOLERANCE_ZOOM,
   },
@@ -51,9 +51,9 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.VAN',
     hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.VAN',
     icon: '🚐',
-    x: 52,
-    y: 90,
-    zoom: 5,
+    x: 3,
+    y: 43,
+    zoom: 7,
     toleranceXY: TOLERANCE_XY,
     toleranceZoom: TOLERANCE_ZOOM,
   },
@@ -62,9 +62,9 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.CLIMBER',
     hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.CLIMBER',
     icon: '🧗',
-    x: 44,
-    y: 38,
-    zoom: 5,
+    x: 93,
+    y: 36,
+    zoom: 7,
     toleranceXY: TOLERANCE_XY,
     toleranceZoom: TOLERANCE_ZOOM,
   },
@@ -73,9 +73,9 @@ const PHOTO_TARGETS: PhotoTarget[] = [
     nameKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.TARGETS.BBQ',
     hintKey: 'CHALLENGES.GAMES.PHOTOGRAPHERS.HINTS.BBQ',
     icon: '🍖',
-    x: 63,
-    y: 73,
-    zoom: 5,
+    x: 100,
+    y: 70,
+    zoom: 7,
     toleranceXY: TOLERANCE_XY,
     toleranceZoom: TOLERANCE_ZOOM,
   },
@@ -100,7 +100,7 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
   phase = signal<'intro' | 'playing' | 'completed'>('intro');
   introClosing = signal(false);
 
-  // --- Camera state (start at max zoom + max focus = fully blurred & zoomed) ---
+  // --- Camera state: Start at Max Zoom (7) and Focus 0 (Borracho) ---
   cameraX = signal(50);
   cameraY = signal(50);
   cameraZoom = signal(5);
@@ -145,10 +145,12 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
   );
 
   // --- Focus / blur mechanics ---
-  readonly correctFocus = computed(() => this.cameraZoom() * 20);
+  // El punto nítido depende del zoom. A zoom 7, el punto nítido es 98.
+  readonly correctFocus = computed(() => this.cameraZoom() * 14);
 
+  // El desenfoque es la distancia entre el foco actual y el punto nítido.
   readonly blurAmount = computed(
-    () => Math.abs(this.cameraFocus() - this.correctFocus()) * 0.4,
+    () => Math.abs(this.cameraFocus() - this.correctFocus()) * 0.3,
   );
 
   readonly isInFocus = computed(() => this.blurAmount() < 1.5);
@@ -178,7 +180,7 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     );
   });
 
-  readonly isMaxZoom = computed(() => this.cameraZoom() >= 5);
+  readonly isMaxZoom = computed(() => this.cameraZoom() >= 7);
 
   readonly isCompleted = computed(
     () => this.capturedTargets().length === this.targets.length,
@@ -530,8 +532,8 @@ export class PhotographersGameComponent implements OnInit, OnDestroy {
     this.timers = [];
     this.cameraX.set(50);
     this.cameraY.set(50);
-    this.cameraZoom.set(5);
-    this.cameraFocus.set(100);
+    this.cameraZoom.set(7);
+    this.cameraFocus.set(0);
     this.capturedTargets.set([]);
     this.showFlash.set(false);
     this.lastPhotoWrong.set(false);

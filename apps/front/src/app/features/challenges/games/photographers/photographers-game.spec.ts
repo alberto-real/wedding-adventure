@@ -189,7 +189,7 @@ describe('PhotographersGameComponent', () => {
     fixture.componentInstance.cameraX.set(target.x);
     fixture.componentInstance.cameraY.set(target.y);
     fixture.componentInstance.cameraZoom.set(target.zoom);
-    fixture.componentInstance.cameraFocus.set(target.zoom * 20);
+    fixture.componentInstance.cameraFocus.set(target.zoom * 14);
 
     expect(fixture.componentInstance.isTargetInRange()).toBe(true);
 
@@ -294,7 +294,7 @@ describe('PhotographersGameComponent', () => {
 
     expect(fixture.componentInstance.capturedTargets()).toEqual([]);
     expect(fixture.componentInstance.phase()).toBe('intro');
-    expect(fixture.componentInstance.cameraFocus()).toBe(100);
+    expect(fixture.componentInstance.cameraFocus()).toBe(0);
   });
 
   it('should compute currentTarget', () => {
@@ -321,9 +321,9 @@ describe('PhotographersGameComponent', () => {
   it('should compute blur and focus mechanics', () => {
     const fixture = TestBed.createComponent(PhotographersGameComponent);
     fixture.componentInstance.cameraZoom.set(5);
-    expect(fixture.componentInstance.correctFocus()).toBe(100);
+    expect(fixture.componentInstance.correctFocus()).toBe(5 * 14);
 
-    fixture.componentInstance.cameraFocus.set(100);
+    fixture.componentInstance.cameraFocus.set(5 * 14);
     expect(fixture.componentInstance.blurAmount()).toBe(0);
     expect(fixture.componentInstance.isInFocus()).toBe(true);
     expect(fixture.componentInstance.focusBarWidth()).toBe(100);
