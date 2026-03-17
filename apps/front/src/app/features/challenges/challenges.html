@@ -36,7 +36,10 @@
             [class.cursor-pointer]="game.enabled"
             [class.opacity-50]="!game.enabled"
             [class.grayscale]="!game.enabled"
+            tabindex="0"
+            role="button"
             (click)="selectGame(game)"
+            (keydown.enter)="selectGame(game)"
           >
             <div class="card-body items-center text-center gap-3">
               <div class="text-5xl group-hover:scale-110 transition-transform duration-300">

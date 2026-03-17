@@ -5,8 +5,8 @@ import { GameRoomService } from '../../services/game-room.service';
 import { signal } from '@angular/core';
 
 // Mock AudioContext with chainable connect
-function makeNode(extra: Record<string, any> = {}): any {
-  const node: any = { connect: vi.fn(), ...extra };
+function makeNode(extra: Record<string, unknown> = {}) {
+  const node = { connect: vi.fn(), ...extra };
   node.connect.mockImplementation(() => node);
   return node;
 }
@@ -22,10 +22,21 @@ class AudioContextMock {
   close() { return Promise.resolve(); }
 }
 
-(window as any).AudioContext = AudioContextMock;
+(window as unknown as Record<string, unknown>)['AudioContext'] = AudioContextMock;
 
 describe('MazeGameComponent', () => {
-  let gameRoomServiceMock: any;
+  let gameRoomServiceMock: {
+    players: ReturnType<typeof signal>;
+    localPlayerName: ReturnType<typeof signal<string>>;
+    roomId: ReturnType<typeof signal>;
+    onGameEvent: ReturnType<typeof vi.fn>;
+    onGameReset: ReturnType<typeof vi.fn>;
+    onGameStart: ReturnType<typeof vi.fn>;
+    sendGameEvent: ReturnType<typeof vi.fn>;
+    resetGame: ReturnType<typeof vi.fn>;
+    markReady: ReturnType<typeof vi.fn>;
+    readyPlayers: ReturnType<typeof signal>;
+  };
 
   beforeEach(async () => {
     vi.useFakeTimers();

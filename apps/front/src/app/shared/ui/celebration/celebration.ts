@@ -16,8 +16,8 @@ export class CelebrationComponent implements OnInit, OnDestroy {
   isVisible = signal(true);
   isFadingOut = signal(false);
   
-  private autoHideTimeout?: any;
-  private destroyTimeout?: any;
+  private autoHideTimeout?: ReturnType<typeof setTimeout>;
+  private destroyTimeout?: ReturnType<typeof setTimeout>;
 
   ngOnInit() {
     this.launchConfetti();

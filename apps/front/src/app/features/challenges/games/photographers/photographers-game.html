@@ -94,9 +94,11 @@
       [class.shake]="lastPhotoWrong()"
     >
       <img
-        src="assets/images/mountain.png"
+        ngSrc="assets/images/mountain.png"
         alt="Mountain scene"
         class="viewfinder-image"
+        fill
+        priority
         [ngStyle]="imageStyle()"
       />
 
@@ -157,11 +159,11 @@
     <div class="card bg-base-200 shadow-md w-full max-w-md">
       <div class="card-body p-4 gap-3">
         @if (role() === 'horizontal') {
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold flex justify-between">
+          <label class="flex flex-col gap-1">
+            <span class="text-sm font-semibold flex justify-between">
               <span>↔ {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.PAN_X' | translate }}</span>
               <span class="font-mono text-xs">{{ cameraX() }}%</span>
-            </label>
+            </span>
             <input
               type="range"
               class="range range-primary range-sm"
@@ -169,12 +171,12 @@
               [ngModel]="cameraX()"
               (ngModelChange)="onCameraXChange($event)"
             />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold flex justify-between">
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-sm font-semibold flex justify-between">
               <span>🔍 {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.ZOOM' | translate }}</span>
               <span class="font-mono text-xs">{{ cameraZoom() | number:'1.1-1' }}x</span>
-            </label>
+            </span>
             <input
               type="range"
               class="range range-secondary range-sm"
@@ -182,13 +184,13 @@
               [ngModel]="cameraZoom()"
               (ngModelChange)="onZoomChange($event)"
             />
-          </div>
+          </label>
         } @else if (role() === 'vertical') {
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold flex justify-between">
+          <label class="flex flex-col gap-1">
+            <span class="text-sm font-semibold flex justify-between">
               <span>↕ {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.PAN_Y' | translate }}</span>
               <span class="font-mono text-xs">{{ cameraY() }}%</span>
-            </label>
+            </span>
             <input
               type="range"
               class="range range-primary range-sm"
@@ -196,9 +198,9 @@
               [ngModel]="cameraY()"
               (ngModelChange)="onCameraYChange($event)"
             />
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-sm font-semibold flex justify-between">
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-sm font-semibold flex justify-between">
               <span>🎯 {{ 'CHALLENGES.GAMES.PHOTOGRAPHERS.FOCUS' | translate }}</span>
               <span
                 class="badge badge-sm"
@@ -207,7 +209,7 @@
               >
                 @if (isInFocus()) { ✓ } @else { ✗ }
               </span>
-            </label>
+            </span>
             <input
               type="range"
               class="range range-accent range-sm"
@@ -215,7 +217,7 @@
               [ngModel]="cameraFocus()"
               (ngModelChange)="onFocusChange($event)"
             />
-          </div>
+          </label>
         }
 
         <div class="text-xs text-center text-base-content/40">

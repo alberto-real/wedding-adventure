@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 describe('SocketService', () => {
   let service: SocketService;
-  let socketMock: any;
+  let socketMock: { on: ReturnType<typeof vi.fn>; emit: ReturnType<typeof vi.fn>; fromEvent: ReturnType<typeof vi.fn>; ioSocket: { connected: boolean } };
 
   beforeEach(() => {
     socketMock = {
@@ -45,8 +45,8 @@ describe('SocketService', () => {
   it('should update connected signal on events', () => {
     // Re-trigger constructor simulation by re-injecting or manually calling mocking
     // Actually the 'on' mock already recorded calls in constructor
-    const connectHandler = socketMock.on.mock.calls.find((c: any) => c[0] === 'connect')[1];
-    const disconnectHandler = socketMock.on.mock.calls.find((c: any) => c[0] === 'disconnect')[1];
+    const connectHandler = socketMock.on.mock.calls.find(c => c[0] === 'connect')![1];
+    const disconnectHandler = socketMock.on.mock.calls.find(c => c[0] === 'disconnect')![1];
 
     disconnectHandler();
     expect(service.connected()).toBe(false);

@@ -8,7 +8,7 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { DecimalPipe, NgStyle } from '@angular/common';
+import { DecimalPipe, NgOptimizedImage, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GameRoomService } from '../../services/game-room.service';
@@ -83,7 +83,7 @@ const PHOTO_TARGETS: PhotoTarget[] = [
 
 @Component({
   selector: 'app-photographers-game',
-  imports: [FormsModule, TranslateModule, DecimalPipe, NgStyle, GameCompleteModalComponent, GameRulesModalComponent],
+  imports: [FormsModule, TranslateModule, DecimalPipe, NgStyle, NgOptimizedImage, GameCompleteModalComponent, GameRulesModalComponent],
   templateUrl: './photographers-game.html',
   styleUrl: './photographers-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -176,7 +176,8 @@ export class GameRoomService implements OnDestroy {
       status: 'joining',
       error: null,
     }));
-    this.socket!.emit('create-room', { gameType, playerName });
+    if (!this.socket) return;
+    this.socket.emit('create-room', { gameType, playerName });
   }
 
   joinRoom(roomId: string, playerName: string): void {
@@ -188,7 +189,8 @@ export class GameRoomService implements OnDestroy {
       status: 'joining',
       error: null,
     }));
-    this.socket!.emit('join-room', { roomId, playerName });
+    if (!this.socket) return;
+    this.socket.emit('join-room', { roomId, playerName });
   }
 
   leaveRoom(): void {

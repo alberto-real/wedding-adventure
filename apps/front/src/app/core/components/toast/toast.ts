@@ -13,7 +13,10 @@ import { ToastService } from '../../services/toast.service';
             [class.alert-warning]="toast.type === 'warning'"
             [class.alert-error]="toast.type === 'error'"
             [class.alert-success]="toast.type === 'success'"
+            tabindex="0"
+            role="button"
             (click)="toastService.dismiss(toast.id)"
+            (keydown.enter)="toastService.dismiss(toast.id)"
           >
             <span class="text-sm">{{ toast.message }}</span>
           </div>

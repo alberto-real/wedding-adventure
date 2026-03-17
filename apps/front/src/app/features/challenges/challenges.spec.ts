@@ -6,7 +6,24 @@ import { provideRouter } from '@angular/router';
 import { signal } from '@angular/core';
 
 describe('ChallengesComponent', () => {
-  let gameRoomServiceMock: any;
+  let gameRoomServiceMock: {
+    state: ReturnType<typeof signal>;
+    status: ReturnType<typeof signal<string>>;
+    players: ReturnType<typeof signal>;
+    roomId: ReturnType<typeof signal>;
+    error: ReturnType<typeof signal>;
+    localPlayerName: ReturnType<typeof signal<string>>;
+    onGameEvent: ReturnType<typeof vi.fn>;
+    onGameReset: ReturnType<typeof vi.fn>;
+    onGameStart: ReturnType<typeof vi.fn>;
+    sendGameEvent: ReturnType<typeof vi.fn>;
+    leaveRoom: ReturnType<typeof vi.fn>;
+    resetGame: ReturnType<typeof vi.fn>;
+    createRoom: ReturnType<typeof vi.fn>;
+    joinRoom: ReturnType<typeof vi.fn>;
+    markReady: ReturnType<typeof vi.fn>;
+    readyPlayers: ReturnType<typeof signal>;
+  };
 
   beforeEach(async () => {
     gameRoomServiceMock = {

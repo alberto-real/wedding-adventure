@@ -11,7 +11,15 @@ vi.mock('qrcode', () => ({
 }));
 
 describe('RoomLobbyComponent', () => {
-  let gameRoomServiceMock: any;
+  let gameRoomServiceMock: {
+    state: ReturnType<typeof signal>;
+    status: ReturnType<typeof signal<string>>;
+    players: ReturnType<typeof signal>;
+    roomId: ReturnType<typeof signal>;
+    error: ReturnType<typeof signal>;
+    createRoom: ReturnType<typeof vi.fn>;
+    joinRoom: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
     vi.useFakeTimers();

@@ -1,7 +1,10 @@
 @if (isVisible()) {
-  <div class="celebration-overlay fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm cursor-pointer" 
+  <div class="celebration-overlay fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm cursor-pointer"
        [class.fade-out]="isFadingOut()"
-       (click)="close()">
+       tabindex="0"
+       role="button"
+       (click)="close()"
+       (keydown.enter)="close()">
     
     <div class="text-center p-8 bg-base-100 rounded-3xl shadow-2xl border-4 border-primary transition-all duration-1000"
          [class.scale-90]="isFadingOut()"

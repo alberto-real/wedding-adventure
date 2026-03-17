@@ -19,7 +19,7 @@ vi.mock('socket.io-client', () => {
 
 describe('GameRoomService', () => {
   let service: GameRoomService;
-  let socketMock: any;
+  let socketMock: { on: ReturnType<typeof vi.fn>; emit: ReturnType<typeof vi.fn>; disconnect: ReturnType<typeof vi.fn>; connected: boolean; ioSocket: { connected: boolean } };
 
   beforeEach(() => {
     vi.useFakeTimers();
@@ -31,7 +31,7 @@ describe('GameRoomService', () => {
       connected: false,
       ioSocket: { connected: false }
     };
-    vi.mocked(io).mockReturnValue(socketMock as any);
+    vi.mocked(io).mockReturnValue(socketMock as unknown as ReturnType<typeof io>);
 
     TestBed.configureTestingModule({
       providers: [
@@ -79,7 +79,7 @@ describe('GameRoomService', () => {
 
   it('should handle room created event with one player (waiting)', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
 
     onCreated({ roomId: 'R1', players: ['P1'] });
     expect(service.roomId()).toBe('R1');
@@ -89,7 +89,7 @@ describe('GameRoomService', () => {
 
   it('should handle room created event with two players (ready)', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
 
     onCreated({ roomId: 'R1', players: ['P1', 'P2'] });
     expect(service.status()).toBe('ready');
@@ -99,10 +99,10 @@ describe('GameRoomService', () => {
 
   it('should handle player joined event', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
-    const onJoined = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-joined')[1];
+    const onJoined = socketMock.on.mock.calls.find(c => c[0] === 'player-joined')![1];
     onJoined({ playerName: 'P2', players: ['P1', 'P2'] });
 
     expect(service.players()).toEqual(['P1', 'P2']);
@@ -111,10 +111,10 @@ describe('GameRoomService', () => {
 
   it('should handle player left event', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1', 'P2'] });
 
-    const onLeft = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-left')[1];
+    const onLeft = socketMock.on.mock.calls.find(c => c[0] === 'player-left')![1];
     onLeft({ playerName: 'P2', players: ['P1'] });
 
     expect(service.players()).toEqual(['P1']);
@@ -123,7 +123,7 @@ describe('GameRoomService', () => {
 
   it('should handle room error', () => {
     service.joinRoom('R1', 'P1');
-    const onError = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-error')[1];
+    const onError = socketMock.on.mock.calls.find(c => c[0] === 'room-error')![1];
 
     onError({ message: 'Error msg' });
     expect(service.error()).toBe('Error msg');
@@ -132,10 +132,10 @@ describe('GameRoomService', () => {
 
   it('should handle room closed', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
-    const onClosed = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-closed')[1];
+    const onClosed = socketMock.on.mock.calls.find(c => c[0] === 'room-closed')![1];
     onClosed();
     expect(service.status()).toBe('closed');
     expect(service.roomId()).toBeNull();
@@ -144,31 +144,31 @@ describe('GameRoomService', () => {
 
   it('should handle game-reset event on socket', () => {
     service.createRoom('ski', 'P1');
-    const onReset = socketMock.on.mock.calls.find((c: any[]) => c[0] === 'game-reset' && typeof c[1] === 'function');
+    const onReset = socketMock.on.mock.calls.find(c => c[0] === 'game-reset' && typeof c[1] === 'function')!;
     expect(onReset).toBeTruthy();
     onReset[1]();
   });
 
   it('should handle disconnect event with room', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
-    const onDisconnect = socketMock.on.mock.calls.find((c: any) => c[0] === 'disconnect')[1];
+    const onDisconnect = socketMock.on.mock.calls.find(c => c[0] === 'disconnect')![1];
     onDisconnect('transport close');
     expect(service.status()).toBe('closed');
   });
 
   it('should handle disconnect event without room', () => {
     service.createRoom('ski', 'P1');
-    const onDisconnect = socketMock.on.mock.calls.find((c: any) => c[0] === 'disconnect')[1];
+    const onDisconnect = socketMock.on.mock.calls.find(c => c[0] === 'disconnect')![1];
     onDisconnect('transport close');
     expect(service.status()).toBe('idle');
   });
 
   it('should send game events', () => {
     service.joinRoom('R1', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
     service.sendGameEvent('move', { x: 10 });
@@ -182,7 +182,7 @@ describe('GameRoomService', () => {
 
   it('should leave room', () => {
     service.joinRoom('R1', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
     service.leaveRoom();
@@ -199,7 +199,7 @@ describe('GameRoomService', () => {
 
   it('should reset game', () => {
     service.joinRoom('R1', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
     service.resetGame();
@@ -249,7 +249,7 @@ describe('GameRoomService', () => {
 
   it('should start and stop activity ping', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
     vi.advanceTimersByTime(30000);
@@ -263,7 +263,7 @@ describe('GameRoomService', () => {
 
   it('should mark player ready', () => {
     service.createRoom('ski', 'P1');
-    const onCreated = socketMock.on.mock.calls.find((c: any) => c[0] === 'room-created')[1];
+    const onCreated = socketMock.on.mock.calls.find(c => c[0] === 'room-created')![1];
     onCreated({ roomId: 'R1', players: ['P1'] });
 
     service.markReady();
@@ -277,7 +277,7 @@ describe('GameRoomService', () => {
 
   it('should update readyPlayers on player-ready event', () => {
     service.createRoom('ski', 'P1');
-    const onPlayerReady = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-ready')[1];
+    const onPlayerReady = socketMock.on.mock.calls.find(c => c[0] === 'player-ready')![1];
 
     onPlayerReady({ playerName: 'P1', readyPlayers: ['P1'] });
     expect(service.readyPlayers()).toEqual(['P1']);
@@ -285,10 +285,10 @@ describe('GameRoomService', () => {
 
   it('should clear readyPlayers on game-start event', () => {
     service.createRoom('ski', 'P1');
-    const onPlayerReady = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-ready')[1];
+    const onPlayerReady = socketMock.on.mock.calls.find(c => c[0] === 'player-ready')![1];
     onPlayerReady({ playerName: 'P1', readyPlayers: ['P1'] });
 
-    const onGameStart = socketMock.on.mock.calls.find((c: any) => c[0] === 'game-start')[1];
+    const onGameStart = socketMock.on.mock.calls.find(c => c[0] === 'game-start')![1];
     onGameStart();
     expect(service.readyPlayers()).toEqual([]);
   });
@@ -309,10 +309,10 @@ describe('GameRoomService', () => {
 
   it('should clear readyPlayers on game-reset event', () => {
     service.createRoom('ski', 'P1');
-    const onPlayerReady = socketMock.on.mock.calls.find((c: any) => c[0] === 'player-ready')[1];
+    const onPlayerReady = socketMock.on.mock.calls.find(c => c[0] === 'player-ready')![1];
     onPlayerReady({ playerName: 'P1', readyPlayers: ['P1'] });
 
-    const onReset = socketMock.on.mock.calls.find((c: any[]) => c[0] === 'game-reset' && typeof c[1] === 'function');
+    const onReset = socketMock.on.mock.calls.find(c => c[0] === 'game-reset' && typeof c[1] === 'function')!;
     onReset[1]();
     expect(service.readyPlayers()).toEqual([]);
   });

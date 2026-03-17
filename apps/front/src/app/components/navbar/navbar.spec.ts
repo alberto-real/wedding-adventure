@@ -5,7 +5,7 @@ import { LanguageService } from '../../core/services/language.service';
 import { provideRouter } from '@angular/router';
 
 describe('NavbarComponent', () => {
-  let langServiceMock: any;
+  let langServiceMock: { languages: { code: string; name: string }[]; setLanguage: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     langServiceMock = {

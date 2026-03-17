@@ -12,6 +12,6 @@
         </button>
       </div>
     </div>
-    <div class="modal-backdrop" (click)="cancel()"></div>
+    <div class="modal-backdrop" role="button" tabindex="-1" (click)="cancel()" (keydown.escape)="cancel()"></div>
   </div>
 }
