@@ -133,7 +133,7 @@
         "GAME_OVER_DESC": "You lost all your lives. Coordinate better and try again!",
         "TRY_AGAIN": "Try again",
         "RULES": "Each player controls one skier (blue or red) using a slider.\n\nBoth skiers are connected by a rope. If they get too far apart, they'll drag each other.\n\nDodge obstacles together as you race downhill. You have 3 lives.\n\nCoordinate your movements and communicate to reach the finish line.",
-        "CLUE_MESSAGE": "Sharing hobbies, like adventure and mountain sports, is the key to a happy marriage.\n\nAnd when it comes to being happy, don't waste a single second. 🎿"
+        "CLUE_MESSAGE": "Sharing hobbies, like adventure and mountain sports, is the key to a happy marriage.\n\nAnd when it comes to being happy, don't waste a single second. 🏆"
       },
       "PHOTOGRAPHERS": {
         "TITLE": "Meticulous Photographers",
@@ -151,7 +151,7 @@
         "COMPLETED": "All photos taken!",
         "COMPLETED_DESC": "Great teamwork! You captured all 4 elements perfectly.",
         "RULES": "One player controls horizontal movement and zoom.\nThe other player controls vertical movement and focus.\n\nYou must find and photograph 4 hidden elements in the image, one by one.\n\nThe photo button is only active when zoom is at maximum (5x).\nWhen the camera is focused and aimed at the target, press the photo button.\n\nYou can request a hint for each element by tapping 💡.\n\nCommunicate to coordinate position and focus.",
-        "CLUE_MESSAGE": "The secret to a happy marriage is remembering that work always comes after your partner.\n\nLeave it for last. 💕",
+        "CLUE_MESSAGE": "The secret to a happy marriage is remembering that work always comes after your partner.\n\nLeave it for last. 🏛️",
         "TARGETS": {
           "WEDDING": "The stars of the event",
           "CLIMBER": "The best helmet in the world",
@@ -177,7 +177,7 @@
         "TIME_UP_DESC": "You didn't complete the course in time. Coordinate better and try again!",
         "TRY_AGAIN": "Try again",
         "RULES": "One player controls horizontal movement (left/right) and reads questions aloud.\nThe other controls vertical movement (up/down) and answers the questions.\n\nNavigate through the maze collecting 4 checkpoints. Each checkpoint triggers a quiz.\n\nYou have 3 minutes. Wrong answers add a 20-second penalty.\n\nAfter collecting all checkpoints, return to base camp.",
-        "CLUE_MESSAGE": "In marriage, as in an orienteering race, sometimes the protagonists lose their way and stray from the path.\n\n Remember that collaborating always comes first. 🧭",
+        "CLUE_MESSAGE": "In marriage, as in an orienteering race, sometimes the protagonists lose their way and stray from the path. And finding the checkpoint is the key.\n\nSo remember: Collaborating always comes first. 📍",
         "QUIZ": {
           "READ_ALOUD": "Read aloud to your partner:",
           "CHOOSE_ANSWER": "Listen and choose the answer:",
