@@ -1,16 +1,22 @@
-<div class="flex flex-col items-center gap-8 max-w-4xl mx-auto py-8">
-  <div class="text-center space-y-4">
-    <div class="text-7xl">📍</div>
-    <h1 class="text-4xl font-black text-primary">{{ 'SECTIONS.GEOCACHING' | translate }}</h1>
-  </div>
+<div class="flex flex-col items-center gap-8 max-w-4xl mx-auto py-8 px-4">
+  <header class="text-center space-y-4 mb-4">
+    <div class="text-7xl animate-bounce">📍</div>
+    <h1 class="text-5xl font-black text-primary">{{ 'GEOCACHING.TITLE' | translate }}</h1>
+    <p class="text-lg text-base-content/70 italic max-w-2xl mx-auto">
+      {{ 'GEOCACHING.INTRO' | translate }}
+    </p>
+  </header>
 
-  <div class="card bg-base-100 shadow-xl border border-base-300 w-full">
-    <div class="card-body items-center text-center">
-      <h2 class="card-title text-2xl">{{ 'HOME.SECTIONS.GEOCACHING_DESC' | translate }}</h2>
-      <p class="py-4">El tesoro está más cerca de lo que creéis. Seguid las coordenadas.</p>
-      <div class="card-actions">
-        <button class="btn btn-secondary" routerLink="/">{{ 'BACK_TO_HOME' | translate }}</button>
-      </div>
-    </div>
+  <a
+    href="https://www.jigidi.com/es/solve/q5sxz28w/dolomitas/"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn btn-primary btn-lg"
+  >
+    🧩 {{ 'GEOCACHING.PUZZLE_LINK' | translate }}
+  </a>
+
+  <div class="mt-8">
+    <button class="btn btn-ghost" routerLink="/">{{ 'BACK_TO_HOME' | translate }}</button>
   </div>
 </div>

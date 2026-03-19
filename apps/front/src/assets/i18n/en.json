@@ -177,7 +177,7 @@
         "TIME_UP_DESC": "You didn't complete the course in time. Coordinate better and try again!",
         "TRY_AGAIN": "Try again",
         "RULES": "One player controls horizontal movement (left/right) and reads questions aloud.\nThe other controls vertical movement (up/down) and answers the questions.\n\nNavigate through the maze collecting 4 checkpoints. Each checkpoint triggers a quiz.\n\nYou have 3 minutes. Wrong answers add a 20-second penalty.\n\nAfter collecting all checkpoints, return to base camp.",
-        "CLUE_MESSAGE": "In marriage, as in an orienteering race, sometimes the protagonists lose their way and stray from the path. And finding the checkpoint is the key.\n\nSo remember: Collaborating always comes first. 📍",
+        "CLUE_MESSAGE": "In marriage, as in an orienteering race, sometimes the protagonists lose their way and stray from the path. And finding the checkpoint is the key.\n\nSo remember: Collaborating always comes first (but you'll need to subtract 2 from the number you had!) 📍",
         "QUIZ": {
           "READ_ALOUD": "Read aloud to your partner:",
           "CHOOSE_ANSWER": "Listen and choose the answer:",
@@ -207,6 +207,11 @@
         }
       }
     }
+  },
+  "GEOCACHING": {
+    "TITLE": "Geocaching Quest",
+    "INTRO": "We've shared many adventures, but I clearly have a special memory of one trip — back then I wasn't looking for geocaches yet... let's fix that!",
+    "PUZZLE_LINK": "Solve the puzzle"
   },
   "ARCHITECTURE": {
     "TITLE": "The Enigma of the Great Architects",

@@ -152,7 +152,7 @@
         "COMPLETED": "¡Todas las fotos tomadas!",
         "COMPLETED_DESC": "¡Gran trabajo en equipo! Habéis capturado los 4 elementos perfectamente.",
         "RULES": "Un jugador controla el movimiento horizontal y el zoom de la cámara.\nEl otro jugador controla el movimiento vertical y el enfoque.\n\nDebéis encontrar y fotografiar 4 elementos ocultos en la imagen, uno por uno.\n\nEl botón de foto solo se activa cuando el zoom está al máximo (5x).\nCuando la cámara esté bien enfocada y apuntando al objetivo, pulsad el botón de foto.\n\nPodéis pedir una pista para cada elemento pulsando 💡.\n\nComunicaos para coordinar la posición y el enfoque.",
-        "CLUE_MESSAGE": "El secreto de un buen matrimonio es recordar que el trabajo siempre va después de tu pareja.\n\nDéjalo para al final. 🏛️",
+        "CLUE_MESSAGE": "El secreto de un buen matrimonio es recordar que el trabajo siempre va después de vuestra pareja.\n\nDejadlo para el final. 🏛️",
         "TARGETS": {
           "WEDDING": "Los protagonistas del evento",
           "CLIMBER": "El mejor casco del mundo",
@@ -178,7 +178,7 @@
         "TIME_UP_DESC": "No habéis completado el recorrido a tiempo. ¡Coordinaos mejor e intentadlo de nuevo!",
         "TRY_AGAIN": "Intentar de nuevo",
         "RULES": "Un jugador controla el movimiento horizontal (← →) y lee las preguntas en voz alta.\nEl otro controla el movimiento vertical (↑ ↓) y responde a las preguntas.\n\nNavegad por el laberinto recogiendo los 4 controles. Cada control activa una prueba.\n\nTenéis 3 minutos. Las respuestas incorrectas añaden 20 segundos de penalización.\n\nTras recoger todos los controles, volved al campamento base.",
-        "CLUE_MESSAGE": "En el matrimonio, como en una carrera de orientación, a veces los protagonistas pierden el rumbo y se salen del camino. Y encontrar el punto es la clave.\n\n Así que recordad: Colaborar es siempre lo primero. 📍",
+        "CLUE_MESSAGE": "En el matrimonio, como en una carrera de orientación, a veces los protagonistas pierden el rumbo y se salen del camino. Y encontrar el punto es la clave.\n\n Así que recordad: Colaborar es siempre lo primero (pero deberéis restarle 2 a la cifra que teníais!) 📍",
         "QUIZ": {
           "READ_ALOUD": "Lee en voz alta a tu compañero:",
           "CHOOSE_ANSWER": "Escucha y elige la respuesta:",
@@ -208,6 +208,11 @@
         }
       }
     }
+  },
+  "GEOCACHING": {
+    "TITLE": "Misión Geocaching",
+    "INTRO": "Hemos compartido muchas aventuras, pero claramente tengo un recuerdo especial de un viaje, entonces aún no buscaba geocachés... ¡vamos a solucionarlo!",
+    "PUZZLE_LINK": "Resolver el puzle"
   },
   "ARCHITECTURE": {
     "TITLE": "El enigma de los grandes Arquitectos",

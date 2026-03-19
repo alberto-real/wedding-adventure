@@ -152,7 +152,7 @@
         "COMPLETED": "Totes les fotos fetes!",
         "COMPLETED_DESC": "Gran treball en equip! Heu capturat els 4 elements perfectament.",
         "RULES": "Un jugador controla el moviment horitzontal i el zoom de la càmera.\nL'altre jugador controla el moviment vertical i l'enfocament.\n\nHeu de trobar i fotografiar 4 elements ocults a la imatge, un per un.\n\nEl botó de foto només s'activa quan el zoom està al màxim (5x).\nQuan la càmera estigui ben enfocada i apuntant a l'objectiu, premeu el botó de foto.\n\nPodeu demanar una pista per a cada element prement 💡.\n\nComuniqueu-vos per coordinar la posició i l'enfocament.",
-        "CLUE_MESSAGE": "El secret d'un bon matrimoni és recordar que la feina sempre va després de la teva parella.\n\nDeixa-ho per al final. 🏛️",
+        "CLUE_MESSAGE": "El secret d'un bon matrimoni és recordar que la feina sempre va després de la vostra parella.\n\nDeixeu-ho per al final. 🏛️",
         "TARGETS": {
           "WEDDING": "Els protagonistes de l'event",
           "CLIMBER": "El millor casc del món",
@@ -178,7 +178,7 @@
         "TIME_UP_DESC": "No heu completat el recorregut a temps. Coordineu-vos millor i torneu-ho a provar!",
         "TRY_AGAIN": "Tornar-ho a provar",
         "RULES": "Un jugador controla el moviment horitzontal (← →) i llegeix les preguntes en veu alta.\nL'altre controla el moviment vertical (↑ ↓) i respon les preguntes.\n\nNavegueu pel laberint recollint els 4 controls. Cada control activa una prova.\n\nTeniu 3 minuts. Les respostes incorrectes afegeixen 20 segons de penalització.\n\nDesprés de recollir tots els controls, torneu al campament base.",
-        "CLUE_MESSAGE": "En el matrimoni, com en una cursa d'orientació, de vegades els protagonistes perden el rumb i se surten del camí. I trobar el punt és la clau.\n\nAixí que recordeu: Col·laborar és sempre el primer. 📍",
+        "CLUE_MESSAGE": "En el matrimoni, com en una cursa d'orientació, de vegades els protagonistes perden el rumb i se surten del camí. I trobar el punt és la clau.\n\nAixí que recordeu: Col·laborar és sempre el primer (però haureu de restar-li 2 a la xifra que teníeu!) 📍",
         "QUIZ": {
           "READ_ALOUD": "Llegeix en veu alta al teu company:",
           "CHOOSE_ANSWER": "Escolta i tria la resposta:",
@@ -208,6 +208,11 @@
         }
       }
     }
+  },
+  "GEOCACHING": {
+    "TITLE": "Missió Geocaching",
+    "INTRO": "Hem compartit moltes aventures, però clarament tinc un record especial d'un viatge, aleshores encara no buscava geocatxés... anem a solucionar-ho!",
+    "PUZZLE_LINK": "Resoldre el puzle"
   },
   "ARCHITECTURE": {
     "TITLE": "L'enigma dels grans Arquitectes",
